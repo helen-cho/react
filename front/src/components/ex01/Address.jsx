@@ -9,12 +9,17 @@ const Address = () => {
         {"id":4, "name":"성춘향", "address":"서울 강남구 압구정동"},
     ]);
 
+    const onInsert = (form) => {
+        setArray(array.concat(form));
+        alert("주소 추가!");
+    }
+
     return (
         <div>
-            <Insert/>
+            <Insert onInsert={onInsert}/>
             <h1>주소목록</h1>
             {array.map(person=>
-                <h1>{person.id} : {person.name} : {person.address}</h1>
+                <h1 key={person.id}>{person.id} : {person.name} : {person.address}</h1>
             )}
         </div>
     )
