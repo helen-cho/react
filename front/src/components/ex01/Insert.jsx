@@ -24,6 +24,7 @@ const Insert = ({onInsert}) => {
             [e.target.name]:e.target.value
         })
     }
+
     return (
         <div>
             <h1>주소등록</h1>

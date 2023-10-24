@@ -1,10 +1,10 @@
 import './App.css';
-import Address from './components/ex01/Address';
+import Product from './components/ex01/Product';
 
 const App = () =>{
     return (
         <div className="App">
-            <Address/>
+            <Product/>
         </div>
     );
 }
