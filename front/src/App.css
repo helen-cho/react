@@ -23,3 +23,8 @@
   margin: 0px 20px;
   font-size: 30px;
 }
+
+.input-group span {
+  width:150px;
+  justify-content: center;
+}
