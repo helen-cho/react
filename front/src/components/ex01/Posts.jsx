@@ -14,11 +14,17 @@ const Posts = () => {
             const start=(page-1)*10 + 1;
             const end=page*10;
 
-            const newJson=json.filter(j=>j.id>=start && j.id<=end);
-            setPosts(newJson);
+            let newJson=json.filter(j=>j.id>=start && j.id<=end);
+            newJson = newJson.map(j=>j && {...j, show:false});
             console.log(newJson);
+            setPosts(newJson);
             setLoading(false);
         });
+    }
+
+    const onClickTitle = (id) =>{
+        const newPosts=posts.map(p=>p.id===id ? {...p, show:!p.show} : p);
+        setPosts(newPosts);
     }
 
     useEffect(()=>{
@@ -44,8 +50,9 @@ const Posts = () => {
                         <tr key={post.id}>
                             <td>{post.id}</td>
                             <td>
-                                    {post.title}
-                            
+                                <div onClick={()=>onClickTitle(post.id)} 
+                                    style={{color:'red',cursor:'pointer'}}>{post.title}</div>
+                                {post.show && <div>{post.body}</div>}
                             </td>
                         </tr>
                     )}
