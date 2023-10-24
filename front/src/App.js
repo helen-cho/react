@@ -1,9 +1,10 @@
 import './App.css';
+import Address from './components/ex01/Address';
 
-function App() {
+const App = () =>{
     return (
         <div className="App">
-            <h1>리액트.....</h1>
+            <Address/>
         </div>
     );
 }

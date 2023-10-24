@@ -1,4 +1,25 @@
 .App {
+
+}
+
+.count {
+  width: 500px;
+  border: 1px solid gray;
+  padding: 20px;
   text-align: center;
-  background-color: yellow;
+}
+
+.button{
+  font-size: 30px;
+  background-color: cyan;
+  color: white;
+  cursor: pointer;
+  border-radius: 10px;
+  border: none;
+  padding: 5px 10px;
+}
+
+.text {
+  margin: 0px 20px;
+  font-size: 30px;
 }
