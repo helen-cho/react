@@ -43,9 +43,7 @@ const BookSearch = () => {
         getBooks();
         ref_txt.current.focus();
     }
-
-    if(loading) return <h1 className='text-center my-5'>잠시만 기다리세요....</h1>
-
+    
     return (
         <div>
             <h1 className='text-center mb-5'>도서검색</h1>
@@ -53,7 +51,8 @@ const BookSearch = () => {
                 <Col md={4}>
                     <form onSubmit={onSubmit}>
                         <InputGroup>
-                            <Form.Control ref={ref_txt} value={query} onChange={onChange}/>
+                            <Form.Control
+                                ref={ref_txt} value={query} onChange={onChange}/>
                             <Button type="submit">검색</Button>
                         </InputGroup>
                     </form>
@@ -62,19 +61,26 @@ const BookSearch = () => {
             <hr/>
             <Table striped>
                 <thead>
-                    <tr><th>이미지</th><th>제목</th><th>가격</th><th>저자</th></tr>
+                    <tr>
+                        <th>이미지</th><th>제목</th><th>가격</th><th>저자</th>
+                        <th>상세보기</th>
+                    </tr>
                 </thead>
                 <tbody>
-                    {books.map(book=>
-                        <Book key={book.isbn} book={book}/>
-                    )}
+                    {loading ?
+                        <div>로딩중입니다...</div>
+                        :   
+                        books.map(book=><Book key={book.isbn} book={book}/>)
+                    }
                 </tbody>
             </Table>
-            <div className='text-center'>
-                <Button onClick={()=>setPage(page-1)} disabled={page===1}>이전</Button>
-                <span className='mx-3'>{page} / {last}</span>
-                <Button onClick={()=>setPage(page+1)} disabled={end}>다음</Button>
-            </div>
+            {(last > 1 && !loading) && 
+                <div className='text-center'>
+                    <Button onClick={()=>setPage(page-1)} disabled={page===1}>이전</Button>
+                    <span className='mx-3'>{page} / {last}</span>
+                    <Button onClick={()=>setPage(page+1)} disabled={end}>다음</Button>
+                </div>
+            }
         </div>
     )
 }

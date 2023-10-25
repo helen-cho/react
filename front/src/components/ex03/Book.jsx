@@ -1,4 +1,5 @@
 import React from 'react'
+import BookModal from './BookModal';
 
 const Book = ({book}) => {
     const {title, thumbnail, price, authors} = book;
@@ -8,6 +9,7 @@ const Book = ({book}) => {
             <td>{title}</td>
             <td>{price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
             <td>{authors}</td>
+            <td><BookModal book={book}/></td>
         </tr>    
     )
 }
