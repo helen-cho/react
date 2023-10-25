@@ -11,6 +11,8 @@ const LocalSearch = () => {
     const location = useLocation();
     const search=new URLSearchParams(location.search);
     let page=parseInt(search.get("page"));
+    const [total, setTotal] = useState(0);
+    const [end, setEnd] = useState(false);
 
     let query="카카오프렌즈";
     const getLocal = async() => {
@@ -22,8 +24,10 @@ const LocalSearch = () => {
         }
         setLoading(true);
         const res=await axios.get(url, config);
-        //console.log(res.data);
+        console.log(res.data);
         setLocals(res.data.documents);
+        setTotal(res.data.meta.pageable_count); //검색수
+        setEnd(res.data.meta.is_end); //마지막페이지
         setLoading(false);
     }
 
@@ -41,6 +45,8 @@ const LocalSearch = () => {
                 </div>
                 :
                 <>
+                    <div>검색수: {total}</div>
+                    <hr/>
                     <Table>
                         <thead>
                             <tr>
@@ -62,8 +68,9 @@ const LocalSearch = () => {
                     <div className='text-center'>
                         <Button onClick={()=>navigator(`/local?page=${page-1}`)}
                             disabled={page===1}>이전</Button>
-                        <span className='mx-3'>{page}/?</span>
-                        <Button onClick={()=>navigator(`/local?page=${page+1}`)}>다음</Button>  
+                        <span className='mx-3'>{page}/{Math.ceil(total/5)}</span>
+                        <Button onClick={()=>navigator(`/local?page=${page+1}`)}
+                            disabled={end}>다음</Button>  
                     </div>
                 </>
             }
