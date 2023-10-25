@@ -28,3 +28,8 @@
   width:150px;
   justify-content: center;
 }
+
+.active {
+  color: white;
+  background-color: aqua;
+}

@@ -1,10 +1,11 @@
 import './App.css';
-import RouterPage from './components/ex02/RouterPage';
+import BookSearch from './components/ex03/BookSearch';
 
 const App = () =>{
+
     return (
         <div className="App">
-            <RouterPage/>
+            <BookSearch/>
         </div>
     );
 }
