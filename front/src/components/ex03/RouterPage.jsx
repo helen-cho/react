@@ -8,7 +8,7 @@ const RouterPage = () => {
         <div>
             <div>
                 <NavLink to="/book" className="me-3">도서검색</NavLink>
-                <NavLink to="/local?page=1">지역검색</NavLink>
+                <NavLink to="/local?page=1&query=카카오프렌즈">지역검색</NavLink>
             </div>
             <hr/>
             <Routes>

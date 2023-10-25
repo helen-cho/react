@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import {Table, Spinner, Button} from 'react-bootstrap'
+import {Table, Spinner, Button, Form, InputGroup, Row, Col} from 'react-bootstrap'
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const LocalSearch = () => {
@@ -11,10 +11,11 @@ const LocalSearch = () => {
     const location = useLocation();
     const search=new URLSearchParams(location.search);
     let page=parseInt(search.get("page"));
+    //let query=search.get("query");
+    const [query, setQuery] = useState(search.get("query"));
     const [total, setTotal] = useState(0);
     const [end, setEnd] = useState(false);
 
-    let query="카카오프렌즈";
     const getLocal = async() => {
         const url=`https://dapi.kakao.com/v2/local/search/keyword.json?query=${query}&size=5&page=${page}`;
         const config ={
@@ -31,9 +32,13 @@ const LocalSearch = () => {
         setLoading(false);
     }
 
+    const onSubmit = (e) => {
+        e.preventDefault();
+        navigator(`/local?page=${page}&query=${query}`);
+    }
     useEffect(()=>{
         getLocal();
-    }, [page]);
+    }, [location]);
 
     return (
         <div className='my-5'>
@@ -45,7 +50,22 @@ const LocalSearch = () => {
                 </div>
                 :
                 <>
-                    <div>검색수: {total}</div>
+                    <div>
+                        <Row>
+                            <Col md={4}>
+                                <form onSubmit={onSubmit}>
+                                    <InputGroup>
+                                        <Form.Control onChange={(e)=>setQuery(e.target.value)}
+                                            value={query}/>
+                                        <Button type="submit">검색</Button>
+                                    </InputGroup>
+                                </form>
+                            </Col>
+                            <Col>
+                                검색수: {total}
+                            </Col>
+                        </Row>
+                    </div>
                     <hr/>
                     <Table>
                         <thead>
@@ -66,10 +86,10 @@ const LocalSearch = () => {
                         </tbody>
                     </Table>
                     <div className='text-center'>
-                        <Button onClick={()=>navigator(`/local?page=${page-1}`)}
+                        <Button onClick={()=>navigator(`/local?page=${page-1}&query=${query}`)}
                             disabled={page===1}>이전</Button>
                         <span className='mx-3'>{page}/{Math.ceil(total/5)}</span>
-                        <Button onClick={()=>navigator(`/local?page=${page+1}`)}
+                        <Button onClick={()=>navigator(`/local?page=${page+1}&query=${query}`)}
                             disabled={end}>다음</Button>  
                     </div>
                 </>
