@@ -6,6 +6,8 @@ const App = () =>{
     return (
         <div className="App">
             <BookSearch/>
+            <hr/>
+            <BookSearch/>
         </div>
     );
 }
