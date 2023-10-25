@@ -34,7 +34,7 @@ const LocalSearch = () => {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        navigator(`/local?page=${page}&query=${query}`);
+        navigator(`/local?page=1&query=${query}`);
     }
     useEffect(()=>{
         getLocal();
