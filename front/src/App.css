@@ -33,3 +33,9 @@
   color: white;
   background-color: aqua;
 }
+
+a {
+  text-decoration: none !important;
+  font-size: 1.5rem;
+  padding: 5px;
+}

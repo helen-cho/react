@@ -68,7 +68,7 @@ const BookSearch = () => {
                 </thead>
                 <tbody>
                     {loading ?
-                        <div>로딩중입니다...</div>
+                        <tr><td colSpan={5}><div>로딩중입니다...</div></td></tr>
                         :   
                         books.map(book=><Book key={book.isbn} book={book}/>)
                     }
