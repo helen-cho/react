@@ -13,7 +13,7 @@ const ImageSearch = () => {
     const [images, setImages] = useState([]);
     const [total, setTotal] = useState(0);
     const [end, setEnd] = useState(false);
-
+    const [cnt, setCnt] = useState(0);
     const [loading, setLoading] = useState(false);
     const location = useLocation();
     const search = new URLSearchParams(location.search);
@@ -52,6 +52,12 @@ const ImageSearch = () => {
         getImages();
     }, [location]);
 
+    useEffect(()=>{
+        let cnt=0;
+        images.forEach(img=>img.checked && cnt++);
+        setCnt(cnt);
+    },[images]);
+
     const onSubmit = (e) => {
         e.preventDefault();
         if(query=="") {
@@ -68,7 +74,10 @@ const ImageSearch = () => {
                 :
                 <>
                     <Row>
-                        <Col col={1}><input type="checkbox" onChange={onChangeAll}/></Col>
+                        <Col col={1}>
+                            <input checked={images.length === cnt}
+                                type="checkbox" onChange={onChangeAll}/>
+                        </Col>
                         <Col>
                             <form onSubmit={onSubmit}>
                                 <InputGroup>
