@@ -26,7 +26,7 @@ const LocalSearch = () => {
         }
         setLoading(true);
         const res=await axios.get(url, config);
-        console.log(res.data);
+        //console.log(res.data);
         setLocals(res.data.documents);
         setTotal(res.data.meta.pageable_count); //검색수
         setEnd(res.data.meta.is_end); //마지막페이지
