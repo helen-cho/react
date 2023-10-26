@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import {useLocation} from 'react-router-dom'
-import {Row, Col, Card} from 'react-bootstrap'
+import {useLocation, useNavigate} from 'react-router-dom'
+import {Row, Col, Card, Button} from 'react-bootstrap'
 import ImageModal from './ImageModal';
 
 const ImageSearch = () => {
@@ -9,8 +9,11 @@ const ImageSearch = () => {
         show:false,
         url:''
     });
-
+    const navigate=useNavigate();
     const [images, setImages] = useState([]);
+    const [total, setTotal] = useState(0);
+    const [end, setEnd] = useState(false);
+
     const [loading, setLoading] = useState(false);
     const location = useLocation();
     const search = new URLSearchParams(location.search);
@@ -27,6 +30,8 @@ const ImageSearch = () => {
         const res=await axios.get(url, config);
         let data=res.data.documents;
         //console.log(data);
+        setTotal(res.data.meta.pageable_count);
+        setEnd(res.data.meta.is_end);
         setImages(data);
         setLoading(false);
         
@@ -34,7 +39,7 @@ const ImageSearch = () => {
 
     useEffect(()=>{
         getImages();
-    }, []);
+    }, [location]);
 
     return (
         <div className='my-5'>
@@ -43,6 +48,10 @@ const ImageSearch = () => {
                 <div>로딩중...</div>
                 :
                 <>
+                    <div>
+                        검색수: {total}건
+                    </div>
+                    <hr/>
                     <Row>
                         {images.map(img=>
                             <Col lg={2} md={3} sm={4} key={img.thumbnail_url} className='mb-3'>
@@ -54,6 +63,13 @@ const ImageSearch = () => {
                             </Col>
                         )}
                     </Row>
+                    <div className='text-center'>
+                            <Button onClick={()=>navigate(`/image?query=${query}&page=${page-1}`)}  
+                                disabled={page===1}>이전</Button>
+                            <span className='mx-3'>{page} / {Math.ceil(total/12)}</span>
+                            <Button onClick={()=>navigate(`/image?query=${query}&page=${page+1}`)} 
+                                disabled={end}>다음</Button>
+                    </div>
                     <ImageModal box={box} setBox={setBox}/>
                 </>
             }

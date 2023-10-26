@@ -47,8 +47,12 @@ const BlogSearch = () => {
 
     const onSubmit = (e) =>{
         e.preventDefault();
-        navigate(`/blog?page=1&query=${query}`);
-        ref_query.current.focus();
+        if(query==""){
+            alert("검색어를 입력하세요!");
+            ref_query.current.focus();
+        }else{
+            navigate(`/blog?page=1&query=${query}`);
+        }
     }
 
     const onClick = (url) => {
