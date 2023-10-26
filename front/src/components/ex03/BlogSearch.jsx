@@ -24,7 +24,9 @@ const BlogSearch = () => {
         setLoading(true);
         const res=await axios(url, config);
         //console.log(res.data);
-        setBlogs(res.data.documents);
+        let data=res.data.documents;
+        data = data.map(blog=>blog && {...blog, show:false});
+        setBlogs(data);
         setEnd(res.data.meta.is_end);
         setTotal(res.data.meta.pageable_count);
         setLoading(false);
@@ -37,6 +39,11 @@ const BlogSearch = () => {
     const onSubmit = (e) =>{
         e.preventDefault();
         navigate(`/blog?page=1&query=${query}`);
+    }
+
+    const onClick = (url) => {
+        let data=blogs.map(blog=>blog.url === url ? {...blog,show:!blog.show} : blog);
+        setBlogs(data);
     }
 
     return (
@@ -66,10 +73,16 @@ const BlogSearch = () => {
                             </tr>
                         </thead>
                         <tbody>
-                        {blogs.map(blog=>
+                        {blogs.map((blog, index)=>
                             <tr key={blog.url}>
-                                <td>{blog.blogname}</td>
-                                <td><div dangerouslySetInnerHTML={{__html:blog.title}}></div></td>
+                                <td width='20%'>{index} : <a href={blog.url}>{blog.blogname}</a></td>
+                                <td>
+                                    <div onClick={()=>onClick(blog.url)} 
+                                        dangerouslySetInnerHTML={{__html:blog.title}} style={{cursor:'pointer',color:'blue'}}></div>
+                                    {blog.show &&
+                                        <div dangerouslySetInnerHTML={{__html:blog.contents}}></div>
+                                    }
+                                </td>
                             </tr>
                         )}    
                         </tbody>
