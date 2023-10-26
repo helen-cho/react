@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import {useLocation, useNavigate} from 'react-router-dom'
-import {Row, Col, Card, Button, InputGroup, Form} from 'react-bootstrap'
+import {Row, Col, Card, Button, InputGroup, Form, Badge} from 'react-bootstrap'
 import ImageModal from './ImageModal';
 
 const ImageSearch = () => {
@@ -76,7 +76,8 @@ const ImageSearch = () => {
                     <Row>
                         <Col col={1}>
                             <input checked={images.length === cnt}
-                                type="checkbox" onChange={onChangeAll}/>
+                                type="checkbox" onChange={onChangeAll}/> 
+                            <span className='ms-3'>전체선택</span>      
                         </Col>
                         <Col>
                             <form onSubmit={onSubmit}>
@@ -92,13 +93,14 @@ const ImageSearch = () => {
                     <Row>
                         {images.map(img=>
                             <Col lg={2} md={3} sm={4} key={img.thumbnail_url} className='mb-3'>
-                                <Card className='p-3'>
+                                <Badge bg="light">
                                     <input onChange={(e)=>onChangeSingle(e, img.thumbnail_url)}
-                                        type="checkbox" checked={img.checked}/>
+                                        type="checkbox" checked={img.checked}
+                                        className='me-2'/>
                                     <img onClick={()=>setBox({url:img.image_url, show:true})}
                                         src={img.thumbnail_url} width="100%"
                                         style={{cursor:'pointer'}}/>
-                                </Card>
+                                </Badge>
                             </Col>
                         )}
                     </Row>
