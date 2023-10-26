@@ -1,19 +1,19 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import {useLocation, useNavigate} from 'react-router-dom'
-import {Table, Button} from 'react-bootstrap'
+import {Table, Button, InputGroup, Form, Row, Col} from 'react-bootstrap'
 
 const BlogSearch = () => {
     const [loading, setLoading] = useState(false);
     const [blogs, setBlogs] = useState([]);
     const [total, setTotal] = useState(0);
     const [end, setEnd] = useState(false);
-
+    
     const navigate=useNavigate();
     const location = useLocation();
     const search = new URLSearchParams(location.search);
     const page=parseInt(search.get("page"));
-    const query=search.get("query");
+    const [query, setQuery]=useState(search.get("query"));
     //console.log(page, query);
 
     const getBlogs= async()=>{
@@ -34,6 +34,11 @@ const BlogSearch = () => {
         getBlogs();
     },[location]);
 
+    const onSubmit = (e) =>{
+        e.preventDefault();
+        navigate(`/blog?page=1&query=${query}`);
+    }
+
     return (
         <div className='my-5'>
             <h1 className='text-center mb-5'>블로그검색</h1>
@@ -41,7 +46,17 @@ const BlogSearch = () => {
                 <div>로딩중....</div>
                 :
                 <>
-                    <div>검색수: {total}</div>
+                    <Row>
+                        <Col md={4}>
+                            <form onSubmit={onSubmit}>
+                                <InputGroup>
+                                    <Form.Control value={query} onChange={(e)=>setQuery(e.target.value)}/>
+                                    <Button type="submit">검색</Button>
+                                </InputGroup>
+                            </form>
+                        </Col>
+                        <Col>검색수: {total}</Col>
+                    </Row>
                     <hr/>
                     <Table striped hover>
                         <thead>
