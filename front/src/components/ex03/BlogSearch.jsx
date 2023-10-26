@@ -8,7 +8,8 @@ const BlogSearch = () => {
     const [blogs, setBlogs] = useState([]);
     const [total, setTotal] = useState(0);
     const [end, setEnd] = useState(false);
-    
+    const [cnt, setCnt] = useState(0);
+
     const navigate=useNavigate();
     const location = useLocation();
     const search = new URLSearchParams(location.search);
@@ -35,6 +36,13 @@ const BlogSearch = () => {
     useEffect(()=>{
         getBlogs();
     },[location]);
+
+    useEffect(()=>{
+        let cnt=0;
+        blogs.forEach(blog=>blog.checked && cnt++);
+        console.log(cnt);
+        setCnt(cnt);
+    }, [blogs]);
 
     const onSubmit = (e) =>{
         e.preventDefault();
@@ -78,7 +86,8 @@ const BlogSearch = () => {
                     <Table striped hover>
                         <thead>
                             <tr>
-                                <th><input type="checkbox" onChange={onChangeAll}/></th>
+                                <th><input checked={cnt==blogs.length}
+                                    type="checkbox" onChange={onChangeAll}/></th>
                                 <th>블로그이름</th>
                                 <th>제목</th>
                             </tr>
