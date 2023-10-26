@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import {useLocation} from 'react-router-dom'
 import {Row, Col, Card} from 'react-bootstrap'
+import ImageModal from './ImageModal';
 
 const ImageSearch = () => {
     const [images, setImages] = useState([]);
@@ -42,6 +43,7 @@ const ImageSearch = () => {
                             <Col lg={2} md={3} sm={4} key={img.thumbnail_url} className='mb-3'>
                                 <Card className='p-3'>
                                     <img src={img.thumbnail_url} width="100%"/>
+                                    <ImageModal image={img}/>
                                 </Card>
                             </Col>
                         )}
