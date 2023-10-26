@@ -5,6 +5,11 @@ import {Row, Col, Card} from 'react-bootstrap'
 import ImageModal from './ImageModal';
 
 const ImageSearch = () => {
+    const [box, setBox] = useState({
+        show:false,
+        url:''
+    });
+
     const [images, setImages] = useState([]);
     const [loading, setLoading] = useState(false);
     const location = useLocation();
@@ -42,12 +47,14 @@ const ImageSearch = () => {
                         {images.map(img=>
                             <Col lg={2} md={3} sm={4} key={img.thumbnail_url} className='mb-3'>
                                 <Card className='p-3'>
-                                    <img src={img.thumbnail_url} width="100%"/>
-                                    <ImageModal image={img}/>
+                                    <img onClick={()=>setBox({url:img.image_url, show:true})}
+                                        src={img.thumbnail_url} width="100%"
+                                        style={{cursor:'pointer'}}/>
                                 </Card>
                             </Col>
                         )}
                     </Row>
+                    <ImageModal box={box} setBox={setBox}/>
                 </>
             }
         </div>

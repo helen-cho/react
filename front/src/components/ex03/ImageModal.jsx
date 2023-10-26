@@ -1,20 +1,13 @@
-import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { Card } from 'react-bootstrap'
 
-const ImageModal = ({ image }) => {
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-
+const ImageModal = ({ box, setBox }) => {
+    const handleClose = () => setBox({...box, show:false});
     return (
         <>
-            <Button variant="primary" onClick={handleShow}>
-                Launch static backdrop modal
-            </Button>
             <Modal
-                show={show}
+                show={box.show}
                 onHide={handleClose}
                 backdrop="static"
                 keyboard={false}>
@@ -23,14 +16,13 @@ const ImageModal = ({ image }) => {
                 </Modal.Header>
                 <Modal.Body>
                     <Card className='p-3'>
-                        <img src={image.image_url} width="100%"/>
+                        <img src={box.url} width="100%"/>
                     </Card>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button variant="primary">Understood</Button>
                 </Modal.Footer>
             </Modal>
         </>
