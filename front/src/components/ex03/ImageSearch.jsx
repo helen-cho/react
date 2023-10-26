@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import {useLocation, useNavigate} from 'react-router-dom'
-import {Row, Col, Card, Button} from 'react-bootstrap'
+import {Row, Col, Card, Button, InputGroup, Form} from 'react-bootstrap'
 import ImageModal from './ImageModal';
 
 const ImageSearch = () => {
@@ -18,7 +18,7 @@ const ImageSearch = () => {
     const location = useLocation();
     const search = new URLSearchParams(location.search);
     const page=parseInt(search.get("page") ? search.get("page") : 1);
-    const query=search.get("query") ? search.get("query") : "송중기";
+    const [query, setQuery]=useState(search.get("query") ? search.get("query") : "송중기");
     //console.log(page, query);
 
     const getImages = async() => {
@@ -32,15 +32,34 @@ const ImageSearch = () => {
         //console.log(data);
         setTotal(res.data.meta.pageable_count);
         setEnd(res.data.meta.is_end);
+        data=data.map(img=>img && {...img, checked:false});
         setImages(data);
         setLoading(false);
         
+    }
+
+    const onChangeAll = (e) => {
+        const data=images.map(img=>img && {...img, checked:e.target.checked});
+        setImages(data);
+    }
+
+    const onChangeSingle = (e, url) =>{
+        const data=images.map(img=>img.thumbnail_url===url? {...img, checked:e.target.checked} : img);
+        setImages(data);
     }
 
     useEffect(()=>{
         getImages();
     }, [location]);
 
+    const onSubmit = (e) => {
+        e.preventDefault();
+        if(query=="") {
+            alert("검색어를 입력하세요!");
+        }else{
+            navigate(`/image?query=${query}&page=1`)
+        }
+    }
     return (
         <div className='my-5'>
             <h1 className='text-center mb-5'>이미지검색</h1>
@@ -48,14 +67,25 @@ const ImageSearch = () => {
                 <div>로딩중...</div>
                 :
                 <>
-                    <div>
-                        검색수: {total}건
-                    </div>
+                    <Row>
+                        <Col col={1}><input type="checkbox" onChange={onChangeAll}/></Col>
+                        <Col>
+                            <form onSubmit={onSubmit}>
+                                <InputGroup>
+                                    <Form.Control value={query} onChange={(e)=>setQuery(e.target.value)}/>
+                                    <Button type="submit">검색</Button>
+                                </InputGroup>
+                            </form>
+                        </Col>
+                        <Col class="text-end">검색수: {total}건</Col>
+                    </Row>
                     <hr/>
                     <Row>
                         {images.map(img=>
                             <Col lg={2} md={3} sm={4} key={img.thumbnail_url} className='mb-3'>
                                 <Card className='p-3'>
+                                    <input onChange={(e)=>onChangeSingle(e, img.thumbnail_url)}
+                                        type="checkbox" checked={img.checked}/>
                                     <img onClick={()=>setBox({url:img.image_url, show:true})}
                                         src={img.thumbnail_url} width="100%"
                                         style={{cursor:'pointer'}}/>
