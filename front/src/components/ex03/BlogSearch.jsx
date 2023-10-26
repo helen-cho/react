@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {useLocation, useNavigate} from 'react-router-dom'
 import {Table, Button, InputGroup, Form, Row, Col} from 'react-bootstrap'
 
@@ -9,12 +9,13 @@ const BlogSearch = () => {
     const [total, setTotal] = useState(0);
     const [end, setEnd] = useState(false);
     const [cnt, setCnt] = useState(0);
+    const ref_query = useRef(null);
 
     const navigate=useNavigate();
     const location = useLocation();
     const search = new URLSearchParams(location.search);
-    const page=parseInt(search.get("page"));
-    const [query, setQuery]=useState(search.get("query"));
+    const page=parseInt(search.get("page")? search.get("page") : 1);
+    const [query, setQuery]=useState(search.get("query") ? search.get("query"):"커피");
     //console.log(page, query);
 
     const getBlogs= async()=>{
@@ -47,6 +48,7 @@ const BlogSearch = () => {
     const onSubmit = (e) =>{
         e.preventDefault();
         navigate(`/blog?page=1&query=${query}`);
+        ref_query.current.focus();
     }
 
     const onClick = (url) => {
@@ -75,7 +77,8 @@ const BlogSearch = () => {
                         <Col md={4}>
                             <form onSubmit={onSubmit}>
                                 <InputGroup>
-                                    <Form.Control value={query} onChange={(e)=>setQuery(e.target.value)}/>
+                                    <Form.Control ref={ref_query}
+                                        value={query} onChange={(e)=>setQuery(e.target.value)}/>
                                     <Button type="submit">검색</Button>
                                 </InputGroup>
                             </form>
@@ -97,7 +100,7 @@ const BlogSearch = () => {
                             <tr key={blog.url}>
                                 <td><input onChange={(e)=>onChangeSingle(e, blog.url)}
                                     type="checkbox" checked={blog.checked}/></td>
-                                <td>{index} : <a href={blog.url}>{blog.blogname}</a></td>
+                                <td width="30%">{index} : <a href={blog.url}>{blog.blogname}</a></td>
                                 <td>
                                     <div onClick={()=>onClick(blog.url)} 
                                         dangerouslySetInnerHTML={{__html:blog.title}} style={{cursor:'pointer',color:'blue'}}></div>
