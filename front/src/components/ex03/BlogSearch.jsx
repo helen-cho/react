@@ -25,7 +25,7 @@ const BlogSearch = () => {
         const res=await axios(url, config);
         //console.log(res.data);
         let data=res.data.documents;
-        data = data.map(blog=>blog && {...blog, show:false});
+        data = data.map(blog=>blog && {...blog, show:false, checked:false});
         setBlogs(data);
         setEnd(res.data.meta.is_end);
         setTotal(res.data.meta.pageable_count);
@@ -43,6 +43,16 @@ const BlogSearch = () => {
 
     const onClick = (url) => {
         let data=blogs.map(blog=>blog.url === url ? {...blog,show:!blog.show} : blog);
+        setBlogs(data);
+    }
+
+    const onChangeAll = (e) => {
+        let data=blogs.map(blog=>blog && {...blog, checked:e.target.checked});
+        setBlogs(data);
+    }
+
+    const onChangeSingle = (e, url)=>{
+        let data=blogs.map(blog=>blog.url===url ? {...blog, checked:e.target.checked} : blog);
         setBlogs(data);
     }
 
@@ -68,6 +78,7 @@ const BlogSearch = () => {
                     <Table striped hover>
                         <thead>
                             <tr>
+                                <th><input type="checkbox" onChange={onChangeAll}/></th>
                                 <th>블로그이름</th>
                                 <th>제목</th>
                             </tr>
@@ -75,7 +86,9 @@ const BlogSearch = () => {
                         <tbody>
                         {blogs.map((blog, index)=>
                             <tr key={blog.url}>
-                                <td width='20%'>{index} : <a href={blog.url}>{blog.blogname}</a></td>
+                                <td><input onChange={(e)=>onChangeSingle(e, blog.url)}
+                                    type="checkbox" checked={blog.checked}/></td>
+                                <td>{index} : <a href={blog.url}>{blog.blogname}</a></td>
                                 <td>
                                     <div onClick={()=>onClick(blog.url)} 
                                         dangerouslySetInnerHTML={{__html:blog.title}} style={{cursor:'pointer',color:'blue'}}></div>
