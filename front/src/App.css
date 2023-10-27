@@ -42,6 +42,10 @@ a {
   margin-right: 20px;
 }
 
-.active {
+.navbar-nav .active {
   color: white;
+}
+
+.navbar-nav a {
+  color: #b4b5b2;
 }

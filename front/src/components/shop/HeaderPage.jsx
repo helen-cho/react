@@ -16,6 +16,9 @@ const HeaderPage = () => {
                         <NavLink to="/">Home</NavLink>
                         <NavLink to="/books/search">도서검색</NavLink>
                     </Nav>
+                    <Nav>
+                        <NavLink to="/users/login">로그인</NavLink>
+                    </Nav>
                 </Navbar.Collapse>
             </Container>
         </Navbar>
