@@ -41,6 +41,16 @@ const BookList = () => {
         navi(`${path}?page=1&query=${query}&size=${size}`);
     }
 
+    const onDelete = async(bid) => {
+        if(!window.confirm(`${bid}번 도서를 삭제하실래요?`)) return;
+        const res=await axios.post('/books/delete', {bid});
+        if(res.data === 0) {
+            alert("삭제 실패!");
+        }else{
+            alert("삭제 성공!");
+            getBooks();
+        }
+    }
     if (loading) return <div className='my-5 text-center'><Spinner variant='primary' /></div>
     return (
         <div className='my-5'>
@@ -59,7 +69,11 @@ const BookList = () => {
             <hr/>
             <Table>
                 <thead>
-                    <tr><th>ID</th><th>이미지</th><td>제목</td><td>저자</td><td>가격</td><td>등록일</td></tr>
+                    <tr>
+                        <th>ID</th><th>이미지</th><td>제목</td>
+                        <td>저자</td><td>가격</td><td>등록일</td>
+                        <td>삭제</td>
+                    </tr>
                 </thead>
                 <tbody>
                     {books.map(book =>
@@ -70,6 +84,8 @@ const BookList = () => {
                             <td width="20%"><div className='ellipsis'>{book.authors}</div></td>
                             <td>{book.fmtprice}원</td>
                             <td>{book.fmtdate}</td>
+                            <td><Button onClick={()=>onDelete(book.bid)}
+                                size='sm' variant='danger'>삭제</Button></td>
                         </tr>
                     )}
                 </tbody>

@@ -42,4 +42,17 @@ router.post('/insert', function(req, res){
     });
 });
 
+//도서삭제
+router.post('/delete', function(req, res){
+    const bid = req.body.bid;
+    const sql='delete from books where bid=?';
+    db.get().query(sql, [bid], function(err){
+        if(err){
+            res.send('0');
+        }else{
+            res.send('1');
+        }
+    })
+});
+
 module.exports = router;
