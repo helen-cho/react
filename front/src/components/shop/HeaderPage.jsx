@@ -15,6 +15,7 @@ const HeaderPage = () => {
                         navbarScroll>
                         <NavLink to="/">Home</NavLink>
                         <NavLink to="/books/search">도서검색</NavLink>
+                        <NavLink to="/books/list">도서목록</NavLink>
                     </Nav>
                     <Nav>
                         <NavLink to="/users/login">로그인</NavLink>
