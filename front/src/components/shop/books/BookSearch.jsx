@@ -42,6 +42,20 @@ const BookSearch = () => {
         }
     }
 
+    const onInsert = async(book) => {
+        if(window.confirm('새로운 도서를 등록하실래요?')) {
+            //console.log(book);
+            const url="/books/insert"
+            const res=await axios.post(url, book);
+            //console.log(res.data);
+            if(res.data==0) {
+                alert("도서가 등록되었습니다!");
+            }else{
+                alert("이미 등록된 도서입니다!");
+            }
+        }
+    }
+
     if(loading) return <div className='text-center my-5'><Spinner variant='primary'/></div>
     return (
         <div className='my-5'>
@@ -69,7 +83,7 @@ const BookSearch = () => {
                         <td>{book.title}</td>
                         <td>{book.price}원</td>
                         <td>{book.authors}</td>
-                        <td><Button size="sm">저장</Button></td>
+                        <td><Button size="sm" onClick={()=>onInsert(book)}>저장</Button></td>
                     </tr>
                     )}
                 </tbody>
@@ -78,7 +92,7 @@ const BookSearch = () => {
                 <div className='text-center'>
                     <Button onClick={()=>navi(`${path}?query=${query}&page=${page-1}`)}
                         disabled={page===1}>이전</Button>
-                    <span class="mx-2">{page} / {Math.ceil(total/5)}</span>
+                    <span className="mx-2">{page} / {Math.ceil(total/5)}</span>
                     <Button onClick={()=>navi(`${path}?query=${query}&page=${page+1}`)}
                         disabled={end}>다음</Button>
                 </div>    

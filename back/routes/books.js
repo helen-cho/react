@@ -29,11 +29,13 @@ router.post('/insert', function(req, res){
     const isbn=req.body.isbn;
     let sql='select * from books where isbn=?';
     db.get().query(sql, [isbn], function(err, rows){
+        if(err) console.log('err1............', err);
         if(rows.length > 0) {
             res.send('1');
         }else{
             sql='insert into books(title,price,authors,contents,publisher,image,isbn) values(?,?,?,?,?,?,?)';
             db.get().query(sql, [title,price,authors,contents,publisher,image,isbn], function(err){
+                if(err) console.log('err2................', err);
                 res.send('0');
             });
         }
