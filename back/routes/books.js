@@ -18,4 +18,26 @@ router.get('/list.json', function(req, res){ //localhost:5000/books/list.json?qu
     });
 });
 
+//도서등록
+router.post('/insert', function(req, res){
+    const title=req.body.title;
+    const price=req.body.price;
+    const authors=req.body.authors;
+    const contents=req.body.contents;
+    const publisher=req.body.publisher;
+    const image = req.body.thumbnail;
+    const isbn=req.body.isbn;
+    let sql='select * from books where isbn=?';
+    db.get().query(sql, [isbn], function(err, rows){
+        if(rows.length > 0) {
+            res.send('1');
+        }else{
+            sql='insert into books(title,price,authors,contents,publisher,image,isbn) values(?,?,?,?,?,?,?)';
+            db.get().query(sql, [title,price,authors,contents,publisher,image,isbn], function(err){
+                res.send('0');
+            });
+        }
+    });
+});
+
 module.exports = router;

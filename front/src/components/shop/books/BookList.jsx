@@ -65,7 +65,7 @@ const BookList = () => {
                     {books.map(book =>
                         <tr key={book.bid}>
                             <td>{book.bid}</td>
-                            <td><img src={book.image} width="30" /></td>
+                            <td><img src={book.image || "http://via.placeholder.com/170x250"} width="30" /></td>
                             <td width="30%"><div className='ellipsis'>{book.title}</div></td>
                             <td width="20%"><div className='ellipsis'>{book.authors}</div></td>
                             <td>{book.fmtprice}원</td>
