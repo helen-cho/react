@@ -46,7 +46,7 @@ const BookSearch = () => {
         if(window.confirm('새로운 도서를 등록하실래요?')) {
             //console.log(book);
             const url="/books/insert"
-            const res=await axios.post(url, book);
+            const res=await axios.post(url, {...book, authors:book.authors.join()});
             //console.log(res.data);
             if(res.data==0) {
                 alert("도서가 등록되었습니다!");
