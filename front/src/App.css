@@ -49,3 +49,11 @@ a {
 .navbar-nav a {
   color: #b4b5b2;
 }
+
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
