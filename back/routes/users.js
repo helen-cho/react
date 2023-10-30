@@ -26,4 +26,14 @@ router.post('/login', function (req, res) {
     });
 });
 
+
+//사용자정보읽기 REST API
+router.get('/read/:uid', function(req, res){ //localhost:5000/users/read/blue
+    const uid=req.params.uid;
+    const sql='select *, date_format(regdate,"%Y-%m-%d %T") fmtdate from users where uid=?';
+    db.get().query(sql, [uid], function(err, rows){
+        res.send(rows[0]);
+    });
+});
+
 module.exports = router;

@@ -57,3 +57,7 @@ a {
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
 }
+
+.photo {
+  border-radius: 50%;
+}

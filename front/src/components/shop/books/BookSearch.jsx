@@ -113,7 +113,7 @@ const BookSearch = () => {
                 <Col className='text-end'><Button size="sm" onClick={onClickSave}>선택저장</Button></Col>
             </Row>
             <hr/>
-            <Table striped>
+            <Table striped hover>
                 <thead>
                     <tr>
                         <th>이미지</th><th>제목</th><th>가격</th><th>저자</th><th>저장</th>

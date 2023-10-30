@@ -109,7 +109,7 @@ const BookList = () => {
                 </Col>
             </Row>
             <hr/>
-            <Table>
+            <Table striped hover>
                 <thead>
                     <tr>
                         <th>ID</th><th>이미지</th><td>제목</td>
