@@ -82,22 +82,16 @@ const BookSearch = () => {
         }else{
             if(window.confirm(`${chcnt}권 도서를 저장하실래요?`)){
                 let count=0;
-                books.forEach(async(book)=>{
+                for(const book of books){
                     if(book.checked){
                         //도서저장
                         const url="/books/insert"
                         const res=await axios.post(url, {...book, authors:book.authors.join()});
-                        if(res.data===0) {
-                            console.log('..................');
-                            count++;
-                        }
+                        if(res.data===0) count++;
                     }
-                });
-                setTimeout(()=>{
-                    alert(`${count}권 저장되었습니다!`);
-                    const docs=books.map(book=> book && {...book, checked:false});
-                    setBooks(docs);
-                }, 1000);
+                };
+                alert(`${count}권 저장되었습니다!`);
+                setBooks(books.map(book=> book && {...book, checked:false}));
             }
         }
     }
