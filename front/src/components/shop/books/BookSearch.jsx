@@ -23,7 +23,9 @@ const BookSearch = () => {
         setLoading(true);
         const res= await axios(url, config);
         //console.log(res.data);
-        setBooks(res.data.documents);
+        let docs=res.data.documents;
+        docs=docs.map(doc=>doc && {...doc, checked:true});
+        setBooks(docs);
         setTotal(res.data.meta.pageable_count);
         setEnd(res.data.meta.is_end);
         setLoading(false);
@@ -74,16 +76,20 @@ const BookSearch = () => {
             <hr/>
             <Table striped>
                 <thead>
-                    <tr><th>이미지</th><th>제목</th><th>가격</th><th>저자</th><td>저장</td></tr>
+                    <tr>
+                        <th>이미지</th><th>제목</th><th>가격</th><th>저자</th><th>저장</th>
+                        <th><input type="checkbox"/></th>
+                    </tr>
                 </thead>
                 <tbody>
                     {books.map(book=>
                     <tr key={book.isbn}>
                         <td><img src={book.thumbnail || "http://via.placeholder.com/170x250"} width="30"/></td>
                         <td>{book.title}</td>
-                        <td>{book.price}원</td>
+                        <td>{book.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}원</td>
                         <td>{book.authors}</td>
                         <td><Button size="sm" onClick={()=>onInsert(book)}>저장</Button></td>
+                        <td><input type="checkbox" checked={book.checked}/></td>
                     </tr>
                     )}
                 </tbody>
