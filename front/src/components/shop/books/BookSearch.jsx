@@ -76,6 +76,32 @@ const BookSearch = () => {
         setBooks(docs);
     }
 
+    const onClickSave = async() => {
+        if(chcnt === 0) {
+            alert("저장할 도서들을 선택하세요!");
+        }else{
+            if(window.confirm(`${chcnt}권 도서를 저장하실래요?`)){
+                let count=0;
+                books.forEach(async(book)=>{
+                    if(book.checked){
+                        //도서저장
+                        const url="/books/insert"
+                        const res=await axios.post(url, {...book, authors:book.authors.join()});
+                        if(res.data===0) {
+                            console.log('..................');
+                            count++;
+                        }
+                    }
+                });
+                setTimeout(()=>{
+                    alert(`${count}권 저장되었습니다!`);
+                    const docs=books.map(book=> book && {...book, checked:false});
+                    setBooks(docs);
+                }, 1000);
+            }
+        }
+    }
+
     if(loading) return <div className='text-center my-5'><Spinner variant='primary'/></div>
     return (
         <div className='my-5'>
@@ -90,6 +116,7 @@ const BookSearch = () => {
                     </form>
                 </Col>
                 <Col className='mt-1'>검색수: {total}권</Col>
+                <Col className='text-end'><Button size="sm" onClick={onClickSave}>선택저장</Button></Col>
             </Row>
             <hr/>
             <Table striped>
