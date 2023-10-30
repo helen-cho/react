@@ -83,7 +83,7 @@ const BookList = () => {
                         if(res.data === 1) count++;
                     }
                 }
-                alert(`${count}권 도서삭제!`);
+                alert(`${count}권 삭제되었습니다.`);
                 navi(`${path}?page=1&query=${query}&size=${size}`);
             }
         }
