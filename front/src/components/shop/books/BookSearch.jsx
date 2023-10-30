@@ -14,6 +14,7 @@ const BookSearch = () => {
     const [books, setBooks] = useState([]);
     const [total, setTotal] = useState(0);
     const [end, setEnd] = useState(false);
+    const [chcnt, setChcnt] = useState(0);
 
     const getBooks = async() => {
         const url=`https://dapi.kakao.com/v3/search/book?target=title&query=${query}&size=5&page=${page}`;
@@ -24,7 +25,7 @@ const BookSearch = () => {
         const res= await axios(url, config);
         //console.log(res.data);
         let docs=res.data.documents;
-        docs=docs.map(doc=>doc && {...doc, checked:true});
+        docs=docs.map(doc=>doc && {...doc, checked:false});
         setBooks(docs);
         setTotal(res.data.meta.pageable_count);
         setEnd(res.data.meta.is_end);
@@ -34,6 +35,13 @@ const BookSearch = () => {
     useEffect(()=>{
         getBooks();
     }, [location]);
+
+    useEffect(()=>{
+        let cnt=0;
+        books.forEach(book=>book.checked && cnt++);
+        //console.log('.............', cnt)
+        setChcnt(cnt);
+    }, [books]);
 
     const onSearch = (e)=>{
         e.preventDefault();
@@ -58,6 +66,16 @@ const BookSearch = () => {
         }
     }
 
+    const onChangeAll = (e) =>{
+        const docs=books.map(book=>book && {...book, checked:e.target.checked});
+        setBooks(docs);
+    }
+
+    const onChangeSingle = (e, isbn) => {
+        const docs=books.map(book=>book.isbn===isbn ? {...book, checked:e.target.checked} : book);
+        setBooks(docs);
+    }
+
     if(loading) return <div className='text-center my-5'><Spinner variant='primary'/></div>
     return (
         <div className='my-5'>
@@ -78,7 +96,8 @@ const BookSearch = () => {
                 <thead>
                     <tr>
                         <th>이미지</th><th>제목</th><th>가격</th><th>저자</th><th>저장</th>
-                        <th><input type="checkbox"/></th>
+                        <th><input checked={books.length === chcnt}
+                                type="checkbox" onChange={onChangeAll}/></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -89,7 +108,8 @@ const BookSearch = () => {
                         <td>{book.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}원</td>
                         <td>{book.authors}</td>
                         <td><Button size="sm" onClick={()=>onInsert(book)}>저장</Button></td>
-                        <td><input type="checkbox" checked={book.checked}/></td>
+                        <td><input onChange={(e)=>{onChangeSingle(e, book.isbn)}}
+                            type="checkbox" checked={book.checked}/></td>
                     </tr>
                     )}
                 </tbody>
