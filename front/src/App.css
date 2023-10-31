@@ -68,6 +68,11 @@ a {
   cursor: pointer;
 }
 
-small {
+.rcnt, .fcnt {
   color:gray;
+  font-size: 0.7rem;
+}
+
+.message {
+  color: gray;
 }
