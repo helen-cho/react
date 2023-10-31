@@ -11,7 +11,7 @@ const ModalPostCode = ({user, setUser}) => {
         console.log(e);
         setUser({
             ...user,
-            address1: e.address
+            address1: e.buildingName ? `${e.address}(${e.buildingName})` : e.address
         });
         handleClose();
     }
