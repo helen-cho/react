@@ -64,4 +64,21 @@ router.get('/read/:bid', function(req, res) { //localhost:5000/books/read/166
     });
 });
 
+//도서정보수정
+router.post('/update', function(req, res){
+    const bid=req.body.bid;
+    const title=req.body.title;
+    const price=req.body.price;
+    const authors=req.body.authors;
+    const publisher=req.body.publisher;
+    const contents=req.body.contents;
+    const sql='update books set title=?,price=?,authors=?,publisher=?,contents=?,regdate=now() where bid=?';
+    db.get().query(sql,[title,price,authors,publisher,contents,bid],function(err){
+        if(err){
+            res.send('0');
+        }else{
+            res.send('1');
+        }
+    });
+})
 module.exports = router;

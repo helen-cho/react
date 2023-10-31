@@ -1,9 +1,10 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { Row, Col, Spinner, Card, Button, InputGroup, Form} from 'react-bootstrap'
 
 const BookUpdate = () => {
+    const navi = useNavigate();
     const [loading, setLoading] = useState(false);
     const {bid} = useParams();
     const [book, setBook] = useState({
@@ -40,10 +41,17 @@ const BookUpdate = () => {
         });
     }
 
-    const onSubmit = (e) => {
+    const onSubmit = async(e) => {
         e.preventDefault();
         if(window.confirm("수정된 내용을 저장하실래요?")){
             //수정하기
+            const res=await axios.post('/books/update',  book);
+            if(res.data===0) {
+                alert("수정 실패!");
+            }else{
+                alert("수정 완료!");
+                navi(`/books/read/${bid}`);
+            }
         }
     }
 
@@ -80,7 +88,7 @@ const BookUpdate = () => {
                                     value={publisher} name="publisher"/>
                             </InputGroup>
                             <Form.Control onChange={onChange}
-                                as="textarea" rows={10} name="content">{contents}</Form.Control>
+                                as="textarea" rows={10} name="contents">{contents}</Form.Control>
                             <div className='text-center my-3'>
                                 <Button type="submit" className='me-2'>정보수정</Button>
                                 <Button variant='secondary' onClick={()=>getBook()}>수정취소</Button>
