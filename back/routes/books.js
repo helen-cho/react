@@ -1,6 +1,34 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../db');
+var multer = require('multer');
+
+//도서이미지 업로드
+var upload = multer({
+    storage: multer.diskStorage({
+        destination:(req, file, done)=>{
+            done(null, './public/upload/book')
+        },
+        filename:(req, file, done)=>{
+            var fileName=Date.now() + '.jpg';
+            done(null, fileName);
+        }
+    })
+}); 
+
+//도서이미지업로드
+router.post('/update/image', upload.single('file'), function(req, res){
+    const filename='/upload/book/' + req.file.filename;
+    const bid=req.body.bid;
+    const sql='update books set image=?, regdate=now() where bid=?';
+    db.get().query(sql, [filename, bid], function(err){
+        if(err){
+            res.send('0');
+        }else{
+            res.send('1');
+        }
+    });
+});
 
 //도서목록
 router.get('/list.json', function(req, res){ //localhost:5000/books/list.json?query=&page=1&size=5

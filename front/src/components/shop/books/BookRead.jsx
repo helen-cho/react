@@ -1,9 +1,10 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { NavLink, useParams } from 'react-router-dom'
 import { Row, Col, Spinner, Card, Button} from 'react-bootstrap'
 
 const BookRead = () => {
+    const ref_file=useRef(null);
     const [loading, setLoading] = useState(false);
     const {bid} = useParams();
     const [book, setBook] = useState({
@@ -17,9 +18,10 @@ const BookRead = () => {
         image:'',
         isbn:'',
         regdate:'',
-        fmtdate:''
+        fmtdate:'',
+        file:null
     });
-    const {title,price,fmtprice,authors,contents,publisher,image,isbn,regdate,fmtdate} = book;
+    const {file,title,price,fmtprice,authors,contents,publisher,image,isbn,regdate,fmtdate} = book;
 
     const getBook = async() => {
         setLoading(true);
@@ -33,6 +35,34 @@ const BookRead = () => {
         getBook();
     },[]);
 
+    const onChangeFile = (e) => {
+        setBook({
+            ...book,
+            image: URL.createObjectURL(e.target.files[0]),
+            file:e.target.files[0]
+        })
+    }
+
+    const onUpdateImage = async() => {
+        if(!file) {
+            alert("변경할 이미지를 선택하세요!");
+        }else{
+            if(window.confirm("이미지를 변경하실래요?")) {
+                //이미지변경
+                const formData=new FormData();
+                formData.append("file", file);
+                formData.append("bid", bid);
+                const res= await axios.post('/books/update/image', formData);
+                if(res.data===0) {
+                    alert("이미지 변경실패!");
+                }else{
+                    alert("이미지 변경 성공!");
+                    getBook();
+                }
+            }
+        }
+    }
+
     if(loading) return <div className='text-center my-5'><Spinner variant='primary'/></div>
     return (
         <div className='my-5'>
@@ -43,10 +73,14 @@ const BookRead = () => {
                         <Row>
                             <Col md={3}>
                                 <div className='mt-1'>
-                                    <img src={image || "http://via.placeholder.com/170x250"}
-                                        width="100%" className='bookPhoto' />
+                                    <img onClick={()=>ref_file.current.click()} 
+                                        src={image || "http://via.placeholder.com/170x250"}
+                                        width="100%" className='bookPhoto'/>
+                                    <input ref={ref_file}
+                                        type="file" onChange={onChangeFile} style={{display:'none'}}/>    
                                 </div>
-                                <Button size='sm mt-2 w-100'>이미지 수정</Button>
+                                <Button onClick={onUpdateImage}
+                                    size='sm mt-2 w-100'>이미지 수정</Button>
                             </Col>
                             <Col className='px-3 align-self-center'>
                                 <h3>{title}</h3>
