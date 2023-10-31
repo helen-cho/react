@@ -35,8 +35,9 @@ router.get('/list.json', function(req, res){ //localhost:5000/books/list.json?qu
     const query=req.query.query;
     const page=parseInt(req.query.page);
     const size=parseInt(req.query.size);
-    const sql ='call books(?,?,?)';
-    db.get().query(sql, [query, page, size], function(err, rows){
+    const uid = req.query.uid ? req.query.uid : '';
+    const sql ='call book_list(?,?,?,?)';
+    db.get().query(sql, [query, page, size, uid], function(err, rows){
         if(err) {
             console.log('도서목록 오류: ', err)
         }else {

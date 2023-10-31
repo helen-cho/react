@@ -127,6 +127,8 @@ const BookList = () => {
                             <td width="30%">
                                 <div className='ellipsis'>
                                     <NavLink to={`/books/read/${book.bid}`}>{book.title}</NavLink>
+                                    <span>리뷰:{book.rcnt}</span>
+                                    <span>좋아요:{book.fcnt}</span>
                                 </div>
                             </td>
                             <td width="20%"><div className='ellipsis'>{book.authors}</div></td>
