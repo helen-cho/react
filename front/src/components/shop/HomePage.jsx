@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import {Row, Col, Spinner, Card} from 'react-bootstrap'
+import {Row, Col, Spinner, Card, Form, InputGroup, Button} from 'react-bootstrap'
 import {BsHeartFill, BsHeart} from 'react-icons/bs'
 import {BiMessageDetail} from 'react-icons/bi'
 import Pagination from "react-js-pagination";
@@ -17,9 +17,10 @@ const HomePage = () => {
     const search=new URLSearchParams(location.search);
     const page = search.get("page") ? parseInt(search.get("page")) : 1;
     const path = location.pathname;
+    const [query, setQuery] = useState(search.get("query") ? search.get("query"):"");
 
     const getBooks = async () => {
-        const url = `/books/list.json?query=&page=${page}&size=6&uid=${sessionStorage.getItem("uid")}`;
+        const url = `/books/list.json?query=${query}&page=${page}&size=6&uid=${sessionStorage.getItem("uid")}`;
         setLoading(true);
         const res = await axios(url);
         //console.log(res.data);
@@ -33,14 +34,28 @@ const HomePage = () => {
     }, [location]);
 
     const onChangePage = (page) => {
-        navi(`${path}?query=&page=${page}&size=6&uid=${sessionStorage.getItem("uid")}`);
+        navi(`${path}?query=${query}&page=${page}`);
+    }
+
+    const onSubmit = (e)=>{
+        e.preventDefault();
+        navi(`${path}?query=${query}&page=${page}`);
     }
 
     if(loading) return <div className='my-5 text-center'><Spinner variant='primary'/></div>
     return (
         <div className='my-5'>
-            <Row>
-                <Col>검색수: {total}권</Col>
+            <Row className='mb-3'>
+                <Col md={4}>
+                    <form onSubmit={onSubmit}>
+                        <InputGroup>
+                            <Form.Control onChange={(e)=>setQuery(e.target.value)}
+                                value={query} placeholder='제목,내용,저자'/>
+                            <Button>검색</Button>
+                        </InputGroup>
+                    </form>
+                </Col>
+                <Col className='mt-2'>검색수: {total}권</Col>
             </Row>
             <Row>
                 {books.map(book=>
@@ -66,14 +81,16 @@ const HomePage = () => {
                     </Col>
                 )}
             </Row>
-            <Pagination
-                activePage={page}
-                itemsCountPerPage={6}
-                totalItemsCount={total}
-                pageRangeDisplayed={10}
-                prevPageText={"‹"}
-                nextPageText={"›"}
-                onChange={onChangePage}/>
+            {total > 6 &&
+                <Pagination
+                    activePage={page}
+                    itemsCountPerPage={6}
+                    totalItemsCount={total}
+                    pageRangeDisplayed={10}
+                    prevPageText={"‹"}
+                    nextPageText={"›"}
+                    onChange={onChangePage}/>
+            }
         </div>
     )
 }
