@@ -12,7 +12,7 @@ const HomePage = () => {
     const [loading, setLoading] = useState(false);
     const [total, setTotal] = useState(0);
     const navi = useNavigate();
-
+    const size=6;
     const location=useLocation();
     const search=new URLSearchParams(location.search);
     const page = search.get("page") ? parseInt(search.get("page")) : 1;
@@ -20,7 +20,7 @@ const HomePage = () => {
     const [query, setQuery] = useState(search.get("query") ? search.get("query"):"");
 
     const getBooks = async () => {
-        const url = `/books/list.json?query=${query}&page=${page}&size=6&uid=${sessionStorage.getItem("uid")}`;
+        const url = `/books/list.json?query=${query}&page=${page}&size=${size}&uid=${sessionStorage.getItem("uid")}`;
         setLoading(true);
         const res = await axios(url);
         //console.log(res.data);
@@ -40,6 +40,22 @@ const HomePage = () => {
     const onSubmit = (e)=>{
         e.preventDefault();
         navi(`${path}?query=${query}&page=${page}`);
+    }
+
+    const onClickHeart = async(bid) => {
+        if(sessionStorage.getItem("uid")) {
+            await axios.post('/books/insert/favorite',
+                {uid:sessionStorage.getItem("uid"), bid: bid});
+            getBooks();
+        }else{
+            navi('/users/login');
+        }
+    }
+
+    const onClickFillHeart = async(bid) => {
+        await axios.post('/books/delete/favorite',
+                {uid:sessionStorage.getItem("uid"), bid: bid});
+            getBooks();
     }
 
     if(loading) return <div className='my-5 text-center'><Spinner variant='primary'/></div>
@@ -73,7 +89,10 @@ const HomePage = () => {
                                     </span>
                                 }
                                 <span className='ms-3'>
-                                    <span className='heart'>{book.ucnt === 0 ? <BsHeart/>:<BsHeartFill/>}</span>
+                                    <span className='heart'>{book.ucnt === 0 ? 
+                                        <BsHeart onClick={()=>onClickHeart(book.bid)}/>
+                                        :
+                                        <BsHeartFill onClick={()=>onClickFillHeart(book.bid)}/>}</span>
                                     <span className='ms-1 fcnt'>{book.fcnt}</span>
                                 </span>
                             </Card.Footer>
@@ -84,7 +103,7 @@ const HomePage = () => {
             {total > 6 &&
                 <Pagination
                     activePage={page}
-                    itemsCountPerPage={6}
+                    itemsCountPerPage={size}
                     totalItemsCount={total}
                     pageRangeDisplayed={10}
                     prevPageText={"‹"}

@@ -68,10 +68,10 @@ const BookRead = () => {
         <div className='my-5'>
             <h1 className='text-center mb-5'>도서 정보</h1>
             <Row className='justify-content-center'>
-                <Col md={10}>
+                <Col xs lg={10}>
                     <Card className='p-3'>
                         <Row>
-                            <Col col={2} className='mb-5'>
+                            <Col xs lg={4} className='mb-5'>
                                 <div className='mt-1'>
                                     <img onClick={()=>ref_file.current.click()} 
                                         src={image || "http://via.placeholder.com/170x250"}
@@ -82,7 +82,7 @@ const BookRead = () => {
                                 <Button onClick={onUpdateImage} height="100%"
                                     size='sm mt-2 w-100'>이미지 수정</Button>  
                             </Col>
-                            <Col col={10} className='px-3 align-self-center'>
+                            <Col className='px-3'>
                                 <h3>{title}</h3>
                                 <hr/>
                                 <div>저자 : {authors}</div>
