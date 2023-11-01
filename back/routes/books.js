@@ -87,8 +87,9 @@ router.post('/delete', function(req, res){
 //도서정보
 router.get('/read/:bid', function(req, res) { //localhost:5000/books/read/166
     const bid=req.params.bid;
-    const sql='call book_read(?)';
-    db.get().query(sql, [bid], function(err, rows){
+    const uid=req.query.uid ? req.query.uid: '';
+    const sql='call book_read(?, ?)';
+    db.get().query(sql, [bid, uid], function(err, rows){
         res.send(rows[0][0]);
     });
 });

@@ -5,7 +5,7 @@ import {BsHeartFill, BsHeart} from 'react-icons/bs'
 import {BiMessageDetail} from 'react-icons/bi'
 import Pagination from "react-js-pagination";
 import './Pagination.css';
-import {useNavigate, useLocation} from 'react-router-dom'
+import {useNavigate, useLocation, NavLink} from 'react-router-dom'
 
 const HomePage = () => {
     const [books, setBooks] = useState([]);
@@ -75,10 +75,12 @@ const HomePage = () => {
             </Row>
             <Row>
                 {books.map(book=>
-                    <Col xs={6} md={4} lg={2} className='mb-3'>
+                    <Col xs={6} md={4} lg={2} className='mb-3' key={book.bid}>
                         <Card>
                             <Card.Body>
-                                <img src={book.image || "http://via.placeholder.com/170x250"} width="100%"/>
+                                <NavLink to={`/books/info/${book.bid}`}>
+                                    <img src={book.image || "http://via.placeholder.com/170x250"} width="100%"/>
+                                </NavLink>
                                 <small className='ellipsis mt-2'>{book.title}</small>
                             </Card.Body>
                             <Card.Footer className="text-end">
