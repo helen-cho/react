@@ -94,7 +94,7 @@ const BookInfo = () => {
                         <div className='px-3'>{book.contents}</div>
                     </Tab>
                     <Tab eventKey="review" title="리뷰">
-                        <ReviewPage location={location}/>
+                        <ReviewPage location={location} setBook={setBook} book={book}/>
                     </Tab>
                 </Tabs>
             </div>

@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import Pagination from "react-js-pagination";
 import '../Pagination.css';
 
-const ReviewPage = ({location}) => {
+const ReviewPage = ({location, setBook, book}) => {
     const [reviwes, setReviews] = useState([]);
     const [page, setPage] = useState(1);
     const size=5;
@@ -18,9 +18,10 @@ const ReviewPage = ({location}) => {
         const res=await axios(url);
         //console.log(res.data);
         let list=res.data.list;
-        list=list.map(r=>r && {...r, ellipsis:true});
+        list=list.map(r=>r && {...r, ellipsis:true, edit:false});
         setReviews(list);
         setTotal(res.data.total);
+        setBook({...book, rcnt:res.data.total});
     }
 
     useEffect(()=>{
@@ -59,11 +60,16 @@ const ReviewPage = ({location}) => {
 
     const onClickDelete = async(rid) => {
         if(window.confirm(`${rid}번 리뷰를 삭제하실래요?`)){
-            const res=await axios.post('/review/delete', {rid});
+            const res=await axios.post('/review/delete', {rid:rid});
             if(res.data===1) {
                 getReviews();
             }
         }
+    }
+
+    const onClickUpdate = (rid)=> {
+        const list=reviwes.map(r=>r.rid===rid ? {...r, edit:true} : r);
+        setReviews(list);
     }
 
     return (
@@ -89,14 +95,27 @@ const ReviewPage = ({location}) => {
                     </Col>
                     <Col>
                         <div className='uname'>{review.fmtdate}</div>
-                        <div onClick={()=>onChangeEllipsis(review.rid)} style={{cursor:'pointer'}}
-                            className={review.ellipsis && 'ellipsis2'}>[{review.rid}] {review.contents}</div>
-                        {sessionStorage.getItem("uid") === review.uid &&    
-                            <div className='text-end'>
-                                <Button onClick={()=>onClickDelete(review.rid)}
-                                    variant='danger' size='sm me-2'>삭제</Button>
-                                <Button size='sm'>수정</Button>
-                            </div>    
+                        {!review.edit ?
+                            <>
+                                <div onClick={()=>onChangeEllipsis(review.rid)} style={{cursor:'pointer'}}
+                                    className={review.ellipsis && 'ellipsis2'}>[{review.rid}] {review.contents}</div>
+                                {sessionStorage.getItem("uid") === review.uid &&    
+                                    <div className='text-end'>
+                                        <Button onClick={()=>onClickDelete(review.rid)}
+                                            variant='danger' size='sm me-2'>삭제</Button>
+                                        <Button onClick={()=>onClickUpdate(review.rid)}
+                                            size='sm'>수정</Button>
+                                    </div>    
+                                }
+                            </>
+                            :
+                            <>
+                                <Form.Control value={review.contents} rows={5} as="textarea"/>
+                                <div className='text-end mt-2'>
+                                    <Button variant='success' size="sm me-2">저장</Button>
+                                    <Button variant='secondary' size="sm">취소</Button>
+                                </div>
+                            </>
                         }
                     </Col>
                 </Row>    
