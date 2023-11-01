@@ -94,7 +94,7 @@ const BookInfo = () => {
                         <div className='px-3'>{book.contents}</div>
                     </Tab>
                     <Tab eventKey="review" title="리뷰">
-                        <ReviewPage pathname={location.pathname}/>
+                        <ReviewPage location={location}/>
                     </Tab>
                 </Tabs>
             </div>
