@@ -41,4 +41,18 @@ router.post('/delete', function(req, res){
     })
 });
 
+//리뷰수정
+router.post('/update', function(req, res){
+    const rid=req.body.rid;
+    const contents=req.body.contents;
+    const sql='update review set contents=?, regdate=now() where rid=?';
+    db.get().query(sql, [contents, rid], function(err){
+        if(err){
+            res.send('0');
+        }else{
+            res.send('1');
+        }
+    });
+});
+
 module.exports = router;

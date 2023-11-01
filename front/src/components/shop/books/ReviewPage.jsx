@@ -18,7 +18,7 @@ const ReviewPage = ({location, setBook, book}) => {
         const res=await axios(url);
         //console.log(res.data);
         let list=res.data.list;
-        list=list.map(r=>r && {...r, ellipsis:true, edit:false});
+        list=list.map(r=>r && {...r, ellipsis:true, edit:false, text:r.contents});
         setReviews(list);
         setTotal(res.data.total);
         setBook({...book, rcnt:res.data.total});
@@ -72,6 +72,27 @@ const ReviewPage = ({location, setBook, book}) => {
         setReviews(list);
     }
 
+    
+    const onClickCancel = (rid)=> {
+        const list=reviwes.map(r=>r.rid===rid ? {...r, edit:false, text:r.contents} : r);
+        setReviews(list);
+    }
+
+    const onChange = (rid, e) =>{
+        const list=reviwes.map(r=>r.rid===rid ? {...r, text:e.target.value} : r);
+        setReviews(list);
+    }
+
+    const onClickSave =async(rid, text, contents) => {
+        if(text === contents) return;
+        if(window.confirm("수정하실래요?")){
+            const res=await axios.post("/review/update", {rid, contents:text});
+            if(res.data === 1) {
+                getReviews();
+            }
+        }
+    }
+
     return (
         <div className='py-3'>
             {!sessionStorage.getItem("uid") ? 
@@ -110,10 +131,13 @@ const ReviewPage = ({location, setBook, book}) => {
                             </>
                             :
                             <>
-                                <Form.Control value={review.contents} rows={5} as="textarea"/>
+                                <Form.Control onChange={(e)=>onChange(review.rid, e)}
+                                    value={review.text} rows={5} as="textarea"/>
                                 <div className='text-end mt-2'>
-                                    <Button variant='success' size="sm me-2">저장</Button>
-                                    <Button variant='secondary' size="sm">취소</Button>
+                                    <Button onClick={()=>onClickSave(review.rid, review.text, review.contents)} 
+                                        variant='success' size="sm me-2">저장</Button>
+                                    <Button onClick={()=>onClickCancel(review.rid)}
+                                        variant='secondary' size="sm">취소</Button>
                                 </div>
                             </>
                         }
