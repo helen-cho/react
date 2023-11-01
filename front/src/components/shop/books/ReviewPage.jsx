@@ -15,8 +15,10 @@ const ReviewPage = ({location}) => {
     const getReviews = async() => {
         const url=`/review/list.json?page=${page}&size=${size}&bid=${bid}`;
         const res=await axios(url);
-        console.log(res.data);
-        setReviews(res.data.list);
+        //console.log(res.data);
+        let list=res.data.list;
+        list=list.map(r=>r && {...r, ellipsis:true});
+        setReviews(list);
         setTotal(res.data.total);
     }
 
@@ -31,6 +33,11 @@ const ReviewPage = ({location}) => {
 
     const onChangePage = (page)=> {
         setPage(page)
+    }
+
+    const onChangeEllipsis = (rid) => {
+        const list=reviwes.map(r=>r.rid===rid ? {...r, ellipsis:!r.ellipsis} : r);
+        setReviews(list);
     }
 
     return (
@@ -55,7 +62,8 @@ const ReviewPage = ({location}) => {
                     </Col>
                     <Col>
                         <div className='uname'>{review.fmtdate}</div>
-                        <div className='ellipsis2'>[{review.rid}] {review.contents}</div>
+                        <div onClick={()=>onChangeEllipsis(review.rid)} style={{cursor:'pointer'}}
+                            className={review.ellipsis && 'ellipsis2'}>[{review.rid}] {review.contents}</div>
                     </Col>
                 </Row>    
             )}
