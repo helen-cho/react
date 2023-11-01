@@ -11,6 +11,7 @@ const ReviewPage = ({location}) => {
     const size=5;
     const {bid} = useParams();
     const [total, setTotal] = useState(0);
+    const [contents, setContents] =useState("");
 
     const getReviews = async() => {
         const url=`/review/list.json?page=${page}&size=${size}&bid=${bid}`;
@@ -40,6 +41,22 @@ const ReviewPage = ({location}) => {
         setReviews(list);
     }
 
+    const onClickRegister = async() => {
+        if(contents==="") {
+            alert("리뷰 내용을 입력하세요!");
+        }else{
+            const res=await axios.post('/review/insert', {
+                uid:sessionStorage.getItem("uid"),
+                bid,
+                contents
+            });
+            if(res.data === 1) {
+                getReviews();
+                setContents("");
+            }
+        }
+    }
+
     return (
         <div className='py-3'>
             {!sessionStorage.getItem("uid") ? 
@@ -48,9 +65,10 @@ const ReviewPage = ({location}) => {
                 </div>
                 :
                 <div>
-                    <Form.Control as="textarea" rows={5} placeholder='내용을 입력하세요.'/>
+                    <Form.Control value={contents} onChange={(e)=>setContents(e.target.value)}
+                        as="textarea" rows={5} placeholder='내용을 입력하세요.'/>
                     <div className='text-end mt-2'>
-                        <Button className='px-5'>등록</Button>
+                        <Button className='px-5' onClick={onClickRegister}>등록</Button>
                     </div>    
                 </div>    
             }
