@@ -28,4 +28,17 @@ router.post('/insert', function(req, res){
     })
 });
 
+//리뷰삭제
+router.post('/delete', function(req, res){
+    const rid=req.body.rid;
+    const sql='delete from review where rid=?';
+    db.get().query(sql, [rid], function(err){
+        if(err){
+            res.send('0');
+        }else{
+            res.send('1');
+        }
+    })
+});
+
 module.exports = router;

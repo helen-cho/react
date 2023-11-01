@@ -57,6 +57,15 @@ const ReviewPage = ({location}) => {
         }
     }
 
+    const onClickDelete = async(rid) => {
+        if(window.confirm(`${rid}번 리뷰를 삭제하실래요?`)){
+            const res=await axios.post('/review/delete', {rid});
+            if(res.data===1) {
+                getReviews();
+            }
+        }
+    }
+
     return (
         <div className='py-3'>
             {!sessionStorage.getItem("uid") ? 
@@ -82,10 +91,17 @@ const ReviewPage = ({location}) => {
                         <div className='uname'>{review.fmtdate}</div>
                         <div onClick={()=>onChangeEllipsis(review.rid)} style={{cursor:'pointer'}}
                             className={review.ellipsis && 'ellipsis2'}>[{review.rid}] {review.contents}</div>
+                        {sessionStorage.getItem("uid") === review.uid &&    
+                            <div className='text-end'>
+                                <Button onClick={()=>onClickDelete(review.rid)}
+                                    variant='danger' size='sm me-2'>삭제</Button>
+                                <Button size='sm'>수정</Button>
+                            </div>    
+                        }
                     </Col>
                 </Row>    
             )}
-            {total > 3 &&
+            {total > size &&
                 <Pagination
                     activePage={page}
                     itemsCountPerPage={size}
