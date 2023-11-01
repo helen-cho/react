@@ -33,7 +33,11 @@ const LoginPage = () => {
                 alert("비빌번호가 일치하지 않습니다!");
             }else{
                 sessionStorage.setItem("uid", uid);
-                navi('/');
+                if(sessionStorage.getItem("target")){
+                    navi(sessionStorage.getItem("target"));
+                }else{
+                    navi('/');
+                }
             }
         }
     }
