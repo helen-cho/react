@@ -180,6 +180,7 @@ const ReviewPage = ({location, setBook, book}) => {
                             </>
                         }
                     </Col>
+                    <hr className='mt-2'/>
                 </Row>    
             )}
             {total > size &&

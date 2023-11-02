@@ -1,15 +1,17 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate, useLocation, useParams } from 'react-router-dom'
 import { Spinner, Row, Col, Card, Button, Tab, Tabs } from 'react-bootstrap';
 import { BsHeartFill, BsHeart } from 'react-icons/bs'
 import { BiMessageDetail } from 'react-icons/bi'
 import ReviewPage from './ReviewPage';
+import { BoxContext } from '../BoxContext';
 
 const BookInfo = () => {
+    const {setBox} = useContext(BoxContext);
     const navi = useNavigate();
     const location = useLocation();
-    //console.log('...........', location.pathname);
+    const [value, setValue] = useState('');
 
     const { bid } = useParams();
     const [book, setBook] = useState('');
@@ -44,7 +46,21 @@ const BookInfo = () => {
         getBook();
     }
 
-    if (loading) return <div className='my-5 text-center'><Spinner variant='primary' /></div>
+    const onClickCart = async() => {
+        const res=await axios.post("/cart/insert", {bid, uid:sessionStorage.getItem("uid")});
+        setBox({
+            show:true, 
+            message: res.data===0 ? 
+                    `장바구니에 등록되었습니다.\n쇼핑을 계속하실래요?`
+                    :
+                    `이미 장바구니에 존재합니다.\n쇼핑을 계속하실래요?`,
+            action:()=>{
+                window.location.href="/";
+            }        
+        });
+    }
+
+    if (loading) return <div className='my-5 text-center'><Spinner variant='primary'/></div>
     return (
         <div className='my-5'>
             <h1 className='text-center mb-5'>도서정보</h1>
@@ -76,10 +92,13 @@ const BookInfo = () => {
                             <span className='ms-1 fcnt'>{book.fcnt}</span>
                         </span>
                         <hr />
-                        <div>
-                            <Button variant='warning' className='me-2'>장바구니</Button>
-                            <Button variant='success'>바로구매</Button>
-                        </div>
+                        {sessionStorage.getItem("uid") &&
+                            <div>
+                                <Button onClick={onClickCart}
+                                    variant='warning' className='me-2'>장바구니</Button>
+                                <Button variant='success'>바로구매</Button>
+                            </div>
+                        }
                     </Col>
                 </Row>
             </Card>

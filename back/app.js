@@ -23,6 +23,8 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/books', require('./routes/books'));
 app.use('/review', require('./routes/review'));
+app.use('/orders', require('./routes/orders'));
+app.use('/cart', require('./routes/cart'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

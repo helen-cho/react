@@ -39,6 +39,9 @@ const HeaderPage = () => {
                         <NavLink to="/">Home</NavLink>
                         <NavLink to="/books/search">도서검색</NavLink>
                         <NavLink to="/books/list">도서목록</NavLink>
+                        {sessionStorage.getItem("uid") &&
+                            <NavLink to="/orders/cart">장바구니</NavLink>
+                        }
                     </Nav>
                     <Nav>
                         {!sessionStorage.getItem("uid") ?
