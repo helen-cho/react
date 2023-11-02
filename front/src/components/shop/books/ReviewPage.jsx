@@ -4,6 +4,7 @@ import {Button, Form, Row, Col} from 'react-bootstrap'
 import { useParams } from 'react-router-dom';
 import Pagination from "react-js-pagination";
 import '../Pagination.css';
+import ModalBox from '../ModalBox';
 
 const ReviewPage = ({location, setBook, book}) => {
     const [reviwes, setReviews] = useState([]);
@@ -12,6 +13,11 @@ const ReviewPage = ({location, setBook, book}) => {
     const {bid} = useParams();
     const [total, setTotal] = useState(0);
     const [contents, setContents] =useState("");
+    const [box, setBox] = useState({
+        show:false,
+        message:'',
+        action:null
+    });
 
     const getReviews = async() => {
         const url=`/review/list.json?page=${page}&size=${size}&bid=${bid}`;
@@ -44,7 +50,7 @@ const ReviewPage = ({location, setBook, book}) => {
 
     const onClickRegister = async() => {
         if(contents==="") {
-            alert("리뷰 내용을 입력하세요!");
+            setBox({show:true, message:'내용을입력하세요!'});
         }else{
             const res=await axios.post('/review/insert', {
                 uid:sessionStorage.getItem("uid"),
@@ -59,12 +65,24 @@ const ReviewPage = ({location, setBook, book}) => {
     }
 
     const onClickDelete = async(rid) => {
+        /*
         if(window.confirm(`${rid}번 리뷰를 삭제하실래요?`)){
             const res=await axios.post('/review/delete', {rid:rid});
             if(res.data===1) {
                 getReviews();
             }
         }
+        */
+        setBox({
+            show:true,
+            message:`${rid}번 리뷰를 삭제하실래요?`,
+            action: async()=>{
+                const res=await axios.post('/review/delete', {rid:rid});
+                if(res.data===1) {
+                    getReviews();
+                }
+            }
+        })
     }
 
     const onClickUpdate = (rid)=> {
@@ -73,7 +91,10 @@ const ReviewPage = ({location, setBook, book}) => {
     }
 
     
-    const onClickCancel = (rid)=> {
+    const onClickCancel = (rid, text, contents)=> {
+        if(text !== contents){
+            if(!window.confirm("정말로 취소할래요?")) return;
+        }
         const list=reviwes.map(r=>r.rid===rid ? {...r, edit:false, text:r.contents} : r);
         setReviews(list);
     }
@@ -112,7 +133,7 @@ const ReviewPage = ({location, setBook, book}) => {
                 <Row key={review.rid} className='my-3'>
                     <Col xs={2} md={1} className='align-self-center'>
                         <img src={review.photo||"http://via.placeholder.com/100x100"} className='photo' width="80%"/>
-                        <div className='uname text-center'>{review.uname}</div>
+                        <div className='uname'>{review.uname}</div>
                     </Col>
                     <Col>
                         <div className='uname'>{review.fmtdate}</div>
@@ -136,7 +157,7 @@ const ReviewPage = ({location, setBook, book}) => {
                                 <div className='text-end mt-2'>
                                     <Button onClick={()=>onClickSave(review.rid, review.text, review.contents)} 
                                         variant='success' size="sm me-2">저장</Button>
-                                    <Button onClick={()=>onClickCancel(review.rid)}
+                                    <Button onClick={()=>onClickCancel(review.rid, review.text, review.contents)}
                                         variant='secondary' size="sm">취소</Button>
                                 </div>
                             </>
@@ -154,6 +175,8 @@ const ReviewPage = ({location, setBook, book}) => {
                     nextPageText={"›"}
                     onChange={onChangePage}/>
             }
+
+            {box.show && <ModalBox box={box} setBox={setBox}/>}
         </div>
     )
 }
