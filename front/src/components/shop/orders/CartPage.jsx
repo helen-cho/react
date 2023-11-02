@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
-import {Table, Button, Spinner, Row, Col, Alert} from 'react-bootstrap'
+import {Table, Button, Spinner, Row, Col, Alert, Form} from 'react-bootstrap'
 import Pagination from "react-js-pagination";
 import '../Pagination.css';
 import {RiDeleteBinLine} from 'react-icons/ri'
@@ -40,10 +40,30 @@ const CartPage = () => {
         setBox({
             show:true,
             message:`${cid}번 장바구니 도서를 삭제하실래요?`,
-            action:()=>{
-
+            action:async ()=>{
+                await axios.post('/cart/delete', {cid});
+                if(page ===1 ){
+                    getCart();
+                }else{
+                    setPage(1);
+                }
             }
         });
+    }
+
+    const onClickUpdate = (cid, qnt) => {
+        setBox({
+            show:true,
+            message:`${cid}번 수량을 ${qnt}로 변경하실래요?`,
+            action:async ()=>{
+                await axios.post("/cart/update", {cid, qnt});
+                getCart();
+            }
+        });
+    }
+
+    const onChange = (e, cid) => {
+        setBooks(books.map(book=>book.cid===cid ? {...book, qnt:e.target.value} : book));
     }
 
     if(loading) return <div className='my-5 text-center'><Spinner variant='primary'/></div> 
@@ -65,7 +85,12 @@ const CartPage = () => {
                             <td><img src={book.image || "http://via.placeholde.com"} width={30}/></td>
                             <td><div className='ellipsis'>{book.title}</div></td>
                             <td className='text-end'>{book.fmtprice}원</td>
-                            <td>{book.qnt}</td>
+                            <td>
+                                <input onChange={(e)=>onChange(e, book.cid)}
+                                    value={book.qnt} size={2} className='text-end'/>
+                                <Button onClick={()=>onClickUpdate(book.cid, book.qnt)}
+                                    size="sm ms-1">변경</Button>
+                            </td>
                             <td className='text-end'>{book.fmtsum}원</td>
                             <td><RiDeleteBinLine onClick={()=>onClickDelete(book.cid)}
                                     className='delete'/></td>

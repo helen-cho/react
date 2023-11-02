@@ -43,4 +43,32 @@ router.get("/sum", function(req, res){ //localhost:5000/cart/sum?uid=blue
     });
 });
 
+
+//장바구니 삭제
+router.post("/delete", function(req, res){
+    const cid=req.body.cid;
+    const sql='delete from cart where cid=?';
+    db.get().query(sql, [cid], function(err){
+        if(err){
+            res.send('0');
+        }else{
+            res.send('1');
+        }
+    })
+});
+
+//수량변경
+router.post("/update", function(req, res){
+    const cid=req.body.cid;
+    const qnt=req.body.qnt;
+    const sql='update cart set qnt=? where cid=?';
+    db.get().query(sql, [qnt, cid], function(err){
+        if(err){
+            res.send('0');
+        }else{
+            res.send('1');
+        }
+    })
+});
+
 module.exports = router;
