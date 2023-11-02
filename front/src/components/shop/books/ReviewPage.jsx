@@ -1,10 +1,10 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {Button, Form, Row, Col} from 'react-bootstrap'
 import { useParams } from 'react-router-dom';
 import Pagination from "react-js-pagination";
 import '../Pagination.css';
-import ModalBox from '../ModalBox';
+import {BoxContext} from '../BoxContext';
 
 const ReviewPage = ({location, setBook, book}) => {
     const [reviwes, setReviews] = useState([]);
@@ -13,11 +13,7 @@ const ReviewPage = ({location, setBook, book}) => {
     const {bid} = useParams();
     const [total, setTotal] = useState(0);
     const [contents, setContents] =useState("");
-    const [box, setBox] = useState({
-        show:false,
-        message:'',
-        action:null
-    });
+    const {box, setBox} = useContext(BoxContext);
 
     const getReviews = async() => {
         const url=`/review/list.json?page=${page}&size=${size}&bid=${bid}`;
@@ -196,8 +192,6 @@ const ReviewPage = ({location, setBook, book}) => {
                     nextPageText={"›"}
                     onChange={onChangePage}/>
             }
-
-            {box.show && <ModalBox box={box} setBox={setBox}/>}
         </div>
     )
 }

@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import axios from 'axios';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Spinner, Table, Row, Col, InputGroup, Form, Button } from 'react-bootstrap';
 import Pagination from "react-js-pagination";
 import '../Pagination.css';
+import { BoxContext } from '../BoxContext';
 
 const BookList = () => {
+    const {box, setBox} = useContext(BoxContext);
     const size = 5;
     const location = useLocation();
     const navi=useNavigate();
@@ -73,9 +75,14 @@ const BookList = () => {
 
     const onClickDelete = async() => {
         if(chcnt==0) {
-            alert("삭제할 도서를 선택하세요!")
+            //alert("삭제할 도서를 선택하세요!")
+            setBox({
+                show:true,
+                message:'삭제할 도서들을 선택하세요!'
+            })
         }else{
             let count=0;
+            /*
             if(window.confirm(`${chcnt}권 도서를 삭제하실래요?`)) {
                 for(const book of books){
                     if(book.checked) {
@@ -86,6 +93,22 @@ const BookList = () => {
                 alert(`${count}권 삭제되었습니다.`);
                 navi(`${path}?page=1&query=${query}&size=${size}`);
             }
+            */
+            setBox({
+                show:true,
+                message:`${chcnt}권 도서를 삭제하실래요?`,
+                action:async()=>{
+                    for(const book of books){
+                        if(book.checked) {
+                            const res=await axios.post('/books/delete', {bid: book.bid});
+                            if(res.data === 1) count++;
+                        }
+                    }
+                    //alert(`${count}권 삭제되었습니다.`);
+                    setBox({show:true, message:`${count}권 삭제되었습니다.`});
+                    navi(`${path}?page=1&query=${query}&size=${size}`);
+                }
+            })
         }
     }
 

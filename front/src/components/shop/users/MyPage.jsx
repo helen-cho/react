@@ -1,9 +1,11 @@
 import axios from 'axios';
-import React, { useEffect, useRef, useState } from 'react'
+import React, {useContext, useEffect, useRef, useState } from 'react'
 import { Spinner, Row, Col, Button, Card } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import { BoxContext } from '../BoxContext';
 
 const MyPage = () => {
+    const {box, setBox} = useContext(BoxContext);
     const navi = useNavigate();
     const ref_file = useRef(null);
     const [loading, setLoading] = useState(false);
@@ -38,8 +40,13 @@ const MyPage = () => {
 
     const onUpdatePhoto = async() => {
         if(!file) {
-            alert("수정할 사진을 선택하세요!");
+            //alert("수정할 사진을 선택하세요!");
+            setBox({
+                show:true,
+                message:'수정할 사진을 선택해 주세요!'
+            });
         }else{
+            /*
             if(window.confirm("변경된 사진을 저장하실래요?")){
                 //사진저장
                 const formData=new FormData();
@@ -47,7 +54,17 @@ const MyPage = () => {
                 formData.append("uid", uid);
                 await axios.post("/users/update/photo", formData);
                 alert("사진이 변경되었습니다.");
-            }
+            }*/
+            setBox({
+                show:true,
+                message:"변경된 사진을 저장하실래요?",
+                action: async()=>{
+                    const formData=new FormData();
+                    formData.append("file", file);
+                    formData.append("uid", uid);
+                    await axios.post("/users/update/photo", formData);
+                }
+            })
         }
     }
 
