@@ -1,16 +1,29 @@
+import { useContext } from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import {NavLink, useNavigate} from 'react-router-dom'
+import { BoxContext } from './BoxContext';
 
 const HeaderPage = () => {
+    const {box, setBox} = useContext(BoxContext);
     const navi = useNavigate();
     const onLogout = (e)=> {
         e.preventDefault();
+        /*
         if(window.confirm("로그아웃하실래요?")) {
             sessionStorage.clear();
             navi("/");
         }
+        */
+       setBox({
+            show:true,
+            message:'로그아웃하실래요?',
+            action:()=>{
+                sessionStorage.clear();
+                navi("/");
+            }
+       })
     }
 
     return (
