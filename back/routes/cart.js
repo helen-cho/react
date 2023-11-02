@@ -34,4 +34,13 @@ router.get('/list.json', function(req, res){ //localhost:5000/cart/list.json?uid
     });
 });
 
+//총합계
+router.get("/sum", function(req, res){ //localhost:5000/cart/sum?uid=blue
+    const uid=req.query.uid;
+    const sql='call cart_sum(?)';
+    db.get().query(sql, [uid], function(err, rows){
+        res.send(rows[0][0]);
+    });
+});
+
 module.exports = router;

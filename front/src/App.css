@@ -89,3 +89,9 @@ a {
   font-size: 0.7rem;
   color: gray;
 }
+
+.delete {
+  cursor: pointer;
+  font-size: 1.5rem;
+  color:gray;
+}
