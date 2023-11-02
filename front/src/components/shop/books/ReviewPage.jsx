@@ -93,10 +93,19 @@ const ReviewPage = ({location, setBook, book}) => {
     
     const onClickCancel = (rid, text, contents)=> {
         if(text !== contents){
-            if(!window.confirm("정말로 취소할래요?")) return;
+            //if(!window.confirm("정말로 취소할래요?")) return;
+            setBox({
+                show:true,
+                message:"정말로 취소하실래요?",
+                action: ()=> {
+                    const list=reviwes.map(r=>r.rid===rid ? {...r, edit:false, text:r.contents} : r);
+                    setReviews(list);
+                }
+            })
+        }else{
+            const list=reviwes.map(r=>r.rid===rid ? {...r, edit:false, text:r.contents} : r);
+            setReviews(list);
         }
-        const list=reviwes.map(r=>r.rid===rid ? {...r, edit:false, text:r.contents} : r);
-        setReviews(list);
     }
 
     const onChange = (rid, e) =>{
@@ -106,12 +115,24 @@ const ReviewPage = ({location, setBook, book}) => {
 
     const onClickSave =async(rid, text, contents) => {
         if(text === contents) return;
+        /*
         if(window.confirm("수정하실래요?")){
             const res=await axios.post("/review/update", {rid, contents:text});
             if(res.data === 1) {
                 getReviews();
             }
         }
+        */
+        setBox({
+            show:true,
+            message:'정말로 저장하실래요?',
+            action:async ()=>{
+                const res=await axios.post("/review/update", {rid, contents:text});
+                if(res.data === 1) {
+                    getReviews();
+                }
+            }
+        });
     }
 
     return (
