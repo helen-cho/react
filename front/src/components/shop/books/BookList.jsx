@@ -63,6 +63,7 @@ const BookList = () => {
         }
     }
 
+
     const onChangeAll = (e) => {
         const list = books.map(book=>book && {...book, checked:e.target.checked});
         setBooks(list);
