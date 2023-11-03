@@ -23,14 +23,11 @@ router.post('/insert', function(req, res){
 });
 
 //카트목록
-router.get('/list.json', function(req, res){ //localhost:5000/cart/list.json?uid=blud&page=1&size=5
+router.get('/list.json', function(req, res){ //localhost:5000/cart/list.json?uid=blue
     const uid=req.query.uid;
-    const page=req.query.page;
-    const size=req.query.size;
-    //console.log('...............', uid, page, size);
-    const sql='call cart_list(?,?,?)';
-    db.get().query(sql, [uid, page, size], function(err, rows){
-        res.send({list:rows[0], total:rows[1][0].total});
+    const sql='call cart_list(?)';
+    db.get().query(sql, [uid], function(err, rows){
+        res.send({list: rows[0]});
     });
 });
 
