@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Spinner, Table } from 'react-bootstrap';
+import { Spinner, Table, Row, Col, InputGroup, Form, Button } from 'react-bootstrap';
 import OrderModal from './OrderModal';
 import Pagination from "react-js-pagination";
 import '../Pagination.css';
@@ -34,10 +34,28 @@ const OrderAdmin = () => {
         navi(`/orders/admin?page=${page}&size=${size}&query=${query}`);
     }
 
+    const onSumbmit = (e) => {
+        e.preventDefault();
+        navi(`/orders/admin?page=1&size=${size}&query=${query}`);
+    }
+
     if(loading) return <div className='text-center my-5'><Spinner variant='primary'/></div>
     return (
         <div className='my-5'>
             <h1 className='text-center mb-5'>주문관리</h1>
+            <Row className='mb-2'>
+                <Col md={4}>
+                    <form onSubmit={onSumbmit}>
+                        <InputGroup>
+                            <Form.Control placeholder='주문자,주소,전화' value={query} onChange={(e)=>setQuery(e.target.value)}/>
+                            <Button type="submit">검색</Button>
+                        </InputGroup>
+                    </form>
+                </Col>
+                <Col className='mt-2'>
+                    검색수: {total}건
+                </Col>
+            </Row>
             <Table bordered striped hover>
                 <thead>
                     <tr className='text-center'>
