@@ -45,4 +45,14 @@ router.post("/insert", function(req, res){
     });    
 });
 
+//주문목록
+router.get('/list/purchase.json', function(req, res){ //localhost:5000/orders/list/purchase.json?uid=blue
+    const uid=req.query.uid;
+    const page=req.query.page ? req.query.page: 1;
+    const size=req.query.size ? req.query.size: 5;
+    const sql='call purchase_list(?,?,?)';
+    db.get().query(sql, [uid, page, size], function(err, rows){
+        res.send({list:rows[0], total:rows[1][0].total});
+    });
+})
 module.exports = router;
