@@ -1,10 +1,11 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react'
-import {Table, Alert, Row, Col, InputGroup, Card, Form, Button} from 'react-bootstrap'
+import {Table, Alert, Row, Col, InputGroup, Card, Form, Button, Spinner} from 'react-bootstrap'
 import ModalPostCode from '../users/ModalPostCode';
 import {BoxContext} from '../BoxContext'
 
 const OrderPage = ({books}) => {
+    const [loading, setLoading] = useState(false);
     const {setBox} = useContext(BoxContext);
     const [orders, setOrders] = useState([]);
     const [total, setTotal] = useState(0); //주문할 전체상품 갯수
@@ -19,7 +20,7 @@ const OrderPage = ({books}) => {
     const {uid, uname, phone, address1, address2} = form;
     const getUser = async() => {
         const res=await axios.get(`/users/read/${sessionStorage.getItem("uid")}`);
-        console.log(res.data);
+        //console.log(res.data);
         setForm(res.data);
     }
 
@@ -49,15 +50,24 @@ const OrderPage = ({books}) => {
             show:true,
             message:"주문을 진행하시겠습니까?",
             action:async()=>{
+                setLoading(true);
                 const data={...form, sum, uid};
                 //console.log(data);
                 const res=await axios.post("/orders/insert/purchase", data);
                 const pid=res.data;
-                console.log(pid);
+                //주문상품저장
+                for(const order of orders){
+                    const data={...order, pid}
+                    //console.log(data);
+                    await axios.post("/orders/insert", data);
+                }
+                setLoading(false);
+                window.location.href="/";
             }
         });
     }
 
+    if(loading) return <div className='text-center my-5'><Spinner variant='primary'/></div>
     return (
         <div className='my-5'>
             <h1 className='text-center mb-5'>주문하기</h1>

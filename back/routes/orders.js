@@ -19,9 +19,30 @@ router.post("/insert/purchase", function(req, res){
                 res.send(rows[0].last.toString());
             });
         }else {
+            console.log('오류....', err);
             res.send('0');
         }
     });
+});
+
+//주문상품등록
+router.post("/insert", function(req, res){
+    const cid = req.body.cid;
+    const pid = req.body.pid;
+    const bid = req.body.bid;
+    const qnt = req.body.qnt;
+    const price = req.body.price;
+    let sql="insert into orders(pid, bid, qnt, price) values(?,?,?,?)";
+    db.get().query(sql, [pid,bid,qnt,price], function(err){
+        if(!err){
+            sql='delete from cart where cid=?';
+            db.get().query(sql, [cid], function(err){
+                res.send('1');
+            });
+        }else{
+            res.send('0');
+        }
+    });    
 });
 
 module.exports = router;
