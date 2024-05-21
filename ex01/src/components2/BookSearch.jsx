@@ -1,8 +1,10 @@
 import axios from 'axios';
 import React, {useEffect, useState} from 'react'
-import { Row, Col, Card, InputGroup, Form, Button } from 'react-bootstrap'
+import { Row, Col, Card, InputGroup, Form, Button, Spinner } from 'react-bootstrap'
+import ModalBook from './ModalBook';
 
 const BookSearch = () => {
+    const [loading, setLoading] = useState(false);
     const [total, setTotal] = useState(0);
     const [last, setLast] = useState(false);
     const [page, setPage] = useState(1);
@@ -10,15 +12,20 @@ const BookSearch = () => {
     const [books, setBooks] = useState([]);
 
     const callAPI = async() => {
+        setLoading(true);
         const url=`https://dapi.kakao.com/v3/search/book?target=title&query=${query}&size=12&page=${page}`;
         const config={
             headers:{"Authorization":"KakaoAK 54b6688221dead45827042df7e297c2d"}
         }
         const res= await axios.get(url, config);
         console.log(res.data);
-        setBooks(res.data.documents);
-        setLast(res.data.meta.is_end);
-        setTotal(res.data.meta.pageable_count);
+        setBooks(res.data.documents);  //배열데이터
+        setLast(res.data.meta.is_end); //마지막페이지 (true/false)
+        setTotal(res.data.meta.pageable_count); //검색수
+
+        setTimeout(()=>{
+            setLoading(false);
+        }, 1000);
     };
 
     useEffect(()=>{
@@ -34,6 +41,10 @@ const BookSearch = () => {
             callAPI();
         }
     }
+
+    if(loading) 
+    return <div className='text-center my-5'><Spinner animation="grow" variant="primary"/></div>
+
 
     return (
         <div className='my-5 bookSearch'>
@@ -57,7 +68,8 @@ const BookSearch = () => {
                     <Col xs={6} md={4} lg={2} className='mb-3'>
                         <Card>
                             <Card.Body>
-                                <img src={book.thumbnail} width="100%"/>
+                                <img src={book.thumbnail || 'http://via.placeholder.com/120x170'} width="100%"/>
+                                <ModalBook book={book}/>
                             </Card.Body>
                             <Card.Footer>
                                 <div className='ellipsis title'>{book.title}</div>
