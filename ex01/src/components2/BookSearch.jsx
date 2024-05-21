@@ -68,7 +68,6 @@ const BookSearch = () => {
                     <Col xs={6} md={4} lg={2} className='mb-3'>
                         <Card>
                             <Card.Body>
-                                <img src={book.thumbnail || 'http://via.placeholder.com/120x170'} width="100%"/>
                                 <ModalBook book={book}/>
                             </Card.Body>
                             <Card.Footer>
