@@ -1,17 +1,12 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import Todos from './components/Todos';
-import { Row, Col} from 'react-bootstrap';
-import Posts from './components/Posts';
-
+import BookSearch from './components2/BookSearch';
+import { Container } from 'react-bootstrap';
 const App = () => {
     return (
-        <div className="App">
-            <Row>
-                <Col><Posts/></Col>
-                <Col><Todos/></Col>
-            </Row>
-        </div>
+        <Container>
+            <BookSearch/>
+        </Container>
     );
 }
 

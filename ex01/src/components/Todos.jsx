@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 
 const Todos = () => {
@@ -5,8 +6,8 @@ const Todos = () => {
     const [page, setPage] = useState(19);
     const [todos, setTodos] = useState([]);
     
-    const callAPI = () => {
-        fetch('https://jsonplaceholder.typicode.com/todos')
+    const callAPI = async() => {
+        fetch('/todos')
         .then(response => response.json())
         .then(json => {
             setLast(Math.ceil(json.length/10));
