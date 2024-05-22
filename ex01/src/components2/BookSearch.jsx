@@ -14,6 +14,7 @@ const BookSearch = () => {
     const callAPI = async() => {
         setLoading(true);
         const url=`https://dapi.kakao.com/v3/search/book?target=title&query=${query}&size=12&page=${page}`;
+        //const url=`/kakao/v3/search/book?target=title&query=${query}&size=12&page=${page}`;
         const config={
             headers:{"Authorization":"KakaoAK 54b6688221dead45827042df7e297c2d"}
         }
