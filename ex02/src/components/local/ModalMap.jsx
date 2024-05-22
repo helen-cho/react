@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { Map, MapMarker} from 'react-kakao-maps-sdk'
 
 const ModalMap = ({local}) => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const {place_name, address_name, x, y} = local; //비구조할당
+  const {place_name, address_name, x, y, phone} = local; //비구조할당
   return (
     <>
       <Button variant="primary" onClick={handleShow} size="sm">
@@ -22,8 +23,11 @@ const ModalMap = ({local}) => {
           <Modal.Title>{place_name}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          I will not close if you click outside me. Do not even try to press
-          escape key.
+          <Map center={{lat:y, lng:x}} style={{width:'100%', height:'300px'}}>
+            <MapMarker position={{lat:y, lng:x}}>
+              <div>전화:{phone || '없음'}</div>
+            </MapMarker>
+          </Map>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
