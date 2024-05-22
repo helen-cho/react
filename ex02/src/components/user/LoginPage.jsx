@@ -1,7 +1,13 @@
 import React, { useState } from 'react'
 import {Row, Col, Card, Form, InputGroup, Button} from 'react-bootstrap'
+import { app } from '../../firebaseInit'
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
+import { useNavigate } from 'react-router-dom'
+
 const LoginPage = () => {
-  
+  const navi = useNavigate();
+  const auth = getAuth(app);  
+
   const [form, setForm] = useState({
     email:'red@test.com',
     pass:'12341234'
@@ -21,7 +27,16 @@ const LoginPage = () => {
       return;
     }
     //로그인체크
-    alert(`${email}\n${pass}`);
+    signInWithEmailAndPassword(auth, email, pass)
+    .then(succss=>{
+      //alert('성공');
+      sessionStorage.setItem('email', email);
+      sessionStorage.setItem('uid', succss.user.uid);
+      navi('/');
+    })
+    .catch(error=>{
+      alert('이메일 비밀하지 않습니다!');
+    })
   }
 
   return (
