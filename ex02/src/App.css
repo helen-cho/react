@@ -5,3 +5,16 @@
     font-weight: 400;
     font-style: normal;
 }
+
+.ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+
+.bookSearch .title {
+    font-size: 12px;
+    color: green;
+}
