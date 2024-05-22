@@ -1,13 +1,14 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Table, Button, InputGroup, Form, Col, Row } from 'react-bootstrap';
+import ModalMap from './ModalMap';
 const LocalSeach = () => {
   const [count, setCount] = useState(0);
   const [isEnd, setIsEnd] = useState(false);
   const [locals, setLocals] = useState([]);
   const [query, setQuery] = useState("가산디지털");
   const [page, setPage] = useState(1);
-  const [size, setSize] = useState(10);
+  const [size, setSize] = useState(5);
 
   const callAPI = async() => {
     const url=`https://dapi.kakao.com/v2/local/search/keyword.json?query=${query}&page=${page}&size=${size}`;
@@ -56,9 +57,9 @@ const LocalSeach = () => {
         </Col>
         <Col className='text-end' xs={2}>
           <Form.Select onChange={onChangeSize}>
-            <option value="5">5행</option>
-            <option value="10">10행</option>
-            <option value="15">15행</option>
+            <option value="5"  selected={size===5}>5행</option>
+            <option value="10" selected={size===10}>10행</option>
+            <option value="15" selected={size===15}>15행</option>
           </Form.Select>
         </Col>
       </Row>
@@ -69,6 +70,7 @@ const LocalSeach = () => {
             <td>지역명</td>
             <td>전화번호</td>
             <td>주소</td>
+            <td>지도보기</td>
           </tr>
         </thead>
         <tbody>
@@ -78,6 +80,7 @@ const LocalSeach = () => {
               <td><div className='ellipsis'>{local.place_name}</div></td>
               <td><div className='ellipsis'>{local.phone}</div></td>
               <td><div className='ellipsis'>{local.address_name}</div></td>
+              <td><ModalMap local={local}/></td>
             </tr>
           )}
         </tbody>
