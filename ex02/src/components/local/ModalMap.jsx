@@ -25,7 +25,7 @@ const ModalMap = ({local}) => {
         <Modal.Body>
           <Map center={{lat:y, lng:x}} style={{width:'100%', height:'300px'}}>
             <MapMarker position={{lat:y, lng:x}}>
-              <div>전화:{phone || '없음'}</div>
+              <div style={{fontSize:'15px'}}>전화:{phone || '없음'}</div>
             </MapMarker>
           </Map>
         </Modal.Body>

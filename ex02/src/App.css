@@ -22,3 +22,7 @@
 .bookSearch img {
     cursor: pointer;
 }
+
+.userLogin .title {
+    width: 100px;
+}
