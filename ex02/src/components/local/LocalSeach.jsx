@@ -23,17 +23,31 @@ const LocalSeach = () => {
 
   useEffect(()=>{
     callAPI();
-  }, [page]);
+  }, [page, size]);
 
+  const onSubmit = (e) => {
+    e.preventDefault();
+    if(query===""){
+      alert("검색어를 입력하세요!");
+    }else{
+      setPage(1);
+      callAPI();
+    }
+  }
+
+  const onChangeSize = (e) => {
+    setPage(1);
+    setSize(e.target.value);
+  }
   return (
     <div className='my-5'>
       <h1 className='text-center my-5'>지역검색</h1>
       <Row className='mb-2'>
-        <Col xs={8} md={6} lg={4}>
-          <form>
+        <Col xs={7} md={6} lg={4}>
+          <form onSubmit={onSubmit}>
             <InputGroup>
-              <Form.Control value={query}/>
-              <Button>검색</Button>
+              <Form.Control value={query} onChange={(e)=>setQuery(e.target.value)}/>
+              <Button type="submit">검색</Button>
             </InputGroup>
           </form>
         </Col>
@@ -41,10 +55,10 @@ const LocalSeach = () => {
           <div className='mt-2'>검색수: {count}건</div>
         </Col>
         <Col className='text-end' xs={2}>
-          <Form.Select>
-            <option>5행</option>
-            <option selected={true}>10행</option>
-            <option>15행</option>
+          <Form.Select onChange={onChangeSize}>
+            <option value="5">5행</option>
+            <option value="10">10행</option>
+            <option value="15">15행</option>
           </Form.Select>
         </Col>
       </Row>
