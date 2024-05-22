@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Table, Button, InputGroup, Form, Col, Row } from 'react-bootstrap';
 const LocalSeach = () => {
+  const [count, setCount] = useState(0);
   const [isEnd, setIsEnd] = useState(false);
   const [locals, setLocals] = useState([]);
   const [query, setQuery] = useState("가산디지털");
@@ -17,6 +18,7 @@ const LocalSeach = () => {
     console.log(res.data);
     setLocals(res.data.documents);
     setIsEnd(res.data.meta.is_end);
+    setCount(res.data.meta.pageable_count);
   }
 
   useEffect(()=>{
@@ -26,6 +28,26 @@ const LocalSeach = () => {
   return (
     <div className='my-5'>
       <h1 className='text-center my-5'>지역검색</h1>
+      <Row className='mb-2'>
+        <Col xs={8} md={6} lg={4}>
+          <form>
+            <InputGroup>
+              <Form.Control value={query}/>
+              <Button>검색</Button>
+            </InputGroup>
+          </form>
+        </Col>
+        <Col>
+          <div className='mt-2'>검색수: {count}건</div>
+        </Col>
+        <Col className='text-end' xs={2}>
+          <Form.Select>
+            <option>5행</option>
+            <option selected={true}>10행</option>
+            <option>15행</option>
+          </Form.Select>
+        </Col>
+      </Row>
       <Table striped bordered hover>
         <thead>
           <tr className='text-center table-primary'>
