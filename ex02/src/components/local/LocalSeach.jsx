@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Table, Button, InputGroup, Form, Col, Row } from 'react-bootstrap';
 const LocalSeach = () => {
+  const [isEnd, setIsEnd] = useState(false);
   const [locals, setLocals] = useState([]);
   const [query, setQuery] = useState("가산디지털");
   const [page, setPage] = useState(1);
@@ -15,11 +16,12 @@ const LocalSeach = () => {
     const res=await axios.get(url, config);
     console.log(res.data);
     setLocals(res.data.documents);
+    setIsEnd(res.data.meta.is_end);
   }
 
   useEffect(()=>{
     callAPI();
-  }, []);
+  }, [page]);
 
   return (
     <div className='my-5'>
@@ -44,6 +46,11 @@ const LocalSeach = () => {
           )}
         </tbody>
       </Table>
+      <div className='text-center my-3'>
+        <Button onClick={()=>setPage(page-1)} disabled={page===1}>이전</Button>
+        <span className='mx-3'>{page}</span>
+        <Button onClick={()=>setPage(page+1)} disabled={isEnd}>다음</Button>
+      </div>
     </div>
   )
 }
