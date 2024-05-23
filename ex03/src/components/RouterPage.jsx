@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import BookSearch from './book/BookSearch'
-import LocalSearch from './local/LocalSeach'
+import LocalSearch from './local/LocalSearch'
 
 const RouterPage = () => {
   return (

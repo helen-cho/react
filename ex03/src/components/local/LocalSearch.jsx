@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Table, Button, InputGroup, Form, Col, Row } from 'react-bootstrap';
 import ModalMap from './ModalMap';
-const LocalSeach = () => {
+const LocalSearch = () => {
   const [count, setCount] = useState(0);
   const [isEnd, setIsEnd] = useState(false);
   const [locals, setLocals] = useState([]);
@@ -94,6 +94,6 @@ const LocalSeach = () => {
   )
 }
 
-export default LocalSeach
+export default LocalSearch
 
 
