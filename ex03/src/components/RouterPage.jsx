@@ -4,6 +4,7 @@ import BookSearch from './book/BookSearch'
 import LocalSearch from './local/LocalSearch'
 import LoginPage from './user/LoginPage'
 import JoinPage from './user/JoinPage'
+import CartPage from './book/CartPage'
 
 const RouterPage = () => {
   return (
@@ -12,6 +13,7 @@ const RouterPage = () => {
       <Route path="/local/search" element={<LocalSearch/>}/>
       <Route path="/user/login" element={<LoginPage/>}/>
       <Route path="/user/join" element={<JoinPage/>}/>
+      <Route path="/book/cart" element={<CartPage/>}/>
     </Routes>
   )
 }

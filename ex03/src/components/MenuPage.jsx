@@ -27,6 +27,9 @@ const MenuPage = () => {
               navbarScroll>
               <Nav.Link href="/book/search">도서검색</Nav.Link>
               <Nav.Link href="/local/search">지역검색</Nav.Link>
+              {sessionStorage.getItem('email') &&
+                <Nav.Link href="/book/cart">장바구니</Nav.Link>
+              }
             </Nav>
             {sessionStorage.getItem('email') ?
               <>
