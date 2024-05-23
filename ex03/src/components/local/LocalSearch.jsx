@@ -109,8 +109,8 @@ const LocalSearch = () => {
               <td><div className='ellipsis'>{local.place_name}</div></td>
               <td><div className='ellipsis'>{local.phone}</div></td>
               <td><div className='ellipsis'>{local.address_name}</div></td>
-              <td><ModalMap local={local}/></td>
-              <td><Button size='sm' variant='success' onClick={()=>onClickFavorite(local)}>즐겨찾기</Button></td>
+              <td className='text-center'><ModalMap local={local}/></td>
+              <td className='text-center'><Button size='sm' variant='success' onClick={()=>onClickFavorite(local)}>즐겨찾기</Button></td>
             </tr>
           )}
         </tbody>

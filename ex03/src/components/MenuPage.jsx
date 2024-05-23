@@ -2,9 +2,12 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import RouterPage from './RouterPage';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const MenuPage = () => {
+  const location = useLocation();
+  const path=location.pathname;
+
   const navi = useNavigate();
 
   const onLogout = (e) => {
@@ -25,13 +28,13 @@ const MenuPage = () => {
             <Nav
               className="me-auto my-2 my-lg-0"
               navbarScroll>
-              <Nav.Link href="/book/search">도서검색</Nav.Link>
-              <Nav.Link href="/local/search">지역검색</Nav.Link>
+              <Nav.Link href="/book/search"  className={path==='/book/search' && 'active'}>도서검색</Nav.Link>
+              <Nav.Link href="/local/search" className={path==='/local/search' && 'active'}>지역검색</Nav.Link>
               {sessionStorage.getItem('email') &&
-                <Nav.Link href="/book/cart">장바구니</Nav.Link>
+                <Nav.Link href="/book/cart"  className={path==='/book/cart' && 'active'}>장바구니</Nav.Link>
               }
               {sessionStorage.getItem('email') &&
-                <Nav.Link href="/local/favorite">즐겨찾기</Nav.Link>
+                <Nav.Link href="/local/favorite" className={path==='/local/favorite' && 'active'}>즐겨찾기</Nav.Link>
               }
             </Nav>
             {sessionStorage.getItem('email') ?

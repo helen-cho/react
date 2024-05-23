@@ -10,7 +10,7 @@ const ModalBook = ({book, type}) => {
     return (
         <>
           {type==='cart' ?
-            <Button onClick={handleShow}>상세보기</Button>
+            <Button onClick={handleShow} size="sm">상세보기</Button>
             :
             <img onClick={handleShow}
               src={thumbnail || 'http://via.placeholder.com/120x170'} width="100%"/> 
