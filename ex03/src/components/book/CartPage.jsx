@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import {app} from '../../firebaseInit'
 import { getDatabase, ref, onValue, remove } from 'firebase/database'
 import { Table, Button } from 'react-bootstrap'
+import ModalBook from './ModalBook'
 
 const CartPage = () => {
   const [loading, setLoading] = useState(false);
@@ -39,19 +40,20 @@ const CartPage = () => {
   return (
     <div className='my-5'>
       <h1 className='text-center my-5'>장바구니</h1>
-      <Table>
+      <Table striped bordered hover>
         <thead>
-          <tr>
+          <tr className='text-center table-primary'>
             <td>No.</td>
             <td>제목</td>
             <td>저자</td>
             <td>가격</td>
             <td>삭제</td>
+            <td>상세보기</td>
           </tr>
         </thead>
         <tbody>
           {books.map(book=>
-            <tr key={book.key}>
+            <tr key={book.key} className='text-center'>
                 <td>{book.no}</td> 
                 <td>
                   <div className='ellipsis'>{book.title}</div>
@@ -60,6 +62,9 @@ const CartPage = () => {
                 <td>{book.price}원</td>
                 <td><Button onClick={()=>onClickDelete(book)}
                   size="sm" variant='danger'>삭제</Button></td>
+                <td>
+                  <ModalBook book={book} type="cart"/>
+                </td>  
             </tr>
           )}
         </tbody>

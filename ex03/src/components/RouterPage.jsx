@@ -5,6 +5,7 @@ import LocalSearch from './local/LocalSearch'
 import LoginPage from './user/LoginPage'
 import JoinPage from './user/JoinPage'
 import CartPage from './book/CartPage'
+import FavoritePage from './local/FavoritePage'
 
 const RouterPage = () => {
   return (
@@ -14,6 +15,7 @@ const RouterPage = () => {
       <Route path="/user/login" element={<LoginPage/>}/>
       <Route path="/user/join" element={<JoinPage/>}/>
       <Route path="/book/cart" element={<CartPage/>}/>
+      <Route path="/local/favorite" element={<FavoritePage/>}/>
     </Routes>
   )
 }

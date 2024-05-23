@@ -2,7 +2,15 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Table, Button, InputGroup, Form, Col, Row } from 'react-bootstrap';
 import ModalMap from './ModalMap';
+import { app } from '../../firebaseInit';
+import { getDatabase, ref, set, get } from 'firebase/database';
+import { useNavigate } from 'react-router-dom';
+
 const LocalSearch = () => {
+  const navi=useNavigate();
+  const db = getDatabase(app);
+  const uid=sessionStorage.getItem('uid');
+
   const [count, setCount] = useState(0);
   const [isEnd, setIsEnd] = useState(false);
   const [locals, setLocals] = useState([]);
@@ -40,6 +48,26 @@ const LocalSearch = () => {
     setPage(1);
     setSize(e.target.value);
   }
+
+  const onClickFavorite = (local) => {
+    get(ref(db, `favorite/${uid}/${local.id}`))
+    .then(snapshot=>{
+      if(snapshot.exists()){
+        alert("이미 즐겨찾기에 등록되었습니다!");
+      }else{
+        if(uid){
+          //즐겨찾기등록
+          if(!window.confirm(`"${local.place_name}" 등록하실래요?`)) return;
+          set(ref(db, `favorite/${uid}/${local.id}`), {...local});
+          alert("즐겨찾기등록완료!");
+        }else{
+          sessionStorage.setItem("target", "/local/search");
+          navi('/user/login');
+        }
+      }
+    });
+  }
+
   return (
     <div className='my-5'>
       <h1 className='text-center my-5'>지역검색</h1>
@@ -71,6 +99,7 @@ const LocalSearch = () => {
             <td>전화번호</td>
             <td>주소</td>
             <td>지도보기</td>
+            <td>즐겨찾기</td>
           </tr>
         </thead>
         <tbody>
@@ -81,6 +110,7 @@ const LocalSearch = () => {
               <td><div className='ellipsis'>{local.phone}</div></td>
               <td><div className='ellipsis'>{local.address_name}</div></td>
               <td><ModalMap local={local}/></td>
+              <td><Button size='sm' variant='success' onClick={()=>onClickFavorite(local)}>즐겨찾기</Button></td>
             </tr>
           )}
         </tbody>

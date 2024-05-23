@@ -30,6 +30,9 @@ const MenuPage = () => {
               {sessionStorage.getItem('email') &&
                 <Nav.Link href="/book/cart">장바구니</Nav.Link>
               }
+              {sessionStorage.getItem('email') &&
+                <Nav.Link href="/local/favorite">즐겨찾기</Nav.Link>
+              }
             </Nav>
             {sessionStorage.getItem('email') ?
               <>
