@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom'
 import BookSearch from './book/BookSearch'
 import LocalSearch from './local/LocalSearch'
 import LoginPage from './user/LoginPage'
+import JoinPage from './user/JoinPage'
 
 const RouterPage = () => {
   return (
@@ -10,6 +11,7 @@ const RouterPage = () => {
       <Route path="/book/search" element={<BookSearch/>}/>
       <Route path="/local/search" element={<LocalSearch/>}/>
       <Route path="/user/login" element={<LoginPage/>}/>
+      <Route path="/user/join" element={<JoinPage/>}/>
     </Routes>
   )
 }

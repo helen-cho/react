@@ -1,12 +1,20 @@
-import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
 import RouterPage from './RouterPage';
+import { useNavigate } from 'react-router-dom';
 
 const MenuPage = () => {
+  const navi = useNavigate();
+
+  const onLogout = (e) => {
+    e.preventDefault();
+    if(window.confirm('정말로 로그아웃하실래요?')) {
+      sessionStorage.clear();
+      navi("/");
+    }
+  }
+
   return (
     <>
       <Navbar expand="lg" bg="primary" variant='dark'>
@@ -20,9 +28,20 @@ const MenuPage = () => {
               <Nav.Link href="/book/search">도서검색</Nav.Link>
               <Nav.Link href="/local/search">지역검색</Nav.Link>
             </Nav>
-            <Nav>
-              <Nav.Link href="/user/login">로그인</Nav.Link>
-            </Nav>
+            {sessionStorage.getItem('email') ?
+              <>
+                <Nav>
+                  <Nav.Link href="/user/mypage">{sessionStorage.getItem("email")}</Nav.Link>
+                </Nav>
+                <Nav>
+                  <Nav.Link href="#" onClick={onLogout}>로그아웃</Nav.Link>
+                </Nav>
+              </>
+              :
+              <Nav>
+                <Nav.Link href="/user/login">로그인</Nav.Link>
+              </Nav>
+            }
           </Navbar.Collapse>
         </Container>
       </Navbar>
