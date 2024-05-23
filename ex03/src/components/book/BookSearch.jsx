@@ -45,16 +45,27 @@ const BookSearch = () => {
     }
 
     const onClickCart = async(book) => {
-        if(uid){
-            if(!window.confirm(`"${book.title}" 도서를 장바구니에 등록하실래요?`)) return;
-            //장바구니에등록
-            await set(ref(db, `cart/${uid}/${book.isbn}`), 
-                {...book, email:sessionStorage.getItem("email")});
-            alert("도서등록 완료!");
-        }else {
-            sessionStorage.setItem("target", "/book/search");
-            navi("/user/login");
-        }
+        //장바구니에 있는지 유무체크
+        await get(ref(db, `cart/${uid}/${book.isbn}`))
+        .then(async(snapshot)=>{
+            if(snapshot.exists()){
+                alert("장바구니에 이미 존재합니다.")
+            }else{
+                //장바구니에등록
+                if(uid){
+                    if(window.confirm("장바구니에 저장하실래요?")){
+                        await set(ref(db, `cart/${uid}/${book.isbn}`), 
+                            {...book, email:sessionStorage.getItem("email")});
+                        if(window.confirm("장바구니로 이동하실래요?")){
+                            navi('/book/cart');
+                        }
+                    }
+                }else{
+                    sessionStorage.setItem("target", "/book/search");
+                    navi('/user/login');
+                }
+            }
+        });
     }
 
     return (
