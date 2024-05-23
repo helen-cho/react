@@ -48,7 +48,7 @@ const MenuPage = () => {
               </>
               :
               <Nav>
-                <Nav.Link href="/user/login">로그인</Nav.Link>
+                <Nav.Link href="/user/login" className={path==='/user/login' && 'active'}>로그인</Nav.Link>
               </Nav>
             }
           </Navbar.Collapse>
