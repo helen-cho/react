@@ -27,12 +27,12 @@ const ModalBook = ({book, type}) => {
             </Modal.Header>
             <Modal.Body>
               <Row>
-                <Col md={3}>
+                <Col md={3} className='text-center'>
                   <img src={thumbnail || 'http://placeholder.com/120x170'}/>
                 </Col>
                 <Col className='mt-3'>
                   <div className='mb-2'>ISBN:{isbn}</div>
-                  <div className='mb-2'>가격:{price}원</div>
+                  <div className='mb-2'>가격:{price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}원</div>
                   <div className='mb-2'>저자:{authors}</div>
                   <div>출판사:{publisher}</div>
                 </Col>

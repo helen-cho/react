@@ -59,7 +59,7 @@ const CartPage = () => {
                   <div className='ellipsis'>{book.title}</div>
                 </td>
                 <td>{book.authors}</td>
-                <td>{book.price}원</td>
+                <td>{book.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}원</td>
                 <td><Button onClick={()=>onClickDelete(book)}
                   size="sm" variant='danger'>삭제</Button></td>
                 <td>
