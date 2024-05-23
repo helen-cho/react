@@ -2,8 +2,16 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import {Row, Col, Card, InputGroup, Form, Button} from 'react-bootstrap'
 import ModalBook from './ModalBook';
+import { IoCartOutline } from "react-icons/io5";
+import { app } from '../../firebaseInit'
+import { getDatabase, ref, set, get } from 'firebase/database';
+import { useNavigate } from 'react-router-dom';
 
 const BookSearch = () => {
+    const navi = useNavigate();
+    const uid=sessionStorage.getItem("uid");
+    const db = getDatabase(app);
+
     const [count, setCount] = useState(0);
     const [isEnd, setIsEnd] = useState(false);
 
@@ -36,6 +44,19 @@ const BookSearch = () => {
         }
     }
 
+    const onClickCart = async(book) => {
+        if(uid){
+            if(!window.confirm(`"${book.title}" 도서를 장바구니에 등록하실래요?`)) return;
+            //장바구니에등록
+            await set(ref(db, `cart/${uid}/${book.isbn}`), 
+                {...book, email:sessionStorage.getItem("email")});
+            alert("도서등록 완료!");
+        }else {
+            sessionStorage.setItem("target", "/book/search");
+            navi("/user/login");
+        }
+    }
+
     return (
         <div className='my-5 bookSearch'>
             <h1 className='text-center my-5'>도서검색</h1>
@@ -61,7 +82,15 @@ const BookSearch = () => {
                                 <ModalBook book={book}/>
                             </Card.Body>
                             <Card.Footer>
-                                <div className='ellipsis title'>{book.title}</div>
+                                <Row>
+                                    <Col xs={8}>
+                                        <div className='ellipsis title'>{book.title}</div>
+                                    </Col>
+                                    <Col className='text-end'>
+                                        <IoCartOutline className='cart'
+                                            onClick={()=>onClickCart(book)}/>
+                                    </Col>
+                                </Row>    
                             </Card.Footer>
                         </Card>
                     </Col>

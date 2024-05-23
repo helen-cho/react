@@ -33,7 +33,11 @@ const LoginPage = () => {
         sessionStorage.setItem('uid', success.user.uid);
         //alert('로그인성공' + success.user.uid);
         setLoading(false);
-        navi("/");
+        if(sessionStorage.getItem("target")){
+          navi(sessionStorage.getItem("target"));
+        }else{
+          navi("/");
+        }
       })
       .catch(error=>{
         setLoading(false);
