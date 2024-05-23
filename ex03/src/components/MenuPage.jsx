@@ -40,7 +40,7 @@ const MenuPage = () => {
             {sessionStorage.getItem('email') ?
               <>
                 <Nav>
-                  <Nav.Link href="/user/mypage">{sessionStorage.getItem("email")}</Nav.Link>
+                  <Nav.Link href="/user/mypage" className='active'>{sessionStorage.getItem("email")}</Nav.Link>
                 </Nav>
                 <Nav>
                   <Nav.Link href="#" onClick={onLogout}>로그아웃</Nav.Link>
