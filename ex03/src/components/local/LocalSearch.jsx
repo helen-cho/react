@@ -57,7 +57,7 @@ const LocalSearch = () => {
         </Col>
         <Col className='text-end' xs={2}>
           <Form.Select onChange={onChangeSize} value={size}>
-            <option value="5" >5행</option>
+            <option value="5">5행</option>
             <option value="10">10행</option>
             <option value="15">15행</option>
           </Form.Select>

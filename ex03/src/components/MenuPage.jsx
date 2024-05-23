@@ -21,7 +21,7 @@ const MenuPage = () => {
               <Nav.Link href="/local/search">지역검색</Nav.Link>
             </Nav>
             <Nav>
-              <Nav.Link href="#action1">로그인</Nav.Link>
+              <Nav.Link href="/user/login">로그인</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>
