@@ -5,6 +5,7 @@ import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { useNavigate } from 'react-router-dom'
 
 const LoginPage = () => {
+  const [loading, setLoading] = useState(false);
   const navi = useNavigate();
   const auth = getAuth(app);  
 
@@ -27,18 +28,22 @@ const LoginPage = () => {
       return;
     }
     //로그인체크
+    setLoading(true);
     signInWithEmailAndPassword(auth, email, pass)
     .then(succss=>{
       //alert('성공');
       sessionStorage.setItem('email', email);
       sessionStorage.setItem('uid', succss.user.uid);
+      setLoading(false);
       navi('/');
     })
     .catch(error=>{
+      setLoading(false);
       alert('이메일 비밀하지 않습니다!');
     })
   }
 
+  if(loading) return <h1 className='text-center my-5'>로딩중...</h1>
   return (
     <div className='my-5 userLogin'>
       <Row className='justify-content-center' >

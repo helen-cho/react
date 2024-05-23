@@ -2,9 +2,11 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import RouterPage from './components/RouterPage';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Menubar = () => {
+    const location = useLocation();
+    const path=location.pathname;
     const navi = useNavigate();
     const onClickLogout = (e) => {
         e.preventDefault();
@@ -22,10 +24,9 @@ const Menubar = () => {
                     <Navbar.Collapse id="navbarScroll">
                     <Nav
                         className="me-auto my-2 my-lg-0"
-                        style={{ maxHeight: '100px' }}
                         navbarScroll>
-                        <Nav.Link href="/book/search">도서검색</Nav.Link>
-                        <Nav.Link href="/local/search">지역검색</Nav.Link>
+                        <Nav.Link href="/book/search" className={path.startsWith('/book') && 'active'}>도서검색</Nav.Link>
+                        <Nav.Link href="/local/search" className={path.startsWith('/local') && 'active'}>지역검색</Nav.Link>
                     </Nav>
                     {sessionStorage.getItem('email') ? 
                         <>
@@ -38,7 +39,7 @@ const Menubar = () => {
                         </>
                         :
                         <Nav>
-                            <Nav.Link href="/user/login">로그인</Nav.Link>
+                            <Nav.Link href="/user/login" className={path.startsWith('/user/login') && 'active'}>로그인</Nav.Link>
                         </Nav>
                     }
                     </Navbar.Collapse>
