@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
 import {Row, Col, Card, Form, InputGroup, Button} from 'react-bootstrap'
+import { app } from '../../firebaseInit'
+import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore'
 
 const MyPage = () => {
+  const db=getFirestore(app);
   const email=sessionStorage.getItem('email');
   const uid=sessionStorage.getItem('uid');
   const [form, setForm] = useState({
@@ -27,8 +30,9 @@ const MyPage = () => {
       return;
     }
     if(!window.confirm("변경내용을 저장하실래요?")) return;
-    console.log(form);
+    //console.log(form);
     //사용자정보저장
+    setDoc(doc(db, 'users', uid), form)
   }
 
   return (
