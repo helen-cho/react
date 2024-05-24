@@ -7,6 +7,8 @@ import JoinPage from './user/JoinPage'
 import CartPage from './book/CartPage'
 import FavoritePage from './local/FavoritePage'
 import MyPage from './user/MyPage'
+import ListPage from './post/ListPage'
+import InsertPage from './post/InsertPage'
 
 const RouterPage = () => {
   return (
@@ -18,6 +20,8 @@ const RouterPage = () => {
       <Route path="/book/cart" element={<CartPage/>}/>
       <Route path="/local/favorite" element={<FavoritePage/>}/>
       <Route path="/user/mypage" element={<MyPage/>}/>
+      <Route path="/post/list" element={<ListPage/>}/>
+      <Route path="/post/insert" element={<InsertPage/>}/>
     </Routes>
   )
 }

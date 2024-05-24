@@ -15,7 +15,9 @@ const ModalPhoto = ({setForm, setLoading, form}) => {
 
   const handleClose = () => {
     setShow(false)
-    setFileName(form.photo);
+    setTimeout(()=>{
+      setFileName(form.photo);
+    }, 500);
   }
   const handleShow = () => setShow(true);
   const [fileName, setFileName] = useState(form.photo);
@@ -27,7 +29,7 @@ const ModalPhoto = ({setForm, setLoading, form}) => {
   }
 
   const onClickSave = async() => {
-    if(fileName==="") {
+    if(!file) {
       alert("변경할 이미지를 선택하세요!");
       return;
     }
@@ -49,7 +51,7 @@ const ModalPhoto = ({setForm, setLoading, form}) => {
     <>
       <img src={form.photo || "http://via.placeholder.com/80x80"} width="80"
             onClick={handleShow}/>      
-      <Modal
+      <Modal style={{top:'20%'}}
         show={show}
         onHide={handleClose}
         backdrop="static"

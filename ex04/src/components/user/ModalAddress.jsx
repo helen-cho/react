@@ -25,7 +25,7 @@ const ModalAddress = (pros) => {
         검색
       </Button>
 
-      <Modal
+      <Modal style={{top:'20%'}}
         show={show}
         onHide={handleClose}
         backdrop="static"
