@@ -12,7 +12,11 @@ const ModalPhoto = ({setForm, setLoading, form}) => {
   const uid= sessionStorage.getItem("uid");
 
   const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
+
+  const handleClose = () => {
+    setShow(false)
+    setFileName(form.photo);
+  }
   const handleShow = () => setShow(true);
   const [fileName, setFileName] = useState(form.photo);
   const [file, setFile] = useState(null);
