@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import {Button, Table} from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom';
 import { app } from '../../firebaseInit'
-import { getFirestore, collection, onSnapshot, orderBy, query } from 'firebase/firestore';
+import { getFirestore, collection, onSnapshot, orderBy, query, getCountFromServer } from 'firebase/firestore';
 import Pagination from 'react-js-pagination';
 import '../Paging.css'
 
@@ -16,18 +16,20 @@ const ListPage = () => {
   const email=sessionStorage.getItem("email");
   const navi = useNavigate();
 
-  const callAPI = () => {
+  const callAPI = async() => {
     setLoading(true);
+    const snapshot = await getCountFromServer(collection(db, 'posts'));
+    setTotal(snapshot.data().count);
+
     const q=query(collection(db, 'posts'), orderBy('date', 'desc'));
     let count=0;
     onSnapshot(q, res=>{
       let rows=[];
       res.forEach(row=>{
         count++;
-        rows.push({no:count, id:row.id, ...row.data()});
+        rows.push({seq:total-count+1, no:count, id:row.id, ...row.data()});
       });
       //console.log(rows);
-      
       const start = (page-1) * size + 1;
       const end = (page * size);
       const data=rows.filter(row=>row.no>=start && row.no<=end);
@@ -62,7 +64,7 @@ const ListPage = () => {
         <tbody>
           {posts.map(post=>
             <tr>
-              <td className='text-center'>{post.no}</td>
+              <td className='text-center'>{post.seq}</td>
               <td>{post.title}</td>
               <td width="200">{post.email}</td>
               <td width="200">{post.date}</td>
