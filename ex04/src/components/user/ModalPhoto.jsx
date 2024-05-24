@@ -14,7 +14,7 @@ const ModalPhoto = ({setForm, setLoading, form}) => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const [fileName, setFileName] = useState('');
+  const [fileName, setFileName] = useState(form.photo);
   const [file, setFile] = useState(null);
 
   const onChangeFile = (e) => {

@@ -84,7 +84,7 @@ const MyPage = () => {
               <Form.Control name="address2" value={address2} onChange={onChangeForm} placeholder='상세주소'/>
               <div className='text-center mt-3'>
                 <Button type="submit" className='px-5'>등록</Button>
-                <Button type="reset" className='px-5 ms-3' variant='secondary'>취소</Button>
+                <Button onClick={callAPI} className='px-5 ms-3' variant='secondary'>취소</Button>
               </div>
             </form>
           </Card.Body>
