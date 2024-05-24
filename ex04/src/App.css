@@ -36,3 +36,10 @@
 .bookSearch .cart:hover {
     color: red;
 }
+
+.mypage img {
+    border-radius: 50%;
+    cursor: pointer;
+    margin: 10px 0px;
+    border: 1px solid gray;
+}

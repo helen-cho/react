@@ -3,6 +3,7 @@ import {Row, Col, Card, Form, InputGroup, Button} from 'react-bootstrap'
 import { app } from '../../firebaseInit'
 import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore'
 import ModalAddress from './ModalAddress'
+import ModalPhoto from './ModalPhoto'
 
 const MyPage = () => {
   const [loading, setLoading] = useState(false);
@@ -55,13 +56,17 @@ const MyPage = () => {
 
   if(loading) return <h1 className='text-center my-5'>로딩중......</h1>
   return (
-    <Row className='justify-content-center my-5'>
+    <Row className='justify-content-center my-5 mypage'>
       <Col xs={10} md={8} lg={7}>
         <Card>
           <Card.Header>
             <h3 className='text-center'>마이페이지</h3>
           </Card.Header>
           <Card.Body>
+            <div>
+              <ModalPhoto form={form} setForm={setForm} setLoading={setLoading}/>
+              <span className='ms-3'>{email}</span>
+            </div>
             <form onSubmit={onSubmit}>
               <InputGroup className='mb-2'>
                 <InputGroup.Text className='px-5'>이름</InputGroup.Text>
@@ -74,7 +79,7 @@ const MyPage = () => {
               <InputGroup className='mb-2'>
                 <InputGroup.Text className='px-5'>주소</InputGroup.Text>
                 <Form.Control name="address1" value={address1} onChange={onChangeForm}/>
-                <ModalAddress/>
+                <ModalAddress setForm={setForm} form={form}/>
               </InputGroup>
               <Form.Control name="address2" value={address2} onChange={onChangeForm} placeholder='상세주소'/>
               <div className='text-center mt-3'>
