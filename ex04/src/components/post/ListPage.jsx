@@ -27,11 +27,12 @@ const ListPage = () => {
         rows.push({no:count, id:row.id, ...row.data()});
       });
       //console.log(rows);
-      setTotal(count);
+      
       const start = (page-1) * size + 1;
       const end = (page * size);
-      const data = rows.filter(row=>row.no>=start && row.no<=end);
+      const data=rows.filter(row=>row.no>=start && row.no<=end);
       setPosts(data);
+      setTotal(count);
       setLoading(false);
     });
   }
@@ -71,7 +72,7 @@ const ListPage = () => {
       </Table>
       <Pagination
         activePage={page}
-        itemsCountPerPage={10}
+        itemsCountPerPage={size}
         totalItemsCount={total}
         pageRangeDisplayed={5}
         prevPageText={"‹"}
