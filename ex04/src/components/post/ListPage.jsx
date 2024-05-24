@@ -3,8 +3,13 @@ import {Button, Table} from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom';
 import { app } from '../../firebaseInit'
 import { getFirestore, collection, onSnapshot, orderBy, query } from 'firebase/firestore';
+import Pagination from 'react-js-pagination';
+import '../Paging.css'
 
 const ListPage = () => {
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(5);
   const [loading, setLoading] = useState(false);
   const [posts, setPosts] = useState([]);
   const db = getFirestore(app);
@@ -22,14 +27,18 @@ const ListPage = () => {
         rows.push({no:count, id:row.id, ...row.data()});
       });
       //console.log(rows);
-      setPosts(rows);
+      setTotal(count);
+      const start = (page-1) * size + 1;
+      const end = (page * size);
+      const data = rows.filter(row=>row.no>=start && row.no<=end);
+      setPosts(data);
       setLoading(false);
     });
   }
 
   useEffect(()=>{
     callAPI();
-  }, []);
+  }, [page]);
 
   if(loading) return <h1 className='text-center my-5'>로딩중......</h1>
   return (
@@ -52,14 +61,22 @@ const ListPage = () => {
         <tbody>
           {posts.map(post=>
             <tr>
-              <td>{post.no}</td>
+              <td className='text-center'>{post.no}</td>
               <td>{post.title}</td>
-              <td>{post.email}</td>
-              <td>{post.date}</td>
+              <td width="200">{post.email}</td>
+              <td width="200">{post.date}</td>
             </tr>
           )}
         </tbody>
       </Table>
+      <Pagination
+        activePage={page}
+        itemsCountPerPage={10}
+        totalItemsCount={total}
+        pageRangeDisplayed={5}
+        prevPageText={"‹"}
+        nextPageText={"›"}
+        onChange={(e)=>setPage(e)}/>
     </div>
   )
 }
