@@ -19,7 +19,7 @@ const ListPage = () => {
   const callAPI = async() => {
     setLoading(true);
     const snapshot = await getCountFromServer(collection(db, 'posts'));
-    setTotal(snapshot.data().count);
+    const totalCount = (snapshot.data().count);
 
     const q=query(collection(db, 'posts'), orderBy('date', 'desc'));
     let count=0;
@@ -27,14 +27,14 @@ const ListPage = () => {
       let rows=[];
       res.forEach(row=>{
         count++;
-        rows.push({seq:total-count+1, no:count, id:row.id, ...row.data()});
+        rows.push({seq:totalCount-count+1, no:count, id:row.id, ...row.data()});
       });
       //console.log(rows);
       const start = (page-1) * size + 1;
       const end = (page * size);
       const data=rows.filter(row=>row.no>=start && row.no<=end);
       setPosts(data);
-      setTotal(count);
+      setTotal(totalCount);
       setLoading(false);
     });
   }
