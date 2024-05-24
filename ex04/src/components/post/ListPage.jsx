@@ -65,7 +65,7 @@ const ListPage = () => {
           {posts.map(post=>
             <tr>
               <td className='text-center'>{post.seq}</td>
-              <td>{post.title}</td>
+              <td><a href={`/post/read/${post.id}`}>{post.title}</a></td>
               <td width="200">{post.email}</td>
               <td width="200">{post.date}</td>
             </tr>
