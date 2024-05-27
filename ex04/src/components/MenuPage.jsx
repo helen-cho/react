@@ -37,6 +37,9 @@ const MenuPage = () => {
                 <Nav.Link href="/local/favorite" className={path==='/local/favorite' && 'active'}>즐겨찾기</Nav.Link>
               }
               <Nav.Link href="/post/list"  className={path.startsWith('/post') && 'active'}>게시판</Nav.Link>
+              {sessionStorage.getItem('email') &&
+                <Nav.Link href="/chat" className={path==='/chat' && 'active'}>채팅</Nav.Link>
+              }
             </Nav>
             {sessionStorage.getItem('email') ?
               <>

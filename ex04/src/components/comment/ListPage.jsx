@@ -104,12 +104,13 @@ const ListPage = ({id}) => {
     if(comment.content===comment.text) return;
     if(!window.confirm("변경된 내용을 저장하실래요?")) return;
 
-    //저장하기
+    //수정(저장)하기
     console.log(comment);
     const rows=comments.map(c=>c.cid===comment.cid ? {...c, isEdit:false} : c);
     setComments(rows);
     const date=moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
-    await setDoc(doc(db, `comments/${comment.cid}`), {...comment, edit_date:date});
+    await setDoc(doc(db, `comments/${comment.cid}`),
+             {...comment, edit_date:date});
   }
 
   return (
@@ -129,9 +130,9 @@ const ListPage = ({id}) => {
           {comments.map(c=>
             <div key={c.cid}>
               <Row className='mb-2'>
-                <Col xs={8} className='text-muted' style={{fontSize:'15px'}}>
+                <Col xs={8} className='text-muted' style={{fontSize:'12px'}}>
                   <span>{c.date}</span>
-                  {c.edit_date && <span>/{c.edit_date}</span>}
+                  {c.edit_date && <span style={{color:'blue'}}>/{c.edit_date}</span>}
                   <span className='mx-2'>{c.email}</span>
                 </Col>
                 {(c.email===sessionStorage.getItem('email')) && !c.isEdit && 

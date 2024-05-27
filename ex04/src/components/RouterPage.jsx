@@ -11,6 +11,7 @@ import ListPage from './post/ListPage'
 import InsertPage from './post/InsertPage'
 import ReadPage from './post/ReadPage'
 import UpdatePage from './post/UpdatePage'
+import ChatPage from './user/ChatPage'
 
 const RouterPage = () => {
   return (
@@ -26,6 +27,7 @@ const RouterPage = () => {
       <Route path="/post/insert" element={<InsertPage/>}/>
       <Route path="/post/read/:id" element={<ReadPage/>}/>
       <Route path="/post/update/:id" element={<UpdatePage/>}/>
+      <Route path="/chat" element={<ChatPage/>}/>
     </Routes>
   )
 }
