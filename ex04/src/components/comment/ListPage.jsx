@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import {Row, Col, Button, Form} from 'react-bootstrap'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { app } from '../../firebaseInit'
-import { deleteDoc, doc, getFirestore, addDoc, collection, orderBy, where, onSnapshot,query } from 'firebase/firestore'
+import { deleteDoc, doc, setDoc, getFirestore, addDoc, collection, orderBy, where, onSnapshot,query } from 'firebase/firestore'
 import moment from 'moment'
 import '../Paging.css'
 import Pagination from 'react-js-pagination';
@@ -31,7 +31,8 @@ const ListPage = ({id}) => {
           cid: row.id, 
           ...row.data(),
           isEllip:true,
-          isEdit:false
+          isEdit:false,
+          text: row.data().content
         })
       });
 
@@ -85,14 +86,28 @@ const ListPage = ({id}) => {
     setComments(rows);
   }
 
-  const onClickCancel = (cid)=>{
-    const rows=comments.map(c=>c.cid===cid ? {...c, isEdit:false} : c);
+  const onClickCancel = (cid,content,text)=>{
+    if(content !== text){
+      if(!window.confirm("정말로 취소하실래요?")) return;
+    }
+    const rows=comments.map(c=>c.cid===cid ? {...c, isEdit:false, content:text} : c);
     setComments(rows);
   }
 
   const onChangeContent = (e, cid) => {
     const rows=comments.map(c=>c.cid===cid ? {...c, content:e.target.value}: c);
     setComments(rows);
+  }
+
+  const onClickSave = async(comment)=>{
+    if(comment.content===comment.text) return;
+    if(!window.confirm("변경된 내용을 저장하실래요?")) return;
+
+    //저장하기
+    console.log(comment);
+    const rows=comments.map(c=>c.cid===comment.cid ? {...c, isEdit:false} : c);
+    setComments(rows);
+    await setDoc(doc(db, `comments/${comment.cid}`), comment);
   }
 
   return (
@@ -126,8 +141,9 @@ const ListPage = ({id}) => {
                 }
                 {(c.email===sessionStorage.getItem('email')) && c.isEdit && 
                   <Col className='text-end'>
-                    <Button variant='outline-secondary' size="sm">저장</Button>
-                    <Button onClick={()=>onClickCancel(c.cid)}
+                    <Button onClick={()=>onClickSave(c)}
+                      variant='outline-secondary' size="sm">저장</Button>
+                    <Button onClick={()=>onClickCancel(c.cid,c.content,c.text)}
                       variant='outline-secondary' size="sm" className='ms-2'>취소</Button>
                   </Col>
                 }
