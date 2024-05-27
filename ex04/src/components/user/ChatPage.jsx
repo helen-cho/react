@@ -1,27 +1,47 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import '../ChatPage.css'
 import {Row, Col, Card, Form} from'react-bootstrap'
 import {app} from '../../firebaseInit'
-import { getDatabase, set, ref, push } from 'firebase/database'
+import { getDatabase, set, ref, push, onValue } from 'firebase/database'
 import moment from 'moment'
 
 const ChatPage = () => {
+  const db = getDatabase(app);
   const [content, setContent] = useState('');
-  const onSubmit = (e) => {
+  
+  const callAPI = () => {
+    onValue(ref(db, 'chat'), res=>{
+      let rows=[];
+      res.forEach(row=>{
+        rows.push({key:row.key, ...row.val()});
+      });
+      console.log(rows);
+    });
+  }
+
+  useEffect(()=>{
+    callAPI();
+  }, []);
+  
+  const onSubmit = async(e) => {
     e.preventDefault();
     if(content==="") {
       alert("보내실 내용을 입력하세요!");
       return;
     }
-    
+
     //메시지 보내기
     const date=moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+    const key = push(ref(db, 'chat')).key
     const data={
+      key,
       email:sessionStorage.getItem('email'),
       date,
       content
     }
-    console.log(data);
+    //console.log(data);
+    await set(ref(db, `chat/${key}`), data);
+    setContent('');
   }
 
   return (
