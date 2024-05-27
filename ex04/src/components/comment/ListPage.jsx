@@ -64,8 +64,8 @@ const ListPage = ({id}) => {
         </div>
         <div className='comments my-5'>
           {comments.map(c=>
-            <>
-              <Row key={c.cid} className='mb-2'>
+            <div key={c.cid}>
+              <Row className='mb-2'>
                 <Col className='text-muted'>
                   <span>{c.date}</span>
                   <span className='mx-2'>({c.email})</span>
@@ -77,9 +77,9 @@ const ListPage = ({id}) => {
                   </Col>
                 }
               </Row>
-              <div class="ellipsis2" style={{whiteSpace:'pre-wrap'}}>{c.content}</div>
+              <div className="ellipsis2" style={{whiteSpace:'pre-wrap'}}>{c.content}</div>
               <hr/>
-            </>
+            </div>
           )}
         </div>
       </Col>
