@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Card, Row, Col, Button} from 'react-bootstrap'
 import { app } from '../../firebaseInit'
 import { getFirestore, doc, getDoc, deleteDoc } from 'firebase/firestore'
+import ListPage from '../comment/ListPage'
 
 const ReadPage = () => {
   const navi = useNavigate();
@@ -35,6 +36,7 @@ const ReadPage = () => {
 
   if(loading) return <h1 className='text-center my-5'>로딩중......</h1>
   return (
+    <>
     <Row className='justify-content-center my-5'>
       <h1 className='text-center mb-5'>게시글정보</h1>
       <Col xs={12} md={10} lg={8}>
@@ -58,6 +60,9 @@ const ReadPage = () => {
         </Card>
       </Col>
     </Row>
+    {/**********댓글목록****************/}
+    <ListPage/>
+    </>
   )
 }
 

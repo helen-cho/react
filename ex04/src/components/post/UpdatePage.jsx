@@ -50,7 +50,8 @@ const UpdatePage = () => {
             as="textarea" rows={15} className='mb-3' value={body}/>
           <div className='text-center'>
             <Button className='px-5' type="submit">수정</Button>
-            <Button className='px-5' variant='secondary ms-2'>취소</Button>
+            <Button onClick={()=>callAPI()}
+              className='px-5' variant='secondary ms-2'>취소</Button>
           </div>  
         </form>
       </Col>
