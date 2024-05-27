@@ -6,6 +6,8 @@ import { getDatabase, set, ref, push, onValue } from 'firebase/database'
 import moment from 'moment'
 
 const ChatPage = () => {
+  const email=sessionStorage.getItem('email');
+  const [chats, setChats] = useState([]);
   const db = getDatabase(app);
   const [content, setContent] = useState('');
   
@@ -15,14 +17,15 @@ const ChatPage = () => {
       res.forEach(row=>{
         rows.push({key:row.key, ...row.val()});
       });
-      console.log(rows);
+      //console.log(rows);
+      setChats(rows);
     });
   }
 
   useEffect(()=>{
     callAPI();
   }, []);
-  
+
   const onSubmit = async(e) => {
     e.preventDefault();
     if(content==="") {
@@ -52,6 +55,23 @@ const ChatPage = () => {
             <h3 className='text-center'>채팅방</h3>
           </Card.Header>
           <Card.Body className='wrap'>
+            {chats.map(chat=>
+              <div key={chat.key} className={chat.email===email ? 'chat ch2':'chat ch1'}>
+                {chat.email !== email &&
+                  <div className='icon'>
+                    <img src="http://via.placeholder.com/50x50"/>
+                    <div class="sender">{chat.email}</div>
+                  </div>  
+                }
+                <div className='textbox'>
+                  <div>
+                    {chat.content}
+                    {chat.email===email && <a href="#">x</a>}
+                  </div>
+                  <div>{chat.date}</div>
+                </div>
+              </div>
+            )}
           </Card.Body>
           <form onSubmit={onSubmit}>
             <Form.Control value={content} 
