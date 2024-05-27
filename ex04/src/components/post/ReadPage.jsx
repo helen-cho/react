@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Card, Row, Col, Button} from 'react-bootstrap'
 import { app } from '../../firebaseInit'
-import { getFirestore, doc, getDoc, deleteDoc } from 'firebase/firestore'
+import { getFirestore, doc, getDoc, deleteDoc, where, orderBy } from 'firebase/firestore'
 import ListPage from '../comment/ListPage'
 
 const ReadPage = () => {
@@ -16,7 +16,7 @@ const ReadPage = () => {
   const callAPI = async() => {
     setLoading(true);
     const res=await getDoc(doc(db, 'posts', id));
-    console.log(res.data());
+    //console.log(res.data());
     setPost(res.data());
     setLoading(false);
   }
@@ -61,7 +61,7 @@ const ReadPage = () => {
       </Col>
     </Row>
     {/**********댓글목록****************/}
-    <ListPage/>
+    <ListPage id={id}/>
     </>
   )
 }
