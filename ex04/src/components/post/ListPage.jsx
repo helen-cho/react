@@ -20,7 +20,6 @@ const ListPage = () => {
     setLoading(true);
     const snapshot = await getCountFromServer(collection(db, 'posts'));
     const totalCount = (snapshot.data().count);
-
     const q=query(collection(db, 'posts'), orderBy('date', 'desc'));
     let count=0;
     onSnapshot(q, res=>{
@@ -64,7 +63,7 @@ const ListPage = () => {
         <tbody>
           {posts.map(post=>
             <tr>
-              <td className='text-center'>{post.seq}</td>
+              <td width="50">{post.seq}</td>
               <td><a href={`/post/read/${post.id}`}>{post.title}</a></td>
               <td width="200">{post.email}</td>
               <td width="200">{post.date}</td>

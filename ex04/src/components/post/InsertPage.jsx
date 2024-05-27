@@ -39,7 +39,7 @@ const InsertPage = () => {
     <div className='my-5'>
       <h1 className='text-center mb-3'>글쓰기</h1>
       <Row className='justify-content-center'>
-        <Col xs={10} md={8} lg={7}>
+        <Col xs={12} md={10} lg={8}>
           <form onSubmit={onSubmit}>
             <Form.Control name="title" value={title} onChange={onChangeForm}
               placeholder='제목을 입력하세요.' className='mb-2'/>
