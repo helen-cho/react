@@ -25,6 +25,7 @@ const ListPage = ({id}) => {
       let rows=[];
       let count=0;
       res.forEach(async row=>{
+        //console.log(row.data());
         count++;
         rows.push({
           no:count, 
@@ -107,7 +108,8 @@ const ListPage = ({id}) => {
     console.log(comment);
     const rows=comments.map(c=>c.cid===comment.cid ? {...c, isEdit:false} : c);
     setComments(rows);
-    await setDoc(doc(db, `comments/${comment.cid}`), comment);
+    const date=moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+    await setDoc(doc(db, `comments/${comment.cid}`), {...comment, edit_date:date});
   }
 
   return (
@@ -127,9 +129,10 @@ const ListPage = ({id}) => {
           {comments.map(c=>
             <div key={c.cid}>
               <Row className='mb-2'>
-                <Col className='text-muted' style={{fontSize:'15px'}}>
+                <Col xs={8} className='text-muted' style={{fontSize:'15px'}}>
                   <span>{c.date}</span>
-                  <span className='mx-2'>({c.email})</span>
+                  {c.edit_date && <span>/{c.edit_date}</span>}
+                  <span className='mx-2'>{c.email}</span>
                 </Col>
                 {(c.email===sessionStorage.getItem('email')) && !c.isEdit && 
                   <Col className='text-end'>
@@ -155,7 +158,7 @@ const ListPage = ({id}) => {
                 </div> 
                 : 
                 <div onClick={()=>onClickContent(c.cid)}
-                  className={c.isEllip && 'ellipsis2'} style={{whiteSpace:'pre-wrap',cursor:'pointer'}}>
+                  className={c.isEllip ? 'ellipsis2':''} style={{whiteSpace:'pre-wrap',cursor:'pointer'}}>
                     {c.content}
                 </div>  
               }
