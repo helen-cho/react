@@ -90,6 +90,11 @@ const ListPage = ({id}) => {
     setComments(rows);
   }
 
+  const onChangeContent = (e, cid) => {
+    const rows=comments.map(c=>c.cid===cid ? {...c, content:e.target.value}: c);
+    setComments(rows);
+  }
+
   return (
     <Row className='justify-content-center my-5 comments'>
       <Col xs={12} md={10} lg={8}>
@@ -129,7 +134,8 @@ const ListPage = ({id}) => {
               </Row>
               {c.isEdit ?
                 <div>
-                  <Form.Control value={c.content} as="textarea" rows={5}/>
+                  <Form.Control onChange={(e)=>onChangeContent(e, c.cid)}
+                    value={c.content} as="textarea" rows={5}/>
                 </div> 
                 : 
                 <div onClick={()=>onClickContent(c.cid)}
