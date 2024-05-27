@@ -2,12 +2,19 @@ import React, { useEffect, useState } from 'react'
 import {Row, Col, Button, Form} from 'react-bootstrap'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { app } from '../../firebaseInit'
-import { getFirestore, addDoc, collection, orderBy, where, onSnapshot,query } from 'firebase/firestore'
+import { deleteDoc, doc, getFirestore, addDoc, collection, orderBy, where, onSnapshot,query } from 'firebase/firestore'
 import moment from 'moment'
+import '../Paging.css'
+import Pagination from 'react-js-pagination';
 
 const ListPage = ({id}) => {
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(3);
+  const [total, setTotal]= useState(100);
+
   const [comments, setComments] = useState([]);
   const db = getFirestore(app);
+
   const navi = useNavigate();
   const {pathname} = useLocation();
   const [content, setContent] = useState('');
@@ -16,17 +23,29 @@ const ListPage = ({id}) => {
     const q=query(collection(db, 'comments'),where('id','==',id),orderBy('date','desc'));
     onSnapshot(q, res=>{
       let rows=[];
-      res.forEach(row=>{
-        rows.push({cid: row.id, ...row.data()})
+      let count=0;
+      res.forEach(async row=>{
+        count++;
+        rows.push({
+          no:count, 
+          cid: row.id, 
+          ...row.data(),
+          isEllip:true,
+          isEdit:false
+        })
       });
-      //console.log(rows);
+
+      setTotal(count);
+      const start = (page-1)*size + 1;
+      const end=(page*size);
+      rows=rows.filter(row=>row.no>=start && row.no<=end);
       setComments(rows)
     });
   }
 
   useEffect(()=>{
     callAPI();
-  }, []);
+  }, [page]);
 
   const onClickInsert = async() => {
     if(sessionStorage.getItem('email')){
@@ -35,20 +54,37 @@ const ListPage = ({id}) => {
         return;
       }
       //댓글저장
-      //alert(content);
       const email=sessionStorage.getItem('email');
       const date=moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
       const comment={id, email, date, content};
-      //console.log(comment);
+
       await addDoc(collection(db, `comments`), comment);
-      alert("댓글등록");
+      //alert("댓글등록");
       setContent("");
+      setPage(1);
     }else{
-      //console.log(pathname);
+      //console.log(pathname)
       sessionStorage.setItem('target', pathname);
       navi('/user/login');
     }
   }
+
+  const onClickContent=(cid)=>{
+    const rows=comments.map(c=>c.cid===cid ? {...c,isEllip:!c.isEllip} : c);
+    setComments(rows);
+  }
+
+  const onClickDelete=async(cid)=>{
+    if(!window.confirm(`${cid}번 댓글을 삭제하실래요?`)) return;
+    //삭제하기
+    await deleteDoc(doc(db, `comments/${cid}`));
+  }
+
+  const onClickUpdate = (cid) => {
+    const rows=comments.map(c=>c.cid==cid ? {...c,isEdit:true} : c);
+    setComments(rows);
+  }
+
   return (
     <Row className='justify-content-center my-5 comments'>
       <Col xs={12} md={10} lg={8}>
@@ -66,22 +102,48 @@ const ListPage = ({id}) => {
           {comments.map(c=>
             <div key={c.cid}>
               <Row className='mb-2'>
-                <Col className='text-muted'>
+                <Col className='text-muted' style={{fontSize:'15px'}}>
                   <span>{c.date}</span>
                   <span className='mx-2'>({c.email})</span>
                 </Col>
-                {c.email===sessionStorage.getItem('email') &&
+                {(c.email===sessionStorage.getItem('email')) && !c.isEdit && 
                   <Col className='text-end'>
-                    <Button variant='outline-secondary' size="sm">수정</Button>
-                    <Button variant='outline-secondary' size="sm" className='ms-2'>삭제</Button>
+                    <Button onClick={()=>onClickUpdate(c.cid)}
+                      variant='outline-secondary' size="sm">수정</Button>
+                    <Button onClick={()=>onClickDelete(c.cid)}
+                      variant='outline-secondary' size="sm" className='ms-2'>삭제</Button>
+                  </Col>
+                }
+                {(c.email===sessionStorage.getItem('email')) && c.isEdit && 
+                  <Col className='text-end'>
+                    <Button variant='outline-secondary' size="sm">저장</Button>
+                    <Button
+                      variant='outline-secondary' size="sm" className='ms-2'>취소</Button>
                   </Col>
                 }
               </Row>
-              <div className="ellipsis2" style={{whiteSpace:'pre-wrap'}}>{c.content}</div>
+              {c.isEdit ?
+                <div>
+                  <Form.Control value={c.content} as="textarea" rows={10}/>
+                </div> 
+                : 
+                <div onClick={()=>onClickContent(c.cid)}
+                  className={c.isEllip && 'ellipsis2'} style={{whiteSpace:'pre-wrap',cursor:'pointer'}}>
+                    {c.content}
+                </div>  
+              }
               <hr/>
             </div>
           )}
         </div>
+        <Pagination
+          activePage={page}
+          itemsCountPerPage={size}
+          totalItemsCount={total}
+          pageRangeDisplayed={5}
+          prevPageText={"‹"}
+          nextPageText={"›"}
+          onChange={(e)=>setPage(e)}/>
       </Col>
     </Row>
   )
