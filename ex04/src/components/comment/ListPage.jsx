@@ -81,7 +81,12 @@ const ListPage = ({id}) => {
   }
 
   const onClickUpdate = (cid) => {
-    const rows=comments.map(c=>c.cid==cid ? {...c,isEdit:true} : c);
+    const rows=comments.map(c=>c.cid===cid ? {...c,isEdit:true} : c);
+    setComments(rows);
+  }
+
+  const onClickCancel = (cid)=>{
+    const rows=comments.map(c=>c.cid===cid ? {...c, isEdit:false} : c);
     setComments(rows);
   }
 
@@ -117,14 +122,14 @@ const ListPage = ({id}) => {
                 {(c.email===sessionStorage.getItem('email')) && c.isEdit && 
                   <Col className='text-end'>
                     <Button variant='outline-secondary' size="sm">저장</Button>
-                    <Button
+                    <Button onClick={()=>onClickCancel(c.cid)}
                       variant='outline-secondary' size="sm" className='ms-2'>취소</Button>
                   </Col>
                 }
               </Row>
               {c.isEdit ?
                 <div>
-                  <Form.Control value={c.content} as="textarea" rows={10}/>
+                  <Form.Control value={c.content} as="textarea" rows={5}/>
                 </div> 
                 : 
                 <div onClick={()=>onClickContent(c.cid)}
