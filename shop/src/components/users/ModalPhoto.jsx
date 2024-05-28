@@ -4,6 +4,7 @@ import Modal from 'react-bootstrap/Modal';
 
 const ModalPhoto = () => {
   const [fileName, setFileName] = useState('');
+  const [file, setFile] = useState(null);
   const refPhoto = useRef(null);
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -14,8 +15,19 @@ const ModalPhoto = () => {
     cursor:'pointer',
     border: '1px solid gray'
   }
+
   const onChageFile = (e) => {
     setFileName(URL.createObjectURL(e.target.files[0]));
+    setFile(e.target.files[0]);
+  }
+
+  const onClickSave = () => {
+    if(!file){
+      alert("변경할 이미지를 선택하세요!");
+      return;
+    }
+    if(!window.confirm("변경한 이미지를 저장하실래요?")) return;
+    //이미지업로드
   }
 
   return (
@@ -39,7 +51,7 @@ const ModalPhoto = () => {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary">Save</Button>
+          <Button onClick={onClickSave} variant="primary">Save</Button>
         </Modal.Footer>
       </Modal>
     </>
