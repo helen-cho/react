@@ -21,3 +21,9 @@
 .readPage .title {
     width: 100px;
 }
+
+.readPage img {
+    border-radius: 50%;
+    cursor: pointer;
+    margin-bottom: 10px;
+}

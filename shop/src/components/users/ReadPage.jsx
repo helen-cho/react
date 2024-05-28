@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import {Row, Col, Card, Form, InputGroup, Button} from 'react-bootstrap'
 import ModalAddress from './ModalAddress';
+import ModalPhoto from './ModalPhoto';
 
 const ReadPage = () => {
   const uid=sessionStorage.getItem('uid');
@@ -52,7 +53,9 @@ const ReadPage = () => {
             <h3 className='text-center'>마이페이지</h3>
           </Card.Header>
           <Card.Body>
-            <div></div>
+            <div>
+              <ModalPhoto/>
+            </div>
             <form onSubmit={onSubmit}>
               <InputGroup className='mb-2'>
                 <InputGroup.Text className='title justify-content-center'>이름</InputGroup.Text>
