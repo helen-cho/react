@@ -17,7 +17,6 @@ const ReadPage = () => {
   const callAPI = async() => {
     const url=`/users/read/${uid}`;
     const res=await axios.get(url);
-    //console.log(res.data);
     setForm(res.data);
   }
 
@@ -53,7 +52,7 @@ const ReadPage = () => {
                 <InputGroup.Text className='title justify-content-center'>주소</InputGroup.Text>
                 <Form.Control onChange={onChangeForm}
                   name="address1" value={address1}/>
-                <ModalAddress/>
+                <ModalAddress form={form} setForm={setForm}/>
               </InputGroup>
               <Form.Control onChange={onChangeForm}
                 name="address2" value={address2} placeholder='상세주소'/>
