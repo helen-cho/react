@@ -1,8 +1,10 @@
 import axios from 'axios';
 import React, { useState } from 'react'
 import { InputGroup, Form, Button, Card, Col, Row } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
+  const navi = useNavigate();
   const [form, setForm] = useState({
     uid:'',
     upass:''
@@ -20,7 +22,16 @@ const LoginPage = () => {
     //로그인체크
     //console.log(uid, upass);
     const res=await axios.post("/users/login", form);
-    console.log(res.data.result);
+    //console.log(res.data.result);
+    const result=parseInt(res.data.result);
+    if(result===0){
+      alert("아이디가 존재하지 않습니다!");
+    }else if(result===2){
+      alert("비밀번호가 일치하지 않습니다!");
+    }else if(result===1){
+      sessionStorage.setItem('uid', uid);
+      navi('/');
+    }
   }
 
   return (
