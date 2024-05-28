@@ -11,9 +11,10 @@ const ReadPage = () => {
     uname:'',
     phone:'',
     address1:'',
-    address2:''
+    address2:'',
+    photo:''
   });
-  const {uname, phone, address1, address2} = form;
+  const {uname, phone, address1, address2, photo} = form;
 
   const callAPI = async() => {
     const url=`/users/read/${uid}`;
@@ -54,7 +55,7 @@ const ReadPage = () => {
           </Card.Header>
           <Card.Body>
             <div>
-              <ModalPhoto/>
+              <ModalPhoto uid={uid} photo={photo} callAPI={callAPI}/>
             </div>
             <form onSubmit={onSubmit}>
               <InputGroup className='mb-2'>

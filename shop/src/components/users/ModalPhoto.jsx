@@ -1,9 +1,10 @@
+import axios from 'axios';
 import { useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-const ModalPhoto = () => {
-  const [fileName, setFileName] = useState('');
+const ModalPhoto = ({uid, photo, callAPI}) => {
+  const [fileName, setFileName] = useState(photo);
   const [file, setFile] = useState(null);
   const refPhoto = useRef(null);
   const [show, setShow] = useState(false);
@@ -21,18 +22,27 @@ const ModalPhoto = () => {
     setFile(e.target.files[0]);
   }
 
-  const onClickSave = () => {
+  const onClickSave = async() => {
     if(!file){
       alert("변경할 이미지를 선택하세요!");
       return;
     }
     if(!window.confirm("변경한 이미지를 저장하실래요?")) return;
     //이미지업로드
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('uid', uid);
+    const res=await axios.post('/users/photo', formData);
+
+    if(res.data.result==1){
+      callAPI();
+      handleClose();
+    }
   }
 
   return (
     <>
-      <img src="http://via.placeholder.com/50x50" onClick={handleShow} width="50px"/>
+      <img src={photo || "http://via.placeholder.com/50x50"} onClick={handleShow} width="50px"/>
       <Modal style={{top:'30%'}}
         show={show}
         onHide={handleClose}
