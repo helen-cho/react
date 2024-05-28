@@ -15,7 +15,6 @@ const MenuPage = () => {
     const url=`/users/read/${uid}`;
     const res=await axios.get(url);
     setUser(res.data);
-    //console.log(uname);
   }
 
   useEffect(()=>{
@@ -44,7 +43,10 @@ const MenuPage = () => {
             {uid ? 
               <>
                 <Nav>
-                  <Nav.Link href="/users/mypage" className='active'>{user.uname}님</Nav.Link>
+                  <Nav.Link href="/users/mypage" className='active me-3'>
+                    <img src="http://via.placeholder.com/30x30" with="30" style={{borderRadius:'50%'}}/> 
+                    <span className='ms-1'>{user.uname}님</span>
+                  </Nav.Link>
                 </Nav>
                 <Nav>
                   <Nav.Link href="#" onClick={onClickLogout}>로그아웃</Nav.Link>

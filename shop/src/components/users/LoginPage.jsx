@@ -6,8 +6,8 @@ import { useNavigate } from 'react-router-dom';
 const LoginPage = () => {
   const navi = useNavigate();
   const [form, setForm] = useState({
-    uid:'',
-    upass:''
+    uid:'green',
+    upass:'pass'
   });
   const { uid, upass } = form;
   const onChangeForm = (e) => {
@@ -35,7 +35,7 @@ const LoginPage = () => {
   }
 
   return (
-    <Row className='justify-content-center my-5 userLogin'>
+    <Row className='justify-content-center my-5 loginPage'>
       <Col xs={8} md={6} lg={4}>
         <Card>
           <Card.Header><h3 className='text-center'>로그인</h3></Card.Header>
