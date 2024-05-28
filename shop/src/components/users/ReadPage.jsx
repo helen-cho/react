@@ -28,6 +28,22 @@ const ReadPage = () => {
     setForm({...form, [e.target.name]:e.target.value});
   }
 
+  const onSubmit = async(e) => {
+    e.preventDefault();
+    if(uname==="") {
+      alert("이름을 입력하세요!");
+      return;
+    }
+    if(!window.confirm("수정하신 정보를 저장하실래요?")) return;
+    //수정처리
+    const url='/users/update';
+    const res=await axios.post(url, form);
+    if(res.data.result==1){
+      alert("정보수정완료!");
+      callAPI();
+    }
+  }
+
   return (
     <Row className='justify-content-center my-5 readPage'>
       <Col xs={12} md={10} lg={8}>
@@ -37,7 +53,7 @@ const ReadPage = () => {
           </Card.Header>
           <Card.Body>
             <div></div>
-            <form>
+            <form onSubmit={onSubmit}>
               <InputGroup className='mb-2'>
                 <InputGroup.Text className='title justify-content-center'>이름</InputGroup.Text>
                 <Form.Control onChange={onChangeForm}
