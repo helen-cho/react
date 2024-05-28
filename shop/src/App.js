@@ -2,13 +2,13 @@ import './App.css';
 import { Container } from 'react-bootstrap';
 import TopPage from './components/TopPage';
 import BottomPage from './components/BottomPage';
-import HomePage  from './components/HomePage';
+import MenuPage from './components/MenuPage';
 
 function App() {
   return (
     <Container>
       <TopPage/>
-      <HomePage/>
+      <MenuPage/>
       <BottomPage/>
     </Container>
   );
