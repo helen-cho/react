@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
@@ -8,7 +8,12 @@ const ModalPhoto = ({uid, photo, callAPI}) => {
   const [file, setFile] = useState(null);
   const refPhoto = useRef(null);
   const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
+
+  const handleClose = () => {
+    setShow(false);
+    setFileName(photo);
+  }
+  
   const handleShow = () => setShow(true);
   const style={
     width: '150px',
@@ -39,6 +44,10 @@ const ModalPhoto = ({uid, photo, callAPI}) => {
       handleClose();
     }
   }
+
+  useEffect(()=>{
+    setFileName(photo);
+  },[photo]);
 
   return (
     <>
