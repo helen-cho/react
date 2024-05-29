@@ -3,7 +3,7 @@ import { useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-const ModalPhoto = ({uid, photo}) => {
+const ModalPhoto = ({uid, photo, callAPI}) => {
   const ref_photo = useRef();
   const style={
     borderRadius:'50%',
@@ -18,8 +18,21 @@ const ModalPhoto = ({uid, photo}) => {
   const {name, file}= image;
 
   const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleClose = () => {
+    setShow(false);
+    setImage({
+      name:photo,
+      fill:null
+    })
+  }
+
+  const handleShow = () => {
+    setShow(true);
+    setImage({
+      name:photo,
+      file:null
+    });
+  }
 
   const onChangeFile = (e) => {
     setImage({
@@ -42,6 +55,7 @@ const ModalPhoto = ({uid, photo}) => {
     const res=await axios.post('/users/photo', data);
     if(res.data.result===1){
       handleClose();
+      callAPI();
     }
 
   }

@@ -56,7 +56,7 @@ const ReadPage = () => {
           <Card.Body>
             <Row>
               <Col md={3} className='my-5'>
-                <ModalPhoto uid={uid} photo={photo}/>
+                <ModalPhoto uid={uid} photo={photo} callAPI={callAPI}/>
               </Col>
               <Col className='my-5'>
                 <form onSubmit={onSubmit}>
