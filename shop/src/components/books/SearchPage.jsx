@@ -134,11 +134,11 @@ const SearchPage = () => {
             <tr key={book.isbn}>
                <td className='text-center'><input onChange={(e)=>onChangeSingle(e, book.isbn)} checked={book.checked} type="checkbox"/></td>
                <td>{book.isbn}</td> 
-               <td><img src={book.thumbnail || 'http://via.placeholder.com/120x170'} width="40px"/></td>
+               <td className='text-center'><img src={book.thumbnail || 'http://via.placeholder.com/120x170'} width="40px"/></td>
                <td>{book.title}</td>
-               <td>{book.price}원</td>
+               <td className='text-end'>{book.price}원</td>
                <td>{book.authors}</td>
-               <td><Button onClick={()=>onInsert(book)} size='sm'>등록</Button></td>
+               <td className='text-center'><Button onClick={()=>onInsert(book)} size='sm'>등록</Button></td>
             </tr>
           )}
         </tbody>
