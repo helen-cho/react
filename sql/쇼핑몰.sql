@@ -17,3 +17,47 @@ insert into users(uid, upass, uname)
 values('green','pass','최그린');
 
 select * from users;
+
+update users 
+set phone='010-2020-3030', 
+address1='인천 서구 경서동 동문아파트',
+address2 ='516-1801' 
+where uid='green';
+
+
+update users set photo=null where uid >'';
+
+create table books(
+	bid int primary key,
+    title varchar(500) not null,
+    price int default 0,
+    contents text,
+    isbn varchar(100),
+    publisher varchar(100),
+    image varchar(200),
+    author varchar(200),
+    regDate datetime default now()
+);
+
+desc books;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

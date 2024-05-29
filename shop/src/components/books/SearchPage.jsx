@@ -40,6 +40,12 @@ const SearchPage = () => {
     callAPI();
   }
 
+  const onInsert = (book) => {
+    if(!window.confirm(`"${book.title}" 도서를 등록하실래요?`)) return;
+    //도서등록
+    console.log(book);
+  }
+
   if(loading) return <h1 className='text-center my-5'>로딩중......</h1>
   return (
     <div className='my-5'>
@@ -57,13 +63,14 @@ const SearchPage = () => {
           검색수: {total}건
         </Col>
       </Row>
-      <Table striped bordered hover>
+      <Table striped bordered hover className='align-middle'>
         <thead>
           <tr>
             <td>isbn</td>
             <td colSpan={2}>Title</td>
             <td>Price</td>
             <td>Authors</td>
+            <td>등록</td>
           </tr>
         </thead>
         <tbody>
@@ -74,6 +81,7 @@ const SearchPage = () => {
                <td>{book.title}</td>
                <td>{book.price}원</td>
                <td>{book.authors}</td>
+               <td><Button onClick={()=>onInsert(book)} size='sm'>등록</Button></td>
             </tr>
           )}
         </tbody>
