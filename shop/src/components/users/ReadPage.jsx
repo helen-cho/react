@@ -54,34 +54,38 @@ const ReadPage = () => {
             <h3 className='text-center'>마이페이지</h3>
           </Card.Header>
           <Card.Body>
-            <div>
-              <ModalPhoto uid={uid} photo={photo} callAPI={callAPI}/>
-            </div>
-            <form onSubmit={onSubmit}>
-              <InputGroup className='mb-2'>
-                <InputGroup.Text className='title justify-content-center'>이름</InputGroup.Text>
-                <Form.Control onChange={onChangeForm}
-                  name="uname" value={uname}/>
-              </InputGroup>              
-              <InputGroup className='mb-2 justify-content-center'>
-                <InputGroup.Text className='title justify-content-center'>전화</InputGroup.Text>
-                <Form.Control onChange={onChangeForm}
-                  name="phone" value={phone}/>
-              </InputGroup>
-              <InputGroup className='mb-1'>
-                <InputGroup.Text className='title justify-content-center'>주소</InputGroup.Text>
-                <Form.Control onChange={onChangeForm}
-                  name="address1" value={address1}/>
-                <ModalAddress form={form} setForm={setForm}/>
-              </InputGroup>
-              <Form.Control onChange={onChangeForm}
-                name="address2" value={address2} placeholder='상세주소'/>
-              <div className='text-center my-3'>
-                <Button className='me-2' type="submit">정보수정</Button>
-                <Button onClick={callAPI}
-                  variant='secondary'>수정취소</Button>
-              </div>
-            </form>
+            <Row>
+              <Col md={3} className='my-5'>
+                <ModalPhoto uid={uid} photo={photo}/>
+              </Col>
+              <Col className='my-5'>
+                <form onSubmit={onSubmit}>
+                    <InputGroup className='mb-2'>
+                      <InputGroup.Text className='title justify-content-center'>이름</InputGroup.Text>
+                      <Form.Control onChange={onChangeForm}
+                        name="uname" value={uname}/>
+                    </InputGroup>              
+                    <InputGroup className='mb-2 justify-content-center'>
+                      <InputGroup.Text className='title justify-content-center'>전화</InputGroup.Text>
+                      <Form.Control onChange={onChangeForm}
+                        name="phone" value={phone}/>
+                    </InputGroup>
+                    <InputGroup className='mb-1'>
+                      <InputGroup.Text className='title justify-content-center'>주소</InputGroup.Text>
+                      <Form.Control onChange={onChangeForm}
+                        name="address1" value={address1}/>
+                      <ModalAddress form={form} setForm={setForm}/>
+                    </InputGroup>
+                    <Form.Control onChange={onChangeForm}
+                      name="address2" value={address2} placeholder='상세주소'/>
+                    <div className='text-center my-3'>
+                      <Button className='me-2' type="submit">정보수정</Button>
+                      <Button onClick={callAPI}
+                        variant='secondary'>수정취소</Button>
+                    </div>
+                  </form>
+              </Col>
+            </Row>
           </Card.Body>
         </Card>
       </Col>

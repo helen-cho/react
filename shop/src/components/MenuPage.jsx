@@ -44,7 +44,6 @@ const MenuPage = () => {
               <>
                 <Nav>
                   <Nav.Link href="/users/mypage" className='active me-3'>
-                    <img src="http://via.placeholder.com/30x30" with="30" style={{borderRadius:'50%'}}/> 
                     <span className='ms-1'>{user.uname}님</span>
                   </Nav.Link>
                 </Nav>

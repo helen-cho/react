@@ -1,57 +1,55 @@
 import axios from 'axios';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-const ModalPhoto = ({uid, photo, callAPI}) => {
-  const [fileName, setFileName] = useState(photo);
-  const [file, setFile] = useState(null);
-  const refPhoto = useRef(null);
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => {
-    setShow(false);
-    setFileName(photo);
-  }
-  
-  const handleShow = () => setShow(true);
+const ModalPhoto = ({uid, photo}) => {
+  const ref_photo = useRef();
   const style={
-    width: '150px',
     borderRadius:'50%',
-    cursor:'pointer',
-    border: '1px solid gray'
+    border:'1px solid gray',
+    cursor:'pointer'
   }
 
-  const onChageFile = (e) => {
-    setFileName(URL.createObjectURL(e.target.files[0]));
-    setFile(e.target.files[0]);
+  const [image, setImage] = useState({
+    name:'',
+    file:null
+  });
+  const {name, file}= image;
+
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const onChangeFile = (e) => {
+    setImage({
+      name:URL.createObjectURL(e.target.files[0]),
+      file:e.target.files[0]
+    })
   }
 
   const onClickSave = async() => {
-    if(!file){
-      alert("변경할 이미지를 선택하세요!");
+    if(!file) {
+      alert("변경할 사진을 선택하세요!");
       return;
     }
-    if(!window.confirm("변경한 이미지를 저장하실래요?")) return;
-    //이미지업로드
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('uid', uid);
-    const res=await axios.post('/users/photo', formData);
+    if(!window.confirm(uid + "사진을 선택한 사진으로 변경하실래요?")) return;
 
-    if(res.data.result==1){
-      callAPI();
+    //사진저장(업로드)
+    const data = new FormData();
+    data.append("file", file);
+    data.append("uid", uid);
+    const res=await axios.post('/users/photo', data);
+    if(res.data.result===1){
       handleClose();
     }
-  }
 
-  useEffect(()=>{
-    setFileName(photo);
-  },[photo]);
+  }
 
   return (
     <>
-      <img src={photo || "http://via.placeholder.com/50x50"} onClick={handleShow} width="50px"/>
+      <img onClick={handleShow}
+        src={photo || "http://via.placeholder.com/200x200"} width="90%"/>
       <Modal style={{top:'30%'}}
         show={show}
         onHide={handleClose}
@@ -61,16 +59,16 @@ const ModalPhoto = ({uid, photo, callAPI}) => {
           <Modal.Title>사진변경</Modal.Title>
         </Modal.Header>
         <Modal.Body className='text-center'>
-          <img onClick={()=>refPhoto.current.click()}
-            src={fileName || "http://via.placeholder.com/150x150"} style={style}/>
-          <input onChange={onChageFile}
-            ref={refPhoto} type="file" style={{display:'none'}}/>
+         <img onClick={()=>ref_photo.current.click()} 
+            src={name || "http://via.placeholder.com/200x200"} width="70%" style={style}/>
+         <input onChange={onChangeFile} type="file" ref={ref_photo} style={{display:'none'}}/>
         </Modal.Body>
-        <Modal.Footer className='text-center'>
+        <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
-            Close
+            닫기
           </Button>
-          <Button onClick={onClickSave} variant="primary">Save</Button>
+          <Button onClick={onClickSave}
+            variant="primary">저장</Button>
         </Modal.Footer>
       </Modal>
     </>
