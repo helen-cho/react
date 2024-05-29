@@ -42,7 +42,13 @@ create table books(
 
 desc books;
 
-select * from books;
+select * from books order by bid desc;
+select count(*) from books;
+
+select *,date_format(regdate,'%Y-%m-%d') fmtdate,format(price,0) fmtprice
+from books
+order by bid desc
+limit 0, 5;
 
 
 

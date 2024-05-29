@@ -120,7 +120,7 @@ const SearchPage = () => {
       </Row>
       <Table striped bordered hover className='align-middle'>
         <thead>
-          <tr>
+          <tr className='text-center'>
             <td><input onChange={onChangeAll} checked={chk===books.length} type="checkbox"/></td>
             <td>isbn</td>
             <td colSpan={2}>Title</td>
@@ -132,7 +132,7 @@ const SearchPage = () => {
         <tbody>
           {books.map(book=>
             <tr key={book.isbn}>
-               <td><input onChange={(e)=>onChangeSingle(e, book.isbn)} checked={book.checked} type="checkbox"/></td>
+               <td className='text-center'><input onChange={(e)=>onChangeSingle(e, book.isbn)} checked={book.checked} type="checkbox"/></td>
                <td>{book.isbn}</td> 
                <td><img src={book.thumbnail || 'http://via.placeholder.com/120x170'} width="40px"/></td>
                <td>{book.title}</td>

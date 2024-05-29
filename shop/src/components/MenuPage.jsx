@@ -38,7 +38,7 @@ const MenuPage = () => {
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
               <Nav.Link href="/books/search">도서검색</Nav.Link>
-              <Nav.Link href="#">도서목록</Nav.Link>
+              <Nav.Link href="/books/list">도서목록</Nav.Link>
             </Nav>
             {uid ? 
               <>
