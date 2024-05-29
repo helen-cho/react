@@ -40,10 +40,16 @@ const SearchPage = () => {
     callAPI();
   }
 
-  const onInsert = (book) => {
+  const onInsert = async(book) => {
     if(!window.confirm(`"${book.title}" 도서를 등록하실래요?`)) return;
     //도서등록
     console.log(book);
+    const res=await axios.post('/books/insert', book);
+    if(res.data.result===1){
+      alert("도서등록완료!");
+    }else {
+      alert("이미 등록된 도서입니다!");
+    }
   }
 
   if(loading) return <h1 className='text-center my-5'>로딩중......</h1>

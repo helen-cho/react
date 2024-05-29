@@ -27,8 +27,9 @@ where uid='green';
 
 update users set photo=null where uid >'';
 
+drop table books;
 create table books(
-	bid int primary key,
+	bid int auto_increment primary key,
     title varchar(500) not null,
     price int default 0,
     contents text,
@@ -40,6 +41,8 @@ create table books(
 );
 
 desc books;
+
+select * from books;
 
 
 
