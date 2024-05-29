@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import {Table, Button} from 'react-bootstrap'
+import {Table, Button, Row, Col} from 'react-bootstrap'
 import '../Paging.css'
 import  Pagination from 'react-js-pagination'
 
@@ -51,9 +51,36 @@ const ListPage = () => {
       book.bid===bid ? {...book, checked:e.target.checked} : book));
   }
 
+  const onDeleteChecked = () => {
+    if(chk===0){
+      alert("삭제할 도서를 선택하세요!");
+      return;
+    }
+    if(!window.confirm(`${chk}개 도서를 삭제하실래요?`)) return;
+    
+    let deleted=0;
+    let cnt=0;
+    books.forEach(async book=>{
+      if(book.checked){
+        const res=await axios.post('/books/delete', {bid:book.bid});
+        cnt++;
+        if(res.data.result===1) deleted++;
+        if(cnt==chk) {
+          alert(`${deleted}개 도서가 삭제되었습니다.`);
+          callAPI();
+        }
+      }
+    });
+  }
+
   return (
     <div className='my-5'>
       <h1 className='text-center mb-5'>도서목록</h1>
+      <Row className='mb-2'>
+        <Col className='text-end'>
+          <Button onClick={onDeleteChecked} variant='danger'>선택도서삭제</Button>
+        </Col>
+      </Row>
       <Table striped bordered hover className='align-middle'>
         <thead>
           <tr className='text-center table-primary'>
