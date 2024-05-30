@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import {Row, Col, Form, InputGroup, Card, Button} from 'react-bootstrap'
 import { useParams } from 'react-router-dom'
+import ModalImage from './ModalImage';
 
 const UpdatePage = () => {
   const {bid} = useParams();
@@ -12,9 +13,10 @@ const UpdatePage = () => {
     author:'',
     image:'',
     fmtdate:'',
-    price:''
+    price:'',
+    bigimage:''
   });
-  const {title, contents, author, image, fmtdate, price} = form;
+  const {title, contents, author, image, fmtdate, price, bigimage} = form;
 
   const callAPI = async() => {
     const res=await axios.get(`/books/read/${bid}`);
@@ -50,7 +52,7 @@ const UpdatePage = () => {
           <Card.Body>
             <Row>
               <Col md={2} className='mb-2 text-center pt-2'>
-                <img src={image || "http://via.placeholder.com/120x170"} width="100%"/>
+                <ModalImage bigimage={bigimage}/>
               </Col>
               <Col className='my-2'>
                   {fmtdate && 
