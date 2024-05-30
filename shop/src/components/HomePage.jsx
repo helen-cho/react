@@ -16,7 +16,7 @@ const HomePage = () => {
 
   const callAPI = async() => {
     const res=await axios.get(
-      `/books/list?page=${page}&size=${size}&key=${key}&word=${word}`);
+      `/books/list?page=${page}&size=${size}&key=${key}&word=${word}&uid=${uid}`);
     console.log(res.data);
     setBooks(res.data.documents);
     setCount(res.data.count);
@@ -36,7 +36,8 @@ const HomePage = () => {
     if(uid){
       //좋아요 저장
       const res=await axios.post('/books/likes/insert', {uid, bid});
-      alert(res.data.result);
+      //alert(res.data.result);
+      callAPI();
     }else{
       window.location.href='/users/login';
     }
@@ -75,9 +76,15 @@ const HomePage = () => {
                       {book.title}
                     </div>
                   </Col>
-                  <Col xs={1} className='text-end me-2'>
-                    <FaRegHeart className='heart' 
+                  <Col xs={1} className='text-end me-2 user-wrap'>
+                    {book.ucnt === 0 ?
+                    <FaRegHeart className='heart user-image' 
                       onClick={()=>onClicklike(book.bid)}/>
+                      :
+                    <FaHeart className='heart user-image'/>  
+                    }
+                    <span style={{fontSize:'10px'}} 
+                        className='user-text'>{book.lcnt}</span>
                   </Col>
                 </Row>
               </Card.Footer>
