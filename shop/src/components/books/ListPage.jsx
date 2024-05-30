@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import {Table, Button, Row, Col, Form, InputGroup} from 'react-bootstrap'
+import {Table, Button, Row, Col, Form, InputGroup, Alert} from 'react-bootstrap'
 import '../Paging.css'
 import  Pagination from 'react-js-pagination'
 
@@ -25,8 +25,11 @@ const ListPage = () => {
     const url=`/books/list?page=${page}&size=${size}&key=${key}&word=${word}`;
     const res=await axios.get(url);
     const documents=res.data.documents;
-    console.log(res.data);
-    setBooks(documents.map(book=>book && {...book, checked:false}));
+    if(documents) {
+      setBooks(documents.map(book=>book && {...book, checked:false}));
+    }else{
+      setBooks([]);
+    }
     setCount(res.data.count);
     if(page > Math.ceil(res.data.count/size)) setPage(page-1);
     setLoading(false);
@@ -106,10 +109,13 @@ const ListPage = () => {
           </form>
         </Col>
         <Col className='mt-2'>검색수:{count}건</Col>
-        <Col className='text-end'>
-          <Button onClick={onDeleteChecked} variant='danger'>선택도서삭제</Button>
-        </Col>
+        {count > 0 &&
+          <Col className='text-end'>
+            <Button onClick={onDeleteChecked} variant='danger'>선택도서삭제</Button>
+          </Col>
+        }
       </Row>
+      {count > 0 ?
       <Table striped bordered hover className='align-middle'>
         <thead>
           <tr className='text-center table-primary'>
@@ -143,7 +149,15 @@ const ListPage = () => {
           )}
         </tbody>
       </Table>
-      {count > size &&
+      :
+      <div>
+        <Alert className='text-center'>
+          <h5>검색결과가 없습니다.</h5>
+        </Alert>
+      </div>
+      }
+
+      {count > size && 
         <Pagination
           activePage={page}
           itemsCountPerPage={size}
