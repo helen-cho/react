@@ -25,6 +25,7 @@ const ListPage = () => {
     const url=`/books/list?page=${page}&size=${size}&key=${key}&word=${word}`;
     const res=await axios.get(url);
     const documents=res.data.documents;
+
     if(documents) {
       setBooks(documents.map(book=>book && {...book, checked:false}));
     }else{
@@ -139,7 +140,7 @@ const ListPage = () => {
               </td>
               <td>{book.bid}</td>
               <td><img src={book.image} width="40px"/></td>
-              <td>{book.title}</td>
+              <td><a href={`/books/update/${book.bid}`}>{book.title}</a></td>
               <td>{book.fmtprice}원</td>
               <td>{book.author}</td>
               <td>{book.fmtdate}</td>
@@ -151,12 +152,11 @@ const ListPage = () => {
       </Table>
       :
       <div>
-        <Alert className='text-center'>
+        <Alert className='text-center' variant='secondary'>
           <h5>검색결과가 없습니다.</h5>
         </Alert>
       </div>
       }
-
       {count > size && 
         <Pagination
           activePage={page}

@@ -5,6 +5,7 @@ import HomePage from './HomePage'
 import ReadPage from './users/ReadPage'
 import SearchPage from './books/SearchPage'
 import ListPage from './books/ListPage'
+import UpdatePage from './books/UpdatePage'
 
 const RouterPage = () => {
   return (
@@ -14,6 +15,7 @@ const RouterPage = () => {
       <Route path="/users/mypage" element={<ReadPage/>}/>
       <Route path="/books/search" element={<SearchPage/>}/>
       <Route path="/books/list" element={<ListPage/>}/>
+      <Route path="/books/update/:bid" element={<UpdatePage/>}/>
     </Routes>
   )
 }
