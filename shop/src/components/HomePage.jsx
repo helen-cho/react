@@ -70,18 +70,19 @@ const HomePage = () => {
                 <img src={book.image} width="100%"/>
               </Card.Body>
               <Card.Footer>
+                <div className='ellipsis mb-2'>{book.title}</div>
                 <Row>
                   <Col>
                     <div className='ellipsis' style={{fontSize:'12px'}}>
-                      {book.title}
+                      {book.fmtprice}원
                     </div>
                   </Col>
-                  <Col xs={1} className='text-end me-2 user-wrap'>
+                  <Col className='text-end'>
                     {book.ucnt === 0 ?
-                    <FaRegHeart className='heart user-image' 
+                    <FaRegHeart className='heart' 
                       onClick={()=>onClicklike(book.bid)}/>
                       :
-                    <FaHeart className='heart user-image'/>  
+                    <FaHeart className='heart'/>  
                     }
                     <span style={{fontSize:'10px'}} 
                         className='user-text'>{book.lcnt}</span>
