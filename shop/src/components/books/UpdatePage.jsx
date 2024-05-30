@@ -42,6 +42,11 @@ const UpdatePage = () => {
     }
   }
 
+  const onChagePrice = (e) => {
+    const result=e.target.value.replace(/[^0-9]/g,'');
+    setForm({...form, price:result});
+  }
+
   return (
     <Row className='my-5 justify-content-center'>
       <Col xs={12} md={10} lg={8}>
@@ -52,7 +57,7 @@ const UpdatePage = () => {
           <Card.Body>
             <Row>
               <Col md={2} className='mb-2 text-center pt-2'>
-                <ModalImage bigimage={bigimage}/>
+                <ModalImage bigimage={bigimage} callAPI={callAPI}/>
               </Col>
               <Col className='my-2'>
                   {fmtdate && 
@@ -64,7 +69,8 @@ const UpdatePage = () => {
                   </InputGroup>
                   <InputGroup className='mb-2'>
                     <InputGroup.Text>도서가격</InputGroup.Text>
-                    <Form.Control onChange={onChangeForm} name="price" value={price}/>
+                    <Form.Control 
+                      onChange={onChagePrice} name="price" value={price}/>
                   </InputGroup>
                   <InputGroup className='mb-2'>
                     <InputGroup.Text>도서저자</InputGroup.Text>

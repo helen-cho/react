@@ -20,10 +20,6 @@ const ModalPhoto = ({uid, photo, callAPI}) => {
   const [show, setShow] = useState(false);
   const handleClose = () => {
     setShow(false);
-    setImage({
-      name:photo,
-      fill:null
-    })
   }
 
   const handleShow = () => {

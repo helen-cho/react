@@ -1,8 +1,11 @@
+import axios from 'axios';
 import { useState, useRef } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { useParams } from 'react-router-dom';
 
-const ModalImage = ({bigimage}) => {
+const ModalImage = ({bigimage, callAPI}) => {
+  const {bid} = useParams();
   const refImage = useRef(null);
   const style ={
     cursor:'pointer'
@@ -24,11 +27,8 @@ const ModalImage = ({bigimage}) => {
 
   const handleClose = () =>{
     setShow(false);
-    setBigImage({
-      file:null,
-      fileName:bigimage
-    })
   } 
+
   const handleShow = () => {
     setShow(true);
     setBigImage({
@@ -37,13 +37,23 @@ const ModalImage = ({bigimage}) => {
     })
   }
 
-  const onClickSave = () => {
+  const onClickSave = async() => {
     if(file==null) {
       alert("저장할 이미지를 선택하세요!");
       return;
     }
     if(!window.confirm('이미지를 저장하실래요?')) return;
+
     //사진저장(업로드);
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("bid", bid);
+    const res = await axios.post('/books/upload', formData);
+    if(res.data.result===1){
+      alert("이미지변경완료!");
+      callAPI();
+      handleClose();
+    }
   }
 
   return (
