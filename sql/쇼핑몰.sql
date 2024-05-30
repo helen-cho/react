@@ -50,7 +50,10 @@ from books
 order by bid desc
 limit 0, 5;
 
+alter table books add column updateDate datetime;
+alter table books add column bigimage varchar(200);
 
+desc books;
 
 
 
