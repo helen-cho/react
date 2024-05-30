@@ -55,7 +55,7 @@ const ReadPage = () => {
           </Card.Header>
           <Card.Body>
             <Row>
-              <Col md={3} className='my-5'>
+              <Col md={3} className='mt-5'>
                 <ModalPhoto uid={uid} photo={photo} callAPI={callAPI}/>
               </Col>
               <Col className='my-5'>
@@ -78,7 +78,7 @@ const ReadPage = () => {
                     </InputGroup>
                     <Form.Control onChange={onChangeForm}
                       name="address2" value={address2} placeholder='상세주소'/>
-                    <div className='text-center my-3'>
+                    <div className='text-center mt-3'>
                       <Button className='me-2' type="submit">정보수정</Button>
                       <Button onClick={callAPI}
                         variant='secondary'>수정취소</Button>

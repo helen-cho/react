@@ -1,10 +1,13 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import {Table, Button, Row, Col} from 'react-bootstrap'
+import {Table, Button, Row, Col, Form, InputGroup} from 'react-bootstrap'
 import '../Paging.css'
 import  Pagination from 'react-js-pagination'
 
 const ListPage = () => {
+  const [key, setKey] = useState('title');
+  const [word, setWord]=useState('');
+  const [loading, setLoading] = useState(false);
   const [chk, setChk] = useState(0);
   const [books, setBooks] = useState([]);
   const [page, setPage] = useState(1);
@@ -12,18 +15,21 @@ const ListPage = () => {
   const [count, setCount]= useState(0);
 
   useEffect(()=>{
-    let count=0;
-    books.map(book=>book.checked && count++);
-    setChk(count);
+    let cnt=0;
+    books.map(book=>book.checked && cnt++);
+    setChk(cnt);
   },[books]);
 
   const callAPI = async() => {
-    const url=`/books/list?page=${page}&size=${size}`;
+    setLoading(true);
+    const url=`/books/list?page=${page}&size=${size}&key=${key}&word=${word}`;
     const res=await axios.get(url);
     const documents=res.data.documents;
     console.log(res.data);
     setBooks(documents.map(book=>book && {...book, checked:false}));
     setCount(res.data.count);
+    if(page > Math.ceil(res.data.count/size)) setPage(page-1);
+    setLoading(false);
   }
 
   useEffect(()=>{
@@ -73,10 +79,33 @@ const ListPage = () => {
     });
   }
 
+  const onSubmit = (e) => {
+    e.preventDefault();
+    setPage(1);
+    callAPI();
+  }
+
+  if(loading) return <h1 className='text-center my-5'>로딩중......</h1>
   return (
     <div className='my-5'>
       <h1 className='text-center mb-5'>도서목록</h1>
       <Row className='mb-2'>
+        <Col xs={8} md={5} lg={4}>
+          <form onSubmit={onSubmit}>
+            <InputGroup>
+              <Form.Select onChange={(e)=>setKey(e.target.value)}
+                  className='me-2' value={key}>
+                <option value="title">제목</option>
+                <option value="author">저자</option>
+                <option value="publisher">출판사</option>
+              </Form.Select>
+              <Form.Control value={word} onChange={(e)=>setWord(e.target.value)}
+                 placeholder='검색어'/>
+              <Button type="submit">검색</Button>
+            </InputGroup>
+          </form>
+        </Col>
+        <Col className='mt-2'>검색수:{count}건</Col>
         <Col className='text-end'>
           <Button onClick={onDeleteChecked} variant='danger'>선택도서삭제</Button>
         </Col>
@@ -114,14 +143,16 @@ const ListPage = () => {
           )}
         </tbody>
       </Table>
-      <Pagination
-        activePage={page}
-        itemsCountPerPage={size}
-        totalItemsCount={count}
-        pageRangeDisplayed={5}
-        prevPageText={"‹"}
-        nextPageText={"›"}
-        onChange={ (e)=>setPage(e) }/>
+      {count > size &&
+        <Pagination
+          activePage={page}
+          itemsCountPerPage={size}
+          totalItemsCount={count}
+          pageRangeDisplayed={5}
+          prevPageText={"‹"}
+          nextPageText={"›"}
+          onChange={ (e)=>setPage(e) }/>
+      }
     </div>
   )
 }
