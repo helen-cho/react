@@ -1,8 +1,9 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import {Row, Col, Card, Button } from 'react-bootstrap'
+import {Row, Col, Card, Button, Tab, Tabs } from 'react-bootstrap'
 import { useLocation, useParams } from 'react-router-dom'
 import { FaHeart, FaRegHeart } from "react-icons/fa";
+import ReviewPage from './ReviewPage';
 
 const ReadPage = () => {
   const {bid} = useParams();
@@ -91,6 +92,21 @@ const ReadPage = () => {
           </Card.Body>
         </Card>
       </Col>
+      <Row className='my-5 justify-content-center'>
+        <Col xs={12} md={10} lg={8}>
+          <Tabs
+            defaultActiveKey="home"
+            id="fill-tab-example"
+            className="mb-3">
+            <Tab eventKey="home" title="리뷰">
+                <ReviewPage/>
+            </Tab>
+            <Tab eventKey="profile" title="상세설명">
+                <div style={{whiteSpace:'pre-wrap'}}>{contents}</div>
+            </Tab>
+          </Tabs>
+        </Col>
+      </Row>
     </Row>
   )
 }

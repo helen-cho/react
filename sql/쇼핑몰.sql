@@ -55,12 +55,22 @@ alter table books add column bigimage varchar(200);
 
 desc books;
 
+create table likes(
+	uid varchar(20) not null,
+    bid int not null,
+    regDate datetime default now(),
+    primary key(uid, bid),
+    foreign key(uid) references users(uid),
+    foreign key(bid) references books(bid)
+);
 
+select * from likes;
 
-
-
-
-
+select *,date_format(regdate,'%Y-%m-%d') fmtdate,format(price,0) fmtprice,
+(select count(*) from likes where books.bid=likes.bid) lcnt,
+(select count(*) from likes where books.bid=likes.bid and uid='green') ucnt
+from books
+where bid=112;
 
 
 
