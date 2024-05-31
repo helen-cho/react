@@ -23,7 +23,8 @@ const ReviewPage = ({bid}) => {
 
     //현재페이지가 마지막 페이지보다 크면 페이지를 1감소시킨다.
     if(page> Math.ceil(res.data.count/size)) setPage(page-1);
-    const data=res.data.documents.map(doc=>doc && {...doc, ellip:true, isEdit:false});
+    const data=res.data.documents.map(doc=>doc && 
+          {...doc, ellip:true, isEdit:false, text:doc.contents});
     setReviews(data);
   }
 
@@ -69,6 +70,30 @@ const ReviewPage = ({bid}) => {
     setReviews(data);
   }
 
+  const onClickCancel = (rid) => {
+    const data=reviews.map(doc=>doc.rid===rid ? 
+      {...doc, isEdit:false, contents:doc.text} : doc);
+    setReviews(data);
+  }
+
+  const onChagenForm = (e, rid) => {
+    const data=reviews.map(doc=>doc.rid===rid ?{...doc, contents:e.target.value}: doc);
+    setReviews(data);
+  }
+
+  const onClickSave = async(rid, contents)=>{
+    if(contents===""){
+      alert("리뷰내용을 입력하세요!");
+      return;
+    }
+    if(!window.confirm(`${rid}번 리뷰를 수정하실래요?`)) return;
+    //리뷰수정
+    const res=await axios.post('/review/update', {rid, contents});
+    if(res.data.result===1){
+      callAPI();
+    }
+  }
+
   return (
     <div className='my-5'>
       {!uid ?
@@ -96,21 +121,30 @@ const ReviewPage = ({bid}) => {
                 <span className='mx-3'>{r.uname}({r.uid})</span>
                 <span>{r.fmtdate}</span>
               </Col>
-              {uid===r.uid && 
-              <Col className='text-end'>
-                <Button onClick={()=>onClickUpdate(r.rid)}
-                  variant='outline-secondary' size="sm" className='me-2'>수정</Button>
-                <Button onClick={()=>onClickDelete(r.rid)}
-                  variant='outline-secondary' size="sm">삭제</Button>
-              </Col>
+              {(uid===r.uid && !r.isEdit) &&
+                <Col className='text-end'>
+                  <Button onClick={()=>onClickUpdate(r.rid)}
+                    variant='outline-secondary' size="sm" className='me-2'>수정</Button>
+                  <Button onClick={()=>onClickDelete(r.rid)}
+                    variant='outline-secondary' size="sm">삭제</Button>
+                </Col>
+              }
+              {(uid===r.uid && r.isEdit) && 
+                <Col className='text-end'>
+                  <Button onClick={()=>onClickSave(r.rid, r.contents)}
+                    variant='outline-secondary' size="sm" className='me-2'>저장</Button>
+                  <Button onClick={()=>onClickCancel(r.rid)}
+                    variant='outline-secondary' size="sm">취소</Button>
+                </Col>
               }
             </Row>
             {r.isEdit ? 
-              <div>
-                <Form.Control as="textarea" rows={10} value={r.contents}/>
+              <div className='mt-2'>
+                <Form.Control onChange={(e)=>onChagenForm(e, r.rid)}
+                  as="textarea" rows={10} value={r.contents}/>
               </div>
             :
-              <div onClick={()=>onClickContents(r.rid)}
+              <div onClick={()=>onClickContents(r.rid)} 
                 className={r.ellip && "ellipsis2"} style={{whiteSpace:'pre-wrap',cursor:'pointer'}}>
                 {r.rid}:{r.contents}
               </div>
