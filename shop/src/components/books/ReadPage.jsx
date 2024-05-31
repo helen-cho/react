@@ -99,7 +99,7 @@ const ReadPage = () => {
             id="fill-tab-example"
             className="mb-3">
             <Tab eventKey="home" title="리뷰">
-                <ReviewPage/>
+                <ReviewPage bid={bid}/>
             </Tab>
             <Tab eventKey="profile" title="상세설명">
                 <div style={{whiteSpace:'pre-wrap'}}>{contents}</div>
