@@ -2,6 +2,8 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Button, Form, Row, Col } from 'react-bootstrap'
 import { useLocation, useNavigate } from 'react-router-dom';
+import '../Paging.css';
+import Pagination from 'react-js-pagination';
 
 const ReviewPage = ({bid}) => {
   const [page, setPage] = useState(1);
@@ -18,6 +20,8 @@ const ReviewPage = ({bid}) => {
     const res=await axios.get(`/review/list/${bid}?page=${page}&size=${size}`);
     console.log(res.data);
     setCount(res.data.count);
+    //현재페이지가 마지막 페이지보다 크면 페이지를 1감소시킨다.
+    if(page> Math.ceil(res.data.count/size)) setPage(page-1);
     const data=res.data.documents.map(doc=>doc && {...doc, ellip:true});
     setReviews(data);
   }
@@ -29,7 +33,7 @@ const ReviewPage = ({bid}) => {
 
   useEffect(()=>{
     callAPI();
-  }, []);
+  }, [page]);
 
   const onClickRegister = () => {
     sessionStorage.setItem('target', pathname);
@@ -45,11 +49,20 @@ const ReviewPage = ({bid}) => {
       if(res.data.result===1){
         alert('리뷰등록성공!');
         setContents("");
+        setPage(1);
         callAPI();
       }
     }
   }
   
+  const onClickDelete = async(rid) => {
+    if(!window.confirm(`${rid}번 댓글을 삭제하실래요?`)) return;
+    const res=await axios.post(`/review/delete/${rid}`);
+    if(res.data.result===1){
+      callAPI();
+    }
+  }
+
   return (
     <div className='my-5'>
       {!uid ?
@@ -77,15 +90,32 @@ const ReviewPage = ({bid}) => {
                 <span className='mx-3'>{r.uname}({r.uid})</span>
                 <span>{r.fmtdate}</span>
               </Col>
+              {uid===r.uid && 
+              <Col className='text-end'>
+                <Button variant='outline-secondary' size="sm" className='me-2'>수정</Button>
+                <Button onClick={()=>onClickDelete(r.rid)}
+                  variant='outline-secondary' size="sm">삭제</Button>
+              </Col>
+              }
             </Row>
             <div onClick={()=>onClickContents(r.rid)}
               className={r.ellip && "ellipsis2"} style={{whiteSpace:'pre-wrap',cursor:'pointer'}}>
-              {r.contents}
+              {r.rid}:{r.contents}
             </div>
             <hr/>  
           </div>  
         )}
       </div>
+      {count > size && 
+        <Pagination
+          activePage={page}
+          itemsCountPerPage={size}
+          totalItemsCount={count}
+          pageRangeDisplayed={5}
+          prevPageText={"‹"}
+          nextPageText={"›"}
+          onChange={ (e)=>setPage(e) }/>
+      }
     </div>
   )
 }
