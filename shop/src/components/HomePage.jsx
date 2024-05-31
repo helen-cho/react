@@ -43,6 +43,13 @@ const HomePage = () => {
     }
   }
 
+  const onClickCancel = async(bid) => {
+    const res = await axios.post('/books/likes/delete', {bid, uid});
+    if(res.data.result == 1){
+      callAPI();
+    }
+  }
+
   return (
     <div className='mt-5'>
       <Row className='mb-3 justify-content-end'>
@@ -82,10 +89,11 @@ const HomePage = () => {
                     <FaRegHeart className='heart' 
                       onClick={()=>onClicklike(book.bid)}/>
                       :
-                    <FaHeart className='heart'/>  
+                    <FaHeart className='heart'
+                      onClick={()=>onClickCancel(book.bid)}/>  
                     }
                     <span style={{fontSize:'10px'}} 
-                        className='user-text'>{book.lcnt}</span>
+                        className='user-text ms-1'>{book.lcnt}</span>
                   </Col>
                 </Row>
               </Card.Footer>
