@@ -74,7 +74,9 @@ const HomePage = () => {
           <Col key={book.bid} xs={6} md={4} lg={2} className='mb-3'>
             <Card>
               <Card.Body>
-                <img src={book.image} width="100%"/>
+                <a href={`/books/read/${book.bid}`}>
+                  <img src={book.image} width="100%"/>
+                </a>
               </Card.Body>
               <Card.Footer>
                 <div className='ellipsis mb-2'>{book.title}</div>
