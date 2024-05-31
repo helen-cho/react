@@ -81,11 +81,19 @@ const ReviewPage = ({bid}) => {
     setReviews(data);
   }
 
-  const onClickSave = async(rid, contents)=>{
+  const onClickSave = async(rid, contents, text)=>{
     if(contents===""){
       alert("리뷰내용을 입력하세요!");
       return;
     }
+
+    if(contents === text){
+      const data=reviews.map(doc=>doc.rid===rid?
+              {...doc, isEdit:false, ellip:true} : doc);
+      setReviews(data);
+      return;
+    }
+
     if(!window.confirm(`${rid}번 리뷰를 수정하실래요?`)) return;
     //리뷰수정
     const res=await axios.post('/review/update', {rid, contents});
@@ -131,7 +139,7 @@ const ReviewPage = ({bid}) => {
               }
               {(uid===r.uid && r.isEdit) && 
                 <Col className='text-end'>
-                  <Button onClick={()=>onClickSave(r.rid, r.contents)}
+                  <Button onClick={()=>onClickSave(r.rid, r.contents, r.text)}
                     variant='outline-secondary' size="sm" className='me-2'>저장</Button>
                   <Button onClick={()=>onClickCancel(r.rid)}
                     variant='outline-secondary' size="sm">취소</Button>
