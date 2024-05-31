@@ -4,9 +4,13 @@ import Navbar from 'react-bootstrap/Navbar';
 import RouterPage from './RouterPage';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { FaCartShopping } from "react-icons/fa6";
+import { Badge } from 'react-bootstrap';
+import { CountContext } from './CountContext';
 
 const MenuPage = () => {
+  const {count} = useContext(CountContext);
   const navi = useNavigate();
   const uid = sessionStorage.getItem("uid");
   const [user, setUser] = useState('');
@@ -42,6 +46,22 @@ const MenuPage = () => {
             </Nav>
             {uid ? 
               <>
+                <Nav>
+                  <Nav.Link href="/users/login" className='me-4'>
+                    <div>
+                      {count == 0 ?
+                        <FaCartShopping style={{fontSize:'25px'}}/>
+                      :
+                      <>
+                        <FaCartShopping  style={{fontSize:'25px', position:'absolute'}}/>
+                        <Badge bg="danger" style={{ position: 'relative', top: '-10px', left:'20px'}}>
+                          <span>{count}</span>
+                        </Badge>
+                      </>
+                      }
+                    </div>  
+                  </Nav.Link>
+                </Nav>
                 <Nav>
                   <Nav.Link href="/users/mypage" className='active me-3'>
                     <span className='ms-1'>{user.uname}님</span>

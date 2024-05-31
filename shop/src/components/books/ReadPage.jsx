@@ -1,14 +1,16 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {Row, Col, Card, Button, Tab, Tabs } from 'react-bootstrap'
 import { useLocation, useParams } from 'react-router-dom'
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import ReviewPage from './ReviewPage';
+import { CountContext } from '../CountContext';
 
 const ReadPage = () => {
   const {bid} = useParams();
   const {pathname} = useLocation();
   //console.log(pathname);
+  const {setCount, count, getUserCount} = useContext(CountContext);
 
   const uid=sessionStorage.getItem('uid');
   const [book, setBook] = useState({
@@ -84,8 +86,9 @@ const ReadPage = () => {
                 <div className='mb-2'>수정일: {fmtdate}</div>
                 <hr/>
                 <div className='mt-3'>
-                  <Button className='px-3 me-2' variant='warning'>바로구매</Button>
-                  <Button className='px-3' variant='success'>장바구니</Button>
+                  <Button onClick={()=>getUserCount()} className='px-3 me-2' variant='warning'>바로구매</Button>
+                  <Button onClick={()=>setCount(count+1)}
+                    className='px-3' variant='success'>장바구니</Button>
                 </div>
               </Col>
             </Row>

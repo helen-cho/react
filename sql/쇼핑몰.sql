@@ -73,13 +73,31 @@ from books
 where bid=112;
 
 
+create table review(
+	rid int auto_increment primary key,
+    bid int not null,
+    uid varchar(20) not null,
+    contents text not null,
+    regdate datetime default now(),
+    foreign key(bid) references books(bid),
+    foreign key(uid) references users(uid)
+);
 
+desc review;
 
+select * from review;
+select * from users;
 
+drop view view_review;
+create view view_review as
+select r.*, u.uname, u.photo, date_format(r.regdate,'%Y-%m-%d %T') fmtdate
+from review r, users u
+where r.uid=u.uid;
 
-
-
-
+select * from view_review
+where bid=113
+order by rid desc
+limit 0, 3;
 
 
 
