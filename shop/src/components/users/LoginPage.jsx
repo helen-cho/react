@@ -30,7 +30,11 @@ const LoginPage = () => {
       alert("비밀번호가 일치하지 않습니다!");
     }else if(result===1){
       sessionStorage.setItem('uid', uid);
-      navi('/');
+      if(sessionStorage.getItem('target')){
+        navi(sessionStorage.getItem('target'));
+      }else{
+        navi('/');
+      }
     }
   }
 

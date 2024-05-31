@@ -1,11 +1,14 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import {Row, Col, Card, Button } from 'react-bootstrap'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 
 const ReadPage = () => {
   const {bid} = useParams();
+  const {pathname} = useLocation();
+  //console.log(pathname);
+
   const uid=sessionStorage.getItem('uid');
   const [book, setBook] = useState({
     bid:'',
@@ -33,6 +36,26 @@ const ReadPage = () => {
     callAPI();
   }, []);
 
+  const onLikeInsert = async(bid)=> {
+    if(uid){
+      //좋아요저장
+      const res=await axios.post('/books/likes/insert', {bid, uid});
+      if(res.data.result===1){
+        callAPI();
+      }
+    }else{
+      sessionStorage.setItem('target', pathname);
+      window.location.href='/users/login'
+    }
+  }
+
+  const onLikeCancel = async(bid)=> {
+    const res=await axios.post('/books/likes/delete', {bid, uid});
+    if(res.data.result===1){
+      callAPI();
+    }
+  }
+
   return (
     <Row className='my-5 justify-content-center'>
       <Col xs={12} md={10} lg={8}>
@@ -40,17 +63,17 @@ const ReadPage = () => {
           <Card.Body>
             <Row>
               <Col md={6} className='text-center mt-3'>
-                <img src={bigimage || "http://via.placeholder.com/120x170"} width="80%"/>
+                <img src={bigimage || "http://via.placeholder.com/120x170"} width="100%"/>
               </Col>
-              <Col className='my-3'>
+              <Col className='my-3 align-self-center'>
                 <div>
                   <span className='me-2'>[{bid}] {title}</span>
                   {ucnt === 0 ?
-                    <FaRegHeart className='heart'/>
+                    <FaRegHeart onClick={()=>onLikeInsert(bid)} className='heart'/>
                     :
-                    <FaHeart className='heart'/>
+                    <FaHeart onClick={()=>onLikeCancel(bid)} className='heart'/>
                   }
-                  <span style={{fontSize:'12px'}}>{lcnt}</span>
+                  <span style={{fontSize:'10px'}}>{lcnt}</span>
                 </div>
                 <hr/>
                 <div className='mb-2'>저자: {author}</div>
