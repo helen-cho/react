@@ -20,9 +20,10 @@ const ReviewPage = ({bid}) => {
     const res=await axios.get(`/review/list/${bid}?page=${page}&size=${size}`);
     console.log(res.data);
     setCount(res.data.count);
+
     //현재페이지가 마지막 페이지보다 크면 페이지를 1감소시킨다.
     if(page> Math.ceil(res.data.count/size)) setPage(page-1);
-    const data=res.data.documents.map(doc=>doc && {...doc, ellip:true});
+    const data=res.data.documents.map(doc=>doc && {...doc, ellip:true, isEdit:false});
     setReviews(data);
   }
 
@@ -63,6 +64,11 @@ const ReviewPage = ({bid}) => {
     }
   }
 
+  const onClickUpdate = (rid) => {
+    const data=reviews.map(doc=>doc.rid===rid ? {...doc, isEdit:true} : doc);
+    setReviews(data);
+  }
+
   return (
     <div className='my-5'>
       {!uid ?
@@ -92,16 +98,23 @@ const ReviewPage = ({bid}) => {
               </Col>
               {uid===r.uid && 
               <Col className='text-end'>
-                <Button variant='outline-secondary' size="sm" className='me-2'>수정</Button>
+                <Button onClick={()=>onClickUpdate(r.rid)}
+                  variant='outline-secondary' size="sm" className='me-2'>수정</Button>
                 <Button onClick={()=>onClickDelete(r.rid)}
                   variant='outline-secondary' size="sm">삭제</Button>
               </Col>
               }
             </Row>
-            <div onClick={()=>onClickContents(r.rid)}
-              className={r.ellip && "ellipsis2"} style={{whiteSpace:'pre-wrap',cursor:'pointer'}}>
-              {r.rid}:{r.contents}
-            </div>
+            {r.isEdit ? 
+              <div>
+                <Form.Control as="textarea" rows={10} value={r.contents}/>
+              </div>
+            :
+              <div onClick={()=>onClickContents(r.rid)}
+                className={r.ellip && "ellipsis2"} style={{whiteSpace:'pre-wrap',cursor:'pointer'}}>
+                {r.rid}:{r.contents}
+              </div>
+            }
             <hr/>  
           </div>  
         )}
