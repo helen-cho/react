@@ -15,7 +15,7 @@ const CartPage = () => {
   useEffect(()=>{
     let checkeCount =0;
     books.forEach(book=>book.checked && checkeCount++);
-    console.log('.........', checkeCount);
+    //console.log('.........', checkeCount);
     setChk(checkeCount);
   }, [books])
 

@@ -1,8 +1,12 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import {Table, Alert, Card, Form, Button, InputGroup} from 'react-bootstrap'
+import {v4} from 'uuid'
 
+import ModalAddress from '../users/ModalAddress';
 const OrderPage = ({books, setBooks}) => {
+  const uuid=v4();
+  const pid=uuid.substring(0, 13);
   const [total, setTotal] = useState(0);
   const [form, setForm] = useState({
     uid:'',
@@ -29,6 +33,21 @@ const OrderPage = ({books, setBooks}) => {
     setTotal(totalSum);
     setBooks(data);
   }, []);
+
+  const onChangeForm = (e) => {
+    setForm({...form, [e.target.name]:e.target.value});
+  }
+
+  const onClickOrder = async() => {
+    if(!window.confirm(`${books.length}개 도서를 주문하실래요?`)) return;
+    //주문자정보
+    const res=await axios.post('/orders/purchase',{
+      ...form, sum:total, pid, uid
+    });
+    if(res.data.result===1){
+      alert('주문자정보저장완료!');
+    }
+  }
 
   return (
     <div>
@@ -64,20 +83,25 @@ const OrderPage = ({books, setBooks}) => {
           <h3 className='text-center'>주문자정보</h3>
         </Card.Header>
         <Card.Body>
+          <div>주문아이디: {pid}</div>
           <InputGroup className='mb-2'>
             <InputGroup.Text>주문자이름</InputGroup.Text>
-            <Form.Control name="uname" value={uname}/>
+            <Form.Control name="uname" value={uname} onChange={onChangeForm}/>
           </InputGroup>
           <InputGroup className='mb-2'>
             <InputGroup.Text>주문자전화</InputGroup.Text>
-            <Form.Control name="phone" value={phone}/>
+            <Form.Control name="phone" value={phone} onChange={onChangeForm}/>
           </InputGroup >
           <InputGroup className='mb-1'>
             <InputGroup.Text>주문자주소</InputGroup.Text>
-            <Form.Control name="address1" value={address1}/>
-            <Button>검색</Button>
+            <Form.Control name="address1" value={address1} onChange={onChangeForm}/>
+            <ModalAddress form={form} setForm={setForm}/>
           </InputGroup>
-          <Form.Control placeholder='상세주소' name="address2" value={address2}/>
+          <Form.Control onChange={onChangeForm}
+            placeholder='상세주소' name="address2" value={address2}/>
+          <div className='text-center mt-3'>
+            <Button onClick={onClickOrder} className='px-5'>주문하기</Button>
+          </div>  
         </Card.Body>  
       </Card>
     </div>
