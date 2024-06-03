@@ -108,6 +108,24 @@ order by bid desc
 limit 0, 6;
 
 
+drop table cart;
+create table cart(
+	uid varchar(20) not null,
+    bid int not null,
+    qnt int default 1,
+    regDate datetime default now(),
+    primary key(uid, bid),
+    foreign key(uid) references users(uid),
+    foreign key(bid) references books(bid)
+);
 
+desc cart;
+
+create view view_cart as
+select c.*, b.title, b.image 
+from cart c, books b
+where c.bid=b.bid;
+
+select * from view_cart;
 
 

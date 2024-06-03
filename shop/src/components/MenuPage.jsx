@@ -10,8 +10,8 @@ import { Badge } from 'react-bootstrap';
 import { CountContext } from './CountContext';
 
 const MenuPage = () => {
-  const {count} = useContext(CountContext);
   const navi = useNavigate();
+  const [count, setCount] = useState(0);
   const uid = sessionStorage.getItem("uid");
   const [user, setUser] = useState('');
 
@@ -20,6 +20,17 @@ const MenuPage = () => {
     const res=await axios.get(url);
     setUser(res.data);
   }
+
+  const getCartCount = async() => {
+    const res=await axios.get(`/cart/list?uid=${uid}`);
+    console.log('...........',res.data.length);
+    setCount(res.data.length);
+  };
+
+  useEffect(()=>{
+    getCartCount();
+  },
+  []);
 
   useEffect(()=>{
     if(uid) callAPI();
@@ -47,21 +58,15 @@ const MenuPage = () => {
             {uid ? 
               <>
                 <Nav>
-                  <Nav.Link href="/users/login" className='me-4 active'>
-                    <div>
-                      {count == 0 ?
-                        <FaCartShopping style={{fontSize:'25px'}}/>
-                      :
-                      <>
-                        <FaCartShopping  style={{fontSize:'25px', position:'absolute'}}/>
-                        <Badge bg="danger" style={{ position: 'relative', top: '-10px', left:'20px'}}>
-                          <span>{count}</span>
-                        </Badge>
-                      </>
-                      }
-                    </div>  
+                  <Nav.Link href="/orders/cart" className='active'>
+                    <>
+                      <FaCartShopping style={{fontSize:'25px',position:'absoluete'}}/>
+                      <Badge bg="danger" style={{position:'relative', top:'-10px',left:'-10px'}}>
+                        {count}
+                      </Badge>
+                    </>
                   </Nav.Link>
-                </Nav>
+                </Nav>  
                 <Nav>
                   <Nav.Link href="/users/mypage" className='active me-3'>
                     <span className='ms-1'>{user.uname}님</span>
