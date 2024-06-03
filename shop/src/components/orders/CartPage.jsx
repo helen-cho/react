@@ -4,10 +4,18 @@ import { Row, Col, Table, Button, Alert } from 'react-bootstrap';
 import { CountContext } from '../CountContext';
 
 const CartPage = () => {
+  const [chk, setChk] = useState(0);
   const {setCount} = useContext(CountContext);
   const [total, setTotal] = useState(0);
   const [books, setBooks] = useState([]);
   const uid=sessionStorage.getItem('uid');
+
+  useEffect(()=>{
+    let checkeCount =0;
+    books.forEach(book=>book.checked && checkeCount++);
+    console.log('.........', checkeCount);
+    setChk(checkeCount);
+  }, [books])
 
   const callAPI = async() => {
     const res=await axios.get(`/cart/list?uid=${uid}`);
@@ -52,18 +60,53 @@ const CartPage = () => {
   }
 
   const onChangeAll = (e) => {
-    const data=books.map(book=>book&&{...book, checked:e.target.checked});
+    const data=books.map(book=>book && {...book, checked:e.target.checked});
     setBooks(data);
+  }
+
+  const onChangeSingle=(e, bid)=>{
+    const data=books.map(book=>book.bid===bid ? 
+            {...book, checked:e.target.checked}:book);
+    setBooks(data);        
+  }
+
+  const onCheckedDelete = () => {
+    if(chk===0) {
+      alert("삭제할 도서들을 선택하세요!");
+      return;
+    }
+    if(!window.confirm(`${chk}개 도서들을 삭제하실래요?`)) return;
+    //선택도서삭제
+    let deleted=0;
+    books.forEach(async book=>{
+      if(book.checked){
+        deleted++;
+        const res=await axios.post('/cart/delete', {bid:book.bid, uid});
+      }
+    });
+    if(chk===deleted) callAPI();
+  }
+
+  const onOrder = () => {
+    if(chk===0) {
+      alert("주문할 상품들을 선택하세요!");
+    }else{
+      //주문페이지로 이동
+    }
   }
 
   return (
     <Row className='justify-content-center my-5'>
       <Col xs={12} md={10} lg={8}>
         <h1 className='text-center mb-5'>장바구니</h1>
+        <div className='mb-2'>
+          <Button onClick={()=>onCheckedDelete()}>선택도서삭제</Button>
+        </div>
         <Table striped bordered hover>
           <thead>
             <tr className='text-center'>
-              <td><input onChange={onChangeAll} type="checkbox"/></td>
+              <td><input checked={chk===books.length}
+                    onChange={onChangeAll} type="checkbox"/></td>
               <td>ID.</td>
               <td>도서명</td>
               <td>가격</td>
@@ -75,7 +118,10 @@ const CartPage = () => {
           <tbody>
             {books.map(book=>
               <tr key={book.bid}>
-                <td className='text-center'><input type="checkbox" checked={book.checked}/></td>
+                <td className='text-center'>
+                  <input onChange={(e)=>onChangeSingle(e, book.bid)}
+                    type="checkbox" checked={book.checked}/>
+                </td>
                 <td className='text-center'>{book.bid}</td>
                 <td>
                   <img src={book.image} width="30px"/>
@@ -96,6 +142,10 @@ const CartPage = () => {
           </tbody>
         </Table>
         <Alert className='text-end'>총합계: {total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}원</Alert>
+        <div className='text-center my-3'>
+          <Button onClick={onOrder} className='me-2 px-5' >주문하기</Button>
+          <a href="/"><Button className='px-5'>쇼핑계속하기</Button></a>
+        </div>  
       </Col>
     </Row>
   )
