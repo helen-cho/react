@@ -40,12 +40,18 @@ const OrderPage = ({books, setBooks}) => {
 
   const onClickOrder = async() => {
     if(!window.confirm(`${books.length}개 도서를 주문하실래요?`)) return;
-    //주문자정보
     const res=await axios.post('/orders/purchase',{
-      ...form, sum:total, pid, uid
-    });
+      ...form, sum:total, pid, uid});//주문자정보입력
     if(res.data.result===1){
-      alert('주문자정보저장완료!');
+      books.forEach(async book=>{
+        const res=await axios.post('/orders/insert',{
+                pid, bid:book.bid, price:book.price, qnt:book.qnt}); //주문상품입력
+        if(res.data.result===1){
+          await axios.post('/cart/delete', {uid, bid:book.bid}); //장바구니상품삭제
+        }        
+      });
+      alert("주문이 완료되었습니다.");
+      window.location.href="/";
     }
   }
 
