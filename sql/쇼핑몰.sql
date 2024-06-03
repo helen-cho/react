@@ -99,5 +99,15 @@ where bid=113
 order by rid desc
 limit 0, 3;
 
+select *,date_format(regdate,'%Y-%m-%d') fmtdate,format(price,0) fmtprice,
+(select count(*) from likes where books.bid=likes.bid) lcnt,
+(select count(*) from likes where books.bid=likes.bid and uid='green') ucnt,
+(select count(*) from review where books.bid=review.bid) rcnt
+from books
+order by bid desc
+limit 0, 6;
+
+
+
 
 

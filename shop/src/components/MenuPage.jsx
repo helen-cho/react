@@ -47,7 +47,7 @@ const MenuPage = () => {
             {uid ? 
               <>
                 <Nav>
-                  <Nav.Link href="/users/login" className='me-4'>
+                  <Nav.Link href="/users/login" className='me-4 active'>
                     <div>
                       {count == 0 ?
                         <FaCartShopping style={{fontSize:'25px'}}/>

@@ -4,6 +4,7 @@ import {Row, Col, Card, Form, InputGroup, Button} from 'react-bootstrap'
 import  Pagination from 'react-js-pagination'
 import './Paging.css'
 import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { LiaCommentSolid } from "react-icons/lia";
 
 const HomePage = () => {
   const uid=sessionStorage.getItem('uid');
@@ -79,7 +80,7 @@ const HomePage = () => {
                 </a>
               </Card.Body>
               <Card.Footer>
-                <div className='ellipsis mb-2'>{book.title}</div>
+                <div className='ellipsis mb-2' style={{fontSize:'13px'}}>{book.title}</div>
                 <Row>
                   <Col>
                     <div className='ellipsis' style={{fontSize:'12px'}}>
@@ -87,6 +88,10 @@ const HomePage = () => {
                     </div>
                   </Col>
                   <Col className='text-end'>
+                    <>
+                      <LiaCommentSolid style={{fontSize:'20px'}}/>
+                      <span style={{fontSize:'12px'}} className='me-2'>{book.rcnt}</span>
+                    </>  
                     {book.ucnt === 0 ?
                     <FaRegHeart className='heart' 
                       onClick={()=>onClicklike(book.bid)}/>
@@ -95,7 +100,7 @@ const HomePage = () => {
                       onClick={()=>onClickCancel(book.bid)}/>  
                     }
                     <span style={{fontSize:'10px'}} 
-                        className='user-text ms-1'>{book.lcnt}</span>
+                        className='user-text'>{book.lcnt}</span>
                   </Col>
                 </Row>
               </Card.Footer>

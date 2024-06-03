@@ -75,10 +75,14 @@ const ReviewPage = ({bid}) => {
     setReviews(data);
   }
 
-  const onClickCancel = (rid) => {
+  const onClickCancel = (rid, contents, text) => {
+    if(contents !== text) {
+      if(!window.confirm("정말로 취소하실래요")) return;
+    }
     const data=reviews.map(doc=>doc.rid===rid ? 
-      {...doc, isEdit:false, contents:doc.text} : doc);
+      {...doc, isEdit:false, contents:doc.text, ellip:true} : doc);
     setReviews(data);
+    
   }
 
   const onChagenForm = (e, rid) => {
@@ -146,7 +150,7 @@ const ReviewPage = ({bid}) => {
                 <Col className='text-end'>
                   <Button onClick={()=>onClickSave(r.rid, r.contents, r.text)}
                     variant='outline-secondary' size="sm" className='me-2'>저장</Button>
-                  <Button onClick={()=>onClickCancel(r.rid)}
+                  <Button onClick={()=>onClickCancel(r.rid, r.contents, r.text)}
                     variant='outline-secondary' size="sm">취소</Button>
                 </Col>
               }

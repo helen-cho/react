@@ -59,6 +59,10 @@ const ReadPage = () => {
     }
   }
 
+  const onClickCart = ()=>{
+    
+  };
+
   return (
     <Row className='my-5 justify-content-center'>
       <Col xs={12} md={10} lg={8}>
@@ -79,11 +83,11 @@ const ReadPage = () => {
                   <span style={{fontSize:'10px'}}>{lcnt}</span>
                 </div>
                 <hr/>
-                <div className='mb-2'>저자: {author}</div>
-                <div className='mb-2'>출판사: {publisher}</div>
-                <div className='mb-2'>ISBN: {isbn}</div>
-                <div className='mb-2'>가격: {fmtprice}원</div>
-                <div className='mb-2'>수정일: {fmtdate}</div>
+                <div className='mb-3'>저자: {author}</div>
+                <div className='mb-3'>출판사: {publisher}</div>
+                <div className='mb-3'>ISBN: {isbn}</div>
+                <div className='mb-3'>가격: {fmtprice}원</div>
+                <div className='mb-3'>수정일: {fmtdate}</div>
                 <hr/>
                 <div className='mt-3'>
                   <Button onClick={()=>getUserCount()} className='px-3 me-2' variant='warning'>바로구매</Button>
