@@ -11,6 +11,7 @@ function App() {
   const [count, setCount]= useState(0);
   const callAPICount = async() => {
     const res=await axios.get(`/cart/list?uid=${sessionStorage.getItem('uid')}`);
+    console.log('.........', res.data.length);
     setCount(res.data.length);
   }
 
@@ -19,7 +20,7 @@ function App() {
   }, []);
 
   return (
-    <CountContext.Provider value={{count, setCount}}>
+    <CountContext.Provider value={{count, setCount, callAPICount}}>
       <Container>
         <TopPage/>
         <MenuPage/>

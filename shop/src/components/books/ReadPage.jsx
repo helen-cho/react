@@ -72,7 +72,9 @@ const ReadPage = () => {
     }else{
       message="장바구니 이미존재합니다.";
     }
-    if(window.confirm(`${message} 장바구니로 이동하실래요?`)){
+    if(window.confirm(`${message} 쇼핑을 계속하실래요?`)){
+      window.location.href='/';
+    }else{
       window.location.href='/orders/cart';
     }
   };

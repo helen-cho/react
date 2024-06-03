@@ -18,7 +18,7 @@ const HomePage = () => {
   const callAPI = async() => {
     const res=await axios.get(
       `/books/list?page=${page}&size=${size}&key=${key}&word=${word}&uid=${uid}`);
-    console.log(res.data);
+    //console.log(res.data);
     setBooks(res.data.documents);
     setCount(res.data.count);
   }

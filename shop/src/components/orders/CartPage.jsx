@@ -11,10 +11,11 @@ const CartPage = () => {
 
   const callAPI = async() => {
     const res=await axios.get(`/cart/list?uid=${uid}`);
-    const data=res.data.map(book=>book && {...book, sum:book.qnt*book.price});
+    const data=res.data.map(book=>book && {
+      ...book, sum:book.qnt*book.price, checked:false});
     setBooks(data);
     setCount(data.length);
-    
+
     let totalSum=0;
     data.forEach(book=>{
       totalSum+=book.sum;
@@ -50,13 +51,19 @@ const CartPage = () => {
     }
   }
 
+  const onChangeAll = (e) => {
+    const data=books.map(book=>book&&{...book, checked:e.target.checked});
+    setBooks(data);
+  }
+
   return (
     <Row className='justify-content-center my-5'>
       <Col xs={12} md={10} lg={8}>
-        <h1 className='text-center mb-3'>장바구니</h1>
+        <h1 className='text-center mb-5'>장바구니</h1>
         <Table striped bordered hover>
           <thead>
             <tr className='text-center'>
+              <td><input onChange={onChangeAll} type="checkbox"/></td>
               <td>ID.</td>
               <td>도서명</td>
               <td>가격</td>
@@ -68,7 +75,8 @@ const CartPage = () => {
           <tbody>
             {books.map(book=>
               <tr key={book.bid}>
-                <td>{book.bid}</td>
+                <td className='text-center'><input type="checkbox" checked={book.checked}/></td>
+                <td className='text-center'>{book.bid}</td>
                 <td>
                   <img src={book.image} width="30px"/>
                   <span className='mx-2'>{book.title}</span>
