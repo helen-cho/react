@@ -24,14 +24,26 @@ const CartPage = () => {
 
   const onChangeQnt=(bid, e)=>{
     const result=e.target.value.replace(/[^0-9]/g,''); //숫자만입력
-    const data=books.map(book=>book.bid==bid ? 
-                {...book, qnt:result}:book);
+    const data=books.map(book=>book.bid==bid ? {...book, qnt:result}:book);
     setBooks(data);
   }
 
-  const onUpdateQnt = (bid, qnt) => {
-    if(!window.confirm(`${bid}번 도서의 수량을 ${qnt}개로 변경하실래요?`)) return;
-    //수량수정
+  const onUpdateQnt = async(bid, qnt) => {
+     //수량수정
+    const res=await axios.post('/cart/update', 
+        {uid:sessionStorage.getItem('uid'), bid, qnt});
+    if(res.data.result===1){
+      callAPI();
+    }    
+  }
+
+  const onClickDelete = async(bid) => {
+    const res=await axios.post('/cart/delete', {
+      uid:sessionStorage.getItem('uid'), bid}
+    );
+    if(res.data.result===1) {
+      callAPI();
+    }
   }
 
   return (
@@ -46,6 +58,7 @@ const CartPage = () => {
               <td>가격</td>
               <td>수량</td>
               <td>금액</td>
+              <td>삭제</td>
             </tr>  
           </thead>
           <tbody>
@@ -64,6 +77,8 @@ const CartPage = () => {
                     variant='secondary' size="sm">수정</Button>    
                 </td>
                 <td>{book.sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}원</td>
+                <td><Button onClick={()=>onClickDelete(book.bid)}
+                  variant='secondary' size="sm">삭제</Button></td>
               </tr>
             )}
           </tbody>
