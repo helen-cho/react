@@ -22,6 +22,18 @@ const CartPage = () => {
     callAPI();
   }, []);
 
+  const onChangeQnt=(bid, e)=>{
+    const result=e.target.value.replace(/[^0-9]/g,''); //숫자만입력
+    const data=books.map(book=>book.bid==bid ? 
+                {...book, qnt:result}:book);
+    setBooks(data);
+  }
+
+  const onUpdateQnt = (bid, qnt) => {
+    if(!window.confirm(`${bid}번 도서의 수량을 ${qnt}개로 변경하실래요?`)) return;
+    //수량수정
+  }
+
   return (
     <Row className='justify-content-center my-5'>
       <Col xs={12} md={10} lg={8}>
@@ -45,7 +57,12 @@ const CartPage = () => {
                   <span className='mx-2'>{book.title}</span>
                 </td>
                 <td>{book.fmtprice}원</td>
-                <td>{book.qnt}</td>
+                <td>
+                  <input onChange={(e)=>onChangeQnt(book.bid, e)}
+                      value={book.qnt} size={3} className='text-end me-1'/>
+                  <Button onClick={()=>onUpdateQnt(book.bid, book.qnt)}
+                    variant='secondary' size="sm">수정</Button>    
+                </td>
                 <td>{book.sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}원</td>
               </tr>
             )}
