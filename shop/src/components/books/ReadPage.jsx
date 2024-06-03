@@ -59,8 +59,22 @@ const ReadPage = () => {
     }
   }
 
-  const onClickCart = ()=>{
-    
+  const onClickCart = async()=>{
+    if(!sessionStorage.getItem('uid')){
+      sessionStorage.setItem('target', pathname);
+      window.location.href='/users/login';
+    }
+    //장바구니넣기
+    const res=await axios.post('/cart/insert',{uid:sessionStorage.getItem('uid'), bid});
+    let message="";
+    if(res.data.result==1){
+      message="장바구니에 등록되었습니다.";
+    }else{
+      message="장바구니 이미존재합니다.";
+    }
+    if(window.confirm(`${message} 장바구니로 이동하실래요?`)){
+
+    }
   };
 
   return (
@@ -91,7 +105,7 @@ const ReadPage = () => {
                 <hr/>
                 <div className='mt-3'>
                   <Button onClick={()=>getUserCount()} className='px-3 me-2' variant='warning'>바로구매</Button>
-                  <Button onClick={()=>setCount(count+1)}
+                  <Button onClick={onClickCart}
                     className='px-3' variant='success'>장바구니</Button>
                 </div>
               </Col>
