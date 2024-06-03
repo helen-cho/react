@@ -1,9 +1,16 @@
-import React, { useEffect } from 'react'
-import {Table} from 'react-bootstrap'
+import React, { useEffect, useState } from 'react'
+import {Table, Alert} from 'react-bootstrap'
 
 const OrderPage = ({books, setBooks}) => {
+  const [total, setTotal] = useState(0);
+
   useEffect(()=>{
     const data=books.filter(book=>book.checked);
+    let totalSum=0;
+    data.forEach(book=>{
+      if(book.checked) totalSum += book.price*book.qnt;
+    });
+    setTotal(totalSum);
     setBooks(data);
   }, []);
 
@@ -28,13 +35,14 @@ const OrderPage = ({books, setBooks}) => {
                 <img src={book.image} width="30px"/>
                 <span className='mx-2'>{book.title}</span>
               </td>
-              <td>{book.fmtprice}원</td>
-              <td>{book.qnt}개</td>
-              <td>{book.sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
+              <td className='text-end'>{book.fmtprice}원</td>
+              <td className='text-end'>{book.qnt}개</td>
+              <td className='text-end'>{book.sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}원</td>
             </tr>
           )}
         </tbody>
       </Table>
+      <Alert className='text-end'>주문합계: {total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}원</Alert>
     </div>
   )
 }
