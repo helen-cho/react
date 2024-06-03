@@ -1,11 +1,13 @@
 import axios from 'axios';
-import React, {useEffect, useState } from 'react'
+import React, {useContext, useEffect, useState } from 'react'
 import {Row, Col, Card, Button, Tab, Tabs } from 'react-bootstrap'
 import { useLocation, useParams } from 'react-router-dom'
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import ReviewPage from './ReviewPage';
+import { CountContext } from '../CountContext';
 
 const ReadPage = () => {
+  const {setCount, count} = useContext(CountContext);
   const {bid} = useParams();
   const {pathname} = useLocation();
 
@@ -66,6 +68,7 @@ const ReadPage = () => {
     let message="";
     if(res.data.result==1){
       message="장바구니에 등록되었습니다.";
+      setCount(count+1);
     }else{
       message="장바구니 이미존재합니다.";
     }

@@ -4,13 +4,14 @@ import Navbar from 'react-bootstrap/Navbar';
 import RouterPage from './RouterPage';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { FaCartShopping } from "react-icons/fa6";
 import { Badge } from 'react-bootstrap';
+import { CountContext } from './CountContext';
 
 const MenuPage = () => {
+  const {count}=useContext(CountContext);
   const navi = useNavigate();
-  const [count, setCount] = useState(0);
   const uid = sessionStorage.getItem("uid");
   const [user, setUser] = useState('');
 
@@ -19,17 +20,6 @@ const MenuPage = () => {
     const res=await axios.get(url);
     setUser(res.data);
   }
-
-  const getCartCount = async() => {
-    const res=await axios.get(`/cart/list?uid=${uid}`);
-    //console.log('...........',res.data.length);
-    setCount(res.data.length);
-  };
-
-  useEffect(()=>{
-    getCartCount();
-  },
-  []);
 
   useEffect(()=>{
     if(uid) callAPI();
@@ -58,12 +48,16 @@ const MenuPage = () => {
               <>
                 <Nav>
                   <Nav.Link href="/orders/cart" className='active'>
-                    <>
-                      <FaCartShopping style={{fontSize:'25px',position:'absoluete'}}/>
-                      <Badge bg="danger" style={{position:'relative', top:'-10px',left:'-10px'}}>
-                        {count}
-                      </Badge>
-                    </>
+                    {count=== 0 ?
+                      <FaCartShopping style={{fontSize:'25px'}}/>
+                      :
+                      <>
+                        <FaCartShopping style={{fontSize:'25px',position:'absoluete'}}/>
+                        <Badge bg="danger" style={{position:'relative', top:'-10px',left:'-10px'}}>
+                          {count}
+                        </Badge>
+                      </>
+                    }
                   </Nav.Link>
                 </Nav>  
                 <Nav>

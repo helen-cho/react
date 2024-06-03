@@ -1,7 +1,10 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Row, Col, Table, Button, Alert } from 'react-bootstrap';
+import { CountContext } from '../CountContext';
+
 const CartPage = () => {
+  const {setCount} = useContext(CountContext);
   const [total, setTotal] = useState(0);
   const [books, setBooks] = useState([]);
   const uid=sessionStorage.getItem('uid');
@@ -10,7 +13,8 @@ const CartPage = () => {
     const res=await axios.get(`/cart/list?uid=${uid}`);
     const data=res.data.map(book=>book && {...book, sum:book.qnt*book.price});
     setBooks(data);
-
+    setCount(data.length);
+    
     let totalSum=0;
     data.forEach(book=>{
       totalSum+=book.sum;
