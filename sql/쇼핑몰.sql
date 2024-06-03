@@ -121,8 +121,9 @@ create table cart(
 
 desc cart;
 
+drop view view_cart;
 create view view_cart as
-select c.*, b.title, b.image 
+select c.*, b.title, b.image , b.price
 from cart c, books b
 where c.bid=b.bid;
 

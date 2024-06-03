@@ -9,7 +9,7 @@ import ListPage from './books/ListPage'
 import UpdatePage from './books/UpdatePage'
 import CartPage from './orders/CartPage'
 
-const RouterPage = () => {
+const RouterPage = ({setCount}) => {
   return (
     <Routes>
       <Route path="/" element={<HomePage/>}/>
@@ -18,7 +18,7 @@ const RouterPage = () => {
       <Route path="/books/search" element={<SearchPage/>}/>
       <Route path="/books/list" element={<ListPage/>}/>
       <Route path="/books/update/:bid" element={<UpdatePage/>}/>
-      <Route path="/books/read/:bid" element={<BookReadPage/>}/>
+      <Route path="/books/read/:bid" element={<BookReadPage setCount={setCount}/>}/>
       <Route path="/orders/cart" element={<CartPage/>}/>
     </Routes>
   )

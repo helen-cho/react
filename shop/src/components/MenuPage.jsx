@@ -4,10 +4,9 @@ import Navbar from 'react-bootstrap/Navbar';
 import RouterPage from './RouterPage';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaCartShopping } from "react-icons/fa6";
 import { Badge } from 'react-bootstrap';
-import { CountContext } from './CountContext';
 
 const MenuPage = () => {
   const navi = useNavigate();
@@ -23,7 +22,7 @@ const MenuPage = () => {
 
   const getCartCount = async() => {
     const res=await axios.get(`/cart/list?uid=${uid}`);
-    console.log('...........',res.data.length);
+    //console.log('...........',res.data.length);
     setCount(res.data.length);
   };
 

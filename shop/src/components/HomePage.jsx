@@ -89,7 +89,7 @@ const HomePage = () => {
                   </Col>
                   <Col className='text-end'>
                     <>
-                      <LiaCommentSolid style={{fontSize:'20px'}}/>
+                      <LiaCommentSolid style={{fontSize:'25px'}}/>
                       <span style={{fontSize:'12px'}} className='me-2'>{book.rcnt}</span>
                     </>  
                     {book.ucnt === 0 ?
