@@ -2,8 +2,10 @@ import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react'
 import { Row, Col, Table, Button, Alert } from 'react-bootstrap';
 import { CountContext } from '../CountContext';
+import OrderPage from './OrderPage';
 
 const CartPage = () => {
+  const [isOrder, setIsOrder] = useState(false);
   const [chk, setChk] = useState(0);
   const {setCount} = useContext(CountContext);
   const [total, setTotal] = useState(0);
@@ -92,60 +94,67 @@ const CartPage = () => {
       alert("주문할 상품들을 선택하세요!");
     }else{
       //주문페이지로 이동
+      setIsOrder(true);
     }
   }
 
   return (
     <Row className='justify-content-center my-5'>
       <Col xs={12} md={10} lg={8}>
-        <h1 className='text-center mb-5'>장바구니</h1>
-        <div className='mb-2'>
-          <Button onClick={()=>onCheckedDelete()}>선택도서삭제</Button>
-        </div>
-        <Table striped bordered hover>
-          <thead>
-            <tr className='text-center'>
-              <td><input checked={chk===books.length}
-                    onChange={onChangeAll} type="checkbox"/></td>
-              <td>ID.</td>
-              <td>도서명</td>
-              <td>가격</td>
-              <td>수량</td>
-              <td>금액</td>
-              <td>삭제</td>
-            </tr>  
-          </thead>
-          <tbody>
-            {books.map(book=>
-              <tr key={book.bid}>
-                <td className='text-center'>
-                  <input onChange={(e)=>onChangeSingle(e, book.bid)}
-                    type="checkbox" checked={book.checked}/>
-                </td>
-                <td className='text-center'>{book.bid}</td>
-                <td>
-                  <img src={book.image} width="30px"/>
-                  <span className='mx-2'>{book.title}</span>
-                </td>
-                <td>{book.fmtprice}원</td>
-                <td>
-                  <input onChange={(e)=>onChangeQnt(book.bid, e)}
-                      value={book.qnt} size={3} className='text-end me-1'/>
-                  <Button onClick={()=>onUpdateQnt(book.bid, book.qnt)}
-                    variant='secondary' size="sm">수정</Button>    
-                </td>
-                <td>{book.sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}원</td>
-                <td><Button onClick={()=>onClickDelete(book.bid)}
-                  variant='secondary' size="sm">삭제</Button></td>
-              </tr>
-            )}
-          </tbody>
-        </Table>
-        <Alert className='text-end'>총합계: {total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}원</Alert>
-        <div className='text-center my-3'>
-          <Button onClick={onOrder} className='me-2 px-5' >주문하기</Button>
-          <a href="/"><Button className='px-5'>쇼핑계속하기</Button></a>
-        </div>  
+        {!isOrder ?
+        <>
+          <h1 className='text-center mb-5'>장바구니</h1>
+          <div className='mb-2'>
+            <Button onClick={()=>onCheckedDelete()}>선택도서삭제</Button>
+          </div>
+          <Table striped bordered hover>
+            <thead>
+              <tr className='text-center'>
+                <td><input checked={chk===books.length}
+                      onChange={onChangeAll} type="checkbox"/></td>
+                <td>ID.</td>
+                <td>도서명</td>
+                <td>가격</td>
+                <td>수량</td>
+                <td>금액</td>
+                <td>삭제</td>
+              </tr>  
+            </thead>
+            <tbody>
+              {books.map(book=>
+                <tr key={book.bid}>
+                  <td className='text-center'>
+                    <input onChange={(e)=>onChangeSingle(e, book.bid)}
+                      type="checkbox" checked={book.checked}/>
+                  </td>
+                  <td className='text-center'>{book.bid}</td>
+                  <td>
+                    <img src={book.image} width="30px"/>
+                    <span className='mx-2'>{book.title}</span>
+                  </td>
+                  <td>{book.fmtprice}원</td>
+                  <td>
+                    <input onChange={(e)=>onChangeQnt(book.bid, e)}
+                        value={book.qnt} size={3} className='text-end me-1'/>
+                    <Button onClick={()=>onUpdateQnt(book.bid, book.qnt)}
+                      variant='secondary' size="sm">수정</Button>    
+                  </td>
+                  <td>{book.sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}원</td>
+                  <td><Button onClick={()=>onClickDelete(book.bid)}
+                    variant='secondary' size="sm">삭제</Button></td>
+                </tr>
+              )}
+            </tbody>
+          </Table>
+          <Alert className='text-end'>총합계: {total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}원</Alert>
+          <div className='text-center my-3'>
+            <Button onClick={onOrder} className='me-2 px-5' >주문하기</Button>
+            <a href="/"><Button className='px-5'>쇼핑계속하기</Button></a>
+          </div> 
+          </>
+        :
+          <OrderPage books={books} setBooks={setBooks}/> 
+        }
       </Col>
     </Row>
   )
