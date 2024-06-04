@@ -22,7 +22,7 @@ const OrderList = () => {
 
   useEffect(()=>{
     callAPI();
-  }, [page]);
+  }, [page, key, word]);
 
   const onChangeStatus = (e, pid)=> {
     const data=orders.map(order=>order.pid===pid ? {...order, status:e.target.value}:order);
@@ -51,6 +51,11 @@ const OrderList = () => {
     }
   }
 
+  const onChangeWord = (e) => {
+    setWord(e.target.value);
+    setPage(1);
+  }
+
   return (
     <div className='my-5'>
       <h1 className='text-center mb-5'>주문관리</h1>
@@ -66,7 +71,7 @@ const OrderList = () => {
                 <option value="address1">배송지</option>
               </Form.Select>
               {key==='status' ? 
-                <Form.Select value={word} onChange={(e)=>setWord(e.target.value)}>
+                <Form.Select value={word} onChange={onChangeWord}>
                   <option value="0" selected>결제대기</option>
                   <option value="1">결제확인</option>
                   <option value="2">배송준비</option>
