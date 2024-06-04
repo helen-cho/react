@@ -45,8 +45,9 @@ const OrderPage = ({books, setBooks}) => {
     if(res.data.result===1){
       let cnt=0;
       books.forEach(async book=>{
-        //주문상품입력
+        //주문도서입력
         await axios.post('/orders/insert',{pid, bid:book.bid, price:book.price, qnt:book.qnt});
+        //주문도서장바구니삭제
         await axios.post('/cart/delete', {uid, bid:book.bid});
         cnt++;
         if(cnt===books.length){

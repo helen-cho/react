@@ -8,7 +8,7 @@ const LoginPage = () => {
   const {callAPICount} = useContext(CountContext);
   const navi = useNavigate();
   const [form, setForm] = useState({
-    uid:'green',
+    uid:'admin',
     upass:'pass'
   });
   const { uid, upass } = form;
