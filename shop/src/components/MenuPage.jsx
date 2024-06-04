@@ -41,6 +41,9 @@ const MenuPage = () => {
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
+              {uid &&
+                <Nav.Link href="/orders/list">주문목록</Nav.Link>
+              }
               <Nav.Link href="/books/search">도서검색</Nav.Link>
               <Nav.Link href="/books/list">도서목록</Nav.Link>
             </Nav>

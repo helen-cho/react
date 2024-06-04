@@ -100,7 +100,7 @@ const CartPage = () => {
 
   return (
     <Row className='justify-content-center my-5'>
-      <Col xs={12} md={10} lg={8}>
+      <Col>
         {!isOrder ?
         <>
           <h1 className='text-center mb-5'>장바구니</h1>
