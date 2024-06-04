@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { Table } from 'react-bootstrap';
 
-const ModalOrder = ({pid}) => {
+const ModalOrder = ({pid, order}) => {
   const [books, setBooks] = useState([]);
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -35,6 +35,7 @@ const ModalOrder = ({pid}) => {
           </Modal.Header>
           <Modal.Body>
             <div className='mb-1'>주문번호:{pid}</div>
+            <div className='mb-2'>배송지주소:{order.address1} {order.address2}</div>
             <Table striped bordered hover>
               <thead>
                 <tr>

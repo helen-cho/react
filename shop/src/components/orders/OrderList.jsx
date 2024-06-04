@@ -42,7 +42,7 @@ const OrderList = () => {
               <td>{order.phone}</td>
               <td>{order.address1} {order.address2}</td>
               <td>{status[order.status]}</td>
-              <td><ModalOrder pid={order.pid}/></td>
+              <td><ModalOrder pid={order.pid} order={order}/></td>
             </tr>
           )}
         </tbody>

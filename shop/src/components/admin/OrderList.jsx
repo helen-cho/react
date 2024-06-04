@@ -3,15 +3,15 @@ import React, { useEffect, useState } from 'react'
 import { Table,Form, Button, InputGroup, Row, Col } from 'react-bootstrap';
 import '../Paging.css'
 import  Pagination from 'react-js-pagination'
+import ModalOrder from '../orders/ModalOrder';
 
 const OrderList = () => {
   const [count, setCount] = useState(0);
   const [orders, setOrders] = useState([]);
-  const [key, setKey] = useState('status');
+  const [key, setKey] = useState('uid');
   const [word, setWord] = useState('');
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(5);
-  const [status, setStatus] = useState(0);
 
   const callAPI = async() => {
     const res=await axios.get(`/orders/admin/list?key=${key}&word=${word}&page=${page}&size=${size}`);
@@ -34,6 +34,7 @@ const OrderList = () => {
     const res=await axios.post('/orders/status', {pid, status});
     if(res.data.result===1){
       alert("상태변경완료!");
+      callAPI();
     }
   }
   const onSubmit = (e) => {
@@ -96,8 +97,8 @@ const OrderList = () => {
             <td>주문일</td>
             <td>주문자</td>
             <td>전화</td>
-            <td>배송지</td>
             <td>주문금액</td>
+            <td>주문상품</td>
             <td>주문상태</td>
           </tr>
         </thead>
@@ -108,8 +109,8 @@ const OrderList = () => {
               <td>{order.fmtdate}</td>
               <td>{order.uname}({order.uid})</td>
               <td>{order.phone}</td>
-              <td>{order.address1} {order.address2}</td>
               <td>{order.fmtsum}원</td>
+              <td><ModalOrder pid={order.pid} order={order}/></td>
               <td>
                 <InputGroup>
                   <Form.Select onChange={(e)=>onChangeStatus(e, order.pid)} value={order.status}>
