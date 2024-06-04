@@ -1,18 +1,21 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { Table,Form, Button, InputGroup } from 'react-bootstrap';
+import { Table,Form, Button, InputGroup, Row, Col } from 'react-bootstrap';
 
 const OrderList = () => {
+  const [count, setCount] = useState(0);
   const [orders, setOrders] = useState([]);
-  const [key, setKey] = useState('uid');
+  const [key, setKey] = useState('uname');
   const [word, setWord] = useState('');
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(5);
+  const [status, setStatus] = useState(0);
 
   const callAPI = async() => {
     const res=await axios.get(`/orders/admin/list?key=${key}&word=${word}&page=${page}&size=${size}`);
     console.log(res.data);
-    setOrders(res.data);
+    setOrders(res.data.documents);
+    setCount(res.data.count);
   }
 
   useEffect(()=>{
@@ -31,10 +34,54 @@ const OrderList = () => {
       alert("상태변경완료!");
     }
   }
+  const onSubmit = (e) => {
+    e.preventDefault();
+    callAPI();
+  }
+
+  const onSubmitStatus = async(e) => {
+    e.preventDefault();
+    const res=await axios.get(`/orders/admin/list?key=status&word=${status}&page=${page}&size=${size}`);
+    setOrders(res.data.documents);
+    setCount(res.data.count);
+  }
 
   return (
     <div className='my-5'>
       <h1 className='text-center mb-5'>주문관리</h1>
+      <Row className='mb-2'>
+        <Col xs={8} md={6} lg={5}>
+          <form onSubmit={onSubmit}>
+            <InputGroup>
+              <Form.Select className='me-2' value={key} onChange={(e)=>setKey(e.target.value)}>
+                <option value="uid">아이디</option>
+                <option value="uname">주문자명</option>
+                <option value="phone">전화</option>
+                <option value="address1">배송지</option>
+              </Form.Select>
+              <Form.Control value={word} onChange={(e)=>setWord(e.target.value)} placeholder='검색어'/>
+              <Button type="submit">검색</Button>
+            </InputGroup>
+          </form>
+        </Col>
+        <Col className='pt-2'>
+          <span>검색수: {count}건</span>
+        </Col>
+        <Col>
+          <form onSubmit={onSubmitStatus} style={{width:'180px', float:'right'}}>
+            <InputGroup>
+              <Form.Select value={status} onChange={(e)=>setStatus(e.target.value)}>
+                <option value="0">결제대기</option>
+                <option value="1">결제확인</option>
+                <option value="2">배송준비</option>
+                <option value="3">배송완료</option>
+                <option value="4">주문완료</option>
+              </Form.Select>
+              <Button type="submit">검색</Button>
+            </InputGroup>
+          </form>
+        </Col>
+      </Row>
       <Table striped bordered hover>
         <thead>
           <tr className='text-center'>
