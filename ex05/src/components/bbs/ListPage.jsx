@@ -1,8 +1,11 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Table } from 'react-bootstrap';
+import '../Paging.css';
+import  Pagination from 'react-js-pagination'
 
 const ListPage = () => {
+  const [count, setCount] = useState(0);
   const [list, setList] = useState([]);
   const [page, setPage]=useState(1);
   const [size, setSize]=useState(5);
@@ -13,11 +16,12 @@ const ListPage = () => {
     const res=await axios.get(`/bbs/list.json?key=${key}&word=${word}&page=${page}&size=${size}`);
     console.log(res.data);
     setList(res.data.documents);
+    setCount(res.data.total);
   }
 
   useEffect(()=>{
     callAPI();
-  }, []);
+  }, [page]);
 
   return (
     <div className='my-5'>
@@ -34,9 +38,9 @@ const ListPage = () => {
         </thead>
         <tbody>
           {list.map(bbs=>
-            <tr key={bbs.bid}>
+            <tr key={bbs.bid} className='text-center'>
               <td>{bbs.bid}</td>
-              <td><div className='ellipsis'>{bbs.title}</div></td>
+              <td className='text-start'><div className='ellipsis'>{bbs.title}</div></td>
               <td>{bbs.uname}({bbs.uid})</td>
               <td>{bbs.fmtdate}</td>
               <td>{bbs.viewcnt}</td>
@@ -44,6 +48,14 @@ const ListPage = () => {
           )}
         </tbody>
       </Table>
+      <Pagination
+          activePage={page}
+          itemsCountPerPage={size}
+          totalItemsCount={count}
+          pageRangeDisplayed={5}
+          prevPageText={"‹"}
+          nextPageText={"›"}
+          onChange={ (e)=>setPage(e) }/>
     </div>
   )
 }
