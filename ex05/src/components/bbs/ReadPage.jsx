@@ -24,7 +24,14 @@ const ReadPage = () => {
         <Col xs={12} md={10} lg={8}>
           <Card>
             <Card.Header>
-              <h5>{form.title}</h5>
+              <Row>
+                <Col>
+                  <h5>{form.title}</h5>
+                </Col>
+                <Col className='text-end' sm={2}>
+                  조회수: {form.viewcnt}
+                </Col>
+              </Row>
             </Card.Header>
             <Card.Body style={{whiteSpace:'pre-wrap'}}>
               {form.contents}

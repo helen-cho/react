@@ -5,3 +5,7 @@
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
 }
+
+.title {
+  width: 100px;
+}
