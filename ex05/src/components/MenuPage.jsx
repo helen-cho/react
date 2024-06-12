@@ -20,7 +20,7 @@ const MenuPage = () => {
       <Link to="/bbs/list" className='me-3'>게시판</Link>
       {uid ?
         <>
-          <Link to="/users/read" className='me-3'>{uname}님</Link>
+          <Link to="/users/read" className='me-3'>{uname}({uid})님</Link>
           <Link to="#" onClick={onLogout}>로그아웃</Link>
         </>
         :

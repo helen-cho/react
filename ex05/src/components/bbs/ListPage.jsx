@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Table, Row, Col, InputGroup, Form, Button } from 'react-bootstrap';
 import '../Paging.css';
 import  Pagination from 'react-js-pagination'
+import { Link } from 'react-router-dom';
 
 const ListPage = () => {
   const [count, setCount] = useState(0);
@@ -49,6 +50,13 @@ const ListPage = () => {
         <Col className='mt-2'>
           검색수: {count}
         </Col>
+        {sessionStorage.getItem('uid') &&
+          <Col className='text-end'>
+            <Link to="/bbs/insert">
+              <Button className='px-5'>글쓰기</Button>
+            </Link>
+          </Col>
+        }
       </Row>
       <Table striped bordered hover>
         <thead>
