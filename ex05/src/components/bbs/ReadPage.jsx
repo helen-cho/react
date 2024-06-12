@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { Row, Col, Card} from 'react-bootstrap'
+import { Link, useParams } from 'react-router-dom'
+import { Row, Col, Card, Button} from 'react-bootstrap'
 
 const ReadPage = () => {
   const [form, setForm] = useState('');
@@ -16,6 +16,13 @@ const ReadPage = () => {
   useEffect(()=>{
     callAPI();
   }, []);
+
+  const onDelete = async()=> {
+    if(!window.confirm(`${form.bid}번 게시글을 삭제하실래요?`)) return;
+    await axios.post(`/bbs/delete/${form.bid}`);
+    alert("게시글삭제완료!");
+    window.location.href='/bbs/list';
+  }
 
   return (
     <div className='my-5'>
@@ -40,6 +47,15 @@ const ReadPage = () => {
               Created by {form.uname} on {form.regDate}
             </Card.Footer>
           </Card>
+          {sessionStorage.getItem('uid')===form.uid &&
+            <div className='text-center my-3'>
+              <Link to={`/bbs/update/${form.bid}`}>
+                <Button className='px-5 me-2'>수정</Button>
+              </Link>
+              <Button onClick={onDelete}
+                className='px-5' variant='danger'>삭제</Button>
+            </div>
+          }
         </Col>
       </Row>
     </div>
