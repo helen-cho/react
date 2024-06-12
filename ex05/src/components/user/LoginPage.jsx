@@ -15,11 +15,15 @@ const LoginPage = () => {
     e.preventDefault();
     const res=await axios.get(`/users/${uid}`);
     console.log(res.data);
-    
+
     if(!res.data){
       alert("아이디가 존재하지 않습니다!");
     }else if(upass === res.data.upass){
       alert("성공!");
+      sessionStorage.setItem('uid', res.data.uid);
+      sessionStorage.setItem('uname', res.data.uname);
+      
+      window.location.href="/";
     }else{
       alert("비밀번호가 일치하지 않습니다!");
     }
