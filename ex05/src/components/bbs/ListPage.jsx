@@ -74,7 +74,7 @@ const ListPage = () => {
               <td>{bbs.bid}</td>
               <td className='text-start'>
                 <div className='ellipsis'>
-                  <a href={`/bbs/read/${bbs.bid}`}>{bbs.title}</a>
+                  <a href={`/bbs/read/${bbs.bid}?isCnt=true`}>{bbs.title}</a>
                 </div>
               </td>
               <td>{bbs.uname}({bbs.uid})</td>
