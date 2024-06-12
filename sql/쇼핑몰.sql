@@ -123,10 +123,140 @@ desc cart;
 
 drop view view_cart;
 create view view_cart as
-select c.*, b.title, b.image , b.price
+select c.*, b.title, b.image , b.price, format(b.price,0) fmtprice
 from cart c, books b
 where c.bid=b.bid;
 
 select * from view_cart;
+
+/*주문자 정보*/
+create table purchase( 
+	pid char(13) not null primary key,
+    uid varchar(20) not null,
+    uname varchar(20) not null,
+    phone varchar(20) not null,
+    address1 varchar(500) not null,
+    address2 varchar(500) not null,
+    pdate datetime default now(),
+    sum int default 0,
+    status int default 0, /*0:결제대기,1:결제확인,2:배송준비,3:배송완료, 4.주문완료*/
+    foreign key(uid) references users(uid)
+);
+
+/*주문상품 정보*/
+create table orders(
+	pid char(13) not null,
+    bid int not null,
+    price int default 0,
+    qnt int default 0,
+    primary key(pid, bid),
+    foreign key(pid) references purchase(pid),
+    foreign key(bid) references books(bid)
+);
+
+select *,date_format(pdate,'%Y-%m-%d %T') as fmtdate,
+format(sum,0) fmtsum
+from purchase where uid='green';
+
+select o.*, b.title, b.image 
+from orders o, books b
+where o.bid=b.bid and pid='00ba8e59-cdcc';
+
+select * from users;
+insert into users(uid, upass, uname)
+values('admin', 'pass', '관리자');
+ 
+ 
+select *, 
+date_format(pdate,'%Y-%m-%d %T') as fmtdate,
+format(sum,0) fmtsum
+from purchase
+where uname like '%최%'
+order by pdate desc
+limit 0, 5;
+
+
+select * from users where uid='red';
+select *, date_format(regdate,'%Y-%m-%d %T') as fmtdate from users;
+
+select *,date_format(regdate,'%Y년%m월%d일 %T') as fmtdate 
+from users
+where uid='hong';
+
+desc users;
+
+insert into users(uid,upass,uname)
+values('hong','pass','홍길동');
+
+
+
+update users
+set uname='박병준',address1='인천',address2='213-1104',phone='010-1010-1010'
+where uid='kim';
+
+
+delete from users
+where uid='hong';
+
+desc users;
+
+
+select count(*) as total from users;
+select * from users
+where address1 like concat('%', '', '%');
+
+create table bbs(
+	bid int auto_increment primary key,
+    title varchar(500) not null,
+    contents text,
+    uid varchar(20) not null,
+    regDate datetime default now(),
+    foreign key(uid) references users(uid)
+);
+
+desc bbs;
+insert into bbs(title, uid)
+values('Spring의 이유와 목적 그리고 필요성에 대한 이야기','red');
+insert into bbs(title, uid)
+values('Spring이란 무엇인가?','red');
+insert into bbs(title, uid)
+values('Spring은 어떻게 탄생했을까?','red');
+insert into bbs(title, uid)
+values('Spring은 어떤 기능을 제공할까?','red');
+insert into bbs(title, uid)
+values('Spring에서 DI나 AOP와 같은 핵심 요소는 무엇이 있을까?','blue');
+insert into bbs(title, uid)
+values('Spring은 어떻게 동작하는 걸까?','green');
+insert into bbs(title, uid)
+values('Spring(스프링)을 한 줄로 정의한다면?','blue');
+
+
+insert into bbs(title, uid)
+select title,uid from bbs;
+
+select count(*) from bbs;
+
+create view view_bbs as
+select b.*, u.uname, u.photo
+from bbs b, users u
+where b.uid=u.uid;
+
+select *,date_format(regdate,'%Y년%m월%d일 %T') as fmtdate 
+from view_bbs
+where uname like '%레드%'
+order by bid desc
+limit 0, 5;
+
+
+
+
+
+
+
+
+
+
+
+
 
 
