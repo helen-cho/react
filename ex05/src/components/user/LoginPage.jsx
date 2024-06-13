@@ -22,8 +22,11 @@ const LoginPage = () => {
       alert("성공!");
       sessionStorage.setItem('uid', res.data.uid);
       sessionStorage.setItem('uname', res.data.uname);
-      
-      window.location.href="/";
+      if(sessionStorage.getItem('target')){
+        window.location.href=sessionStorage.getItem('target');
+      }else{
+        window.location.href="/";
+      }
     }else{
       alert("비밀번호가 일치하지 않습니다!");
     }
