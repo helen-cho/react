@@ -2,22 +2,22 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Link, useLocation, useParams } from 'react-router-dom'
 import { Row, Col, Card, Button} from 'react-bootstrap'
+import ReplyPage from './ReplyPage';
 
 const ReadPage = () => {
-  const location = useLocation();
-  console.log('location', location);
-  const search = new URLSearchParams(location.search);
-  console.log('search', search);
-  const isCnt = search.get('isCnt');
-  console.log(isCnt);
+  //console.log('location', useLocation());
+  //console.log('search', useLocation().search);
+  const param = new URLSearchParams(useLocation().search);
+  //console.log('param', param);
+  const isCnt = param.get('isCnt');
+  //console.log(isCnt);
 
-  console.log(location);
   const [form, setForm] = useState('');
   const {bid} = useParams();
 
   const callAPI = async() => {
     const res=await axios.get(`/bbs/${bid}?isCnt=${isCnt}`);
-    console.log(res.data);
+    //console.log(res.data);
     setForm(res.data);
   }
 
@@ -66,6 +66,7 @@ const ReadPage = () => {
           }
         </Col>
       </Row>
+      <ReplyPage bid={bid}/>
     </div>
   )
 }
