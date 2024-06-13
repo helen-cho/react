@@ -20,7 +20,8 @@ const ReplyPage = ({bid}) => {
     const url=`/reply/list.json/${bid}?page=${page}&size=${size}`;
     const res=await axios.get(url);
     //console.log(res.data);
-    const data=res.data.documents.map(doc=>doc && {...doc, isEllip:true, isEdit:false});
+    const data=res.data.documents.map(doc=>doc && 
+      {...doc, isEllip:true, isEdit:false, text:doc.contents});
     setList(data);
     setCount(res.data.total);
   }
@@ -63,6 +64,26 @@ const ReplyPage = ({bid}) => {
     setList(data);     
   }
 
+  const onChangeContents = (e, rid) => {
+    const data=list.map(reply=>reply.rid===rid?{...reply,contents:e.target.value}:reply);
+    setList(data);
+  }
+
+  const onClickSave = async(reply) => {
+    if(reply.contents !== reply.text){
+      if(!window.confirm(`${reply.rid}번 댓글을 수정하실래요?`)) return;
+      await axios.post('/reply/update', {rid:reply.rid, contents:reply.contents});
+    }
+    callAPI();
+  }
+
+  const onClickCancel = (reply) => {
+    if(reply.contents !== reply.text) {
+      if(!window.confirm(`${reply.rid}번 댓글을 취소하실래요?`)) return;
+    }
+    callAPI();
+  }
+
   return (
     <div className='my-5'>
       <Row className='justify-content-center'>
@@ -91,9 +112,10 @@ const ReplyPage = ({bid}) => {
           {list.map(reply=>
             <div key={reply.rid}>
               <Row>
-                <Col className='text-muted' style={{fontSize:'14px'}}>
+                <Col className='text-muted' style={{fontSize:'14px'}} xs={8}>
                   <span className='me-3'>{reply.uname}({reply.uid})</span>
                   <span>{reply.fmtdate}</span>
+                  {reply.fmtupdate && <span style={{color:'blue'}}>({reply.fmtupdate})</span>}
                 </Col>
                 {uid === reply.uid && !reply.isEdit &&
                   <Col className='text-end mb-2'>
@@ -106,9 +128,9 @@ const ReplyPage = ({bid}) => {
 
                 {uid === reply.uid && reply.isEdit &&
                   <Col className='text-end mb-2'>
-                    <Button 
+                    <Button onClick={()=>onClickSave(reply)}
                       size="sm" variant='outline-secondary' className='me-2'>저장</Button>
-                    <Button 
+                    <Button onClick={()=>onClickCancel(reply)}
                       size="sm" variant='outline-secondary'>취소</Button>
                   </Col>
                 }
@@ -116,7 +138,8 @@ const ReplyPage = ({bid}) => {
 
               {reply.isEdit ?
                 <div>
-                  <Form.Control as="textarea" rows={5} value={reply.contents}/>
+                  <Form.Control onChange={(e)=>onChangeContents(e, reply.rid)}
+                    as="textarea" rows={5} value={reply.contents}/>
                 </div>  
                 :
                 <div style={{whiteSpace:'pre-wrap', cursor:'pointer'}} 
