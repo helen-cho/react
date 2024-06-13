@@ -5,13 +5,8 @@ import { Row, Col, Card, Button} from 'react-bootstrap'
 import ReplyPage from './ReplyPage';
 
 const ReadPage = () => {
-  //console.log('location', useLocation());
-  //console.log('search', useLocation().search);
   const param = new URLSearchParams(useLocation().search);
-  //console.log('param', param);
   const isCnt = param.get('isCnt');
-  //console.log(isCnt);
-
   const [form, setForm] = useState('');
   const {bid} = useParams();
 
