@@ -20,7 +20,7 @@ const ReplyPage = ({bid}) => {
     const url=`/reply/list.json/${bid}?page=${page}&size=${size}`;
     const res=await axios.get(url);
     //console.log(res.data);
-    const data=res.data.documents.map(doc=>doc && {...doc, isEllip:true});
+    const data=res.data.documents.map(doc=>doc && {...doc, isEllip:true, isEdit:false});
     setList(data);
     setCount(res.data.total);
   }
@@ -58,6 +58,11 @@ const ReplyPage = ({bid}) => {
     callAPI();
   }
 
+  const onClickUpdate = (rid) => {
+    const data=list.map(reply=>reply.rid===rid ? {...reply, isEdit:true} : reply);
+    setList(data);     
+  }
+
   return (
     <div className='my-5'>
       <Row className='justify-content-center'>
@@ -90,17 +95,34 @@ const ReplyPage = ({bid}) => {
                   <span className='me-3'>{reply.uname}({reply.uid})</span>
                   <span>{reply.fmtdate}</span>
                 </Col>
-                {uid === reply.uid &&
+                {uid === reply.uid && !reply.isEdit &&
                   <Col className='text-end mb-2'>
-                    <Button size="sm" variant='outline-secondary' className='me-2'>수정</Button>
+                    <Button onClick={()=>onClickUpdate(reply.rid)}
+                      size="sm" variant='outline-secondary' className='me-2'>수정</Button>
                     <Button onClick={()=>onClickDelete(reply.rid)}
                       size="sm" variant='outline-secondary'>삭제</Button>
                   </Col>
                 }
+
+                {uid === reply.uid && reply.isEdit &&
+                  <Col className='text-end mb-2'>
+                    <Button 
+                      size="sm" variant='outline-secondary' className='me-2'>저장</Button>
+                    <Button 
+                      size="sm" variant='outline-secondary'>취소</Button>
+                  </Col>
+                }
               </Row>
-              <div style={{whiteSpace:'pre-wrap', cursor:'pointer'}} 
-                onClick={()=>onClickContents(reply.rid)}
-                className={reply.isEllip && 'ellipsis'}>{reply.contents}</div>
+
+              {reply.isEdit ?
+                <div>
+                  <Form.Control as="textarea" rows={5} value={reply.contents}/>
+                </div>  
+                :
+                <div style={{whiteSpace:'pre-wrap', cursor:'pointer'}} 
+                  onClick={()=>onClickContents(reply.rid)}
+                  className={reply.isEllip && 'ellipsis'}>{reply.contents}</div>
+              }
               <hr/>
             </div>
           )}
