@@ -119,7 +119,8 @@ const ReplyPage = ({bid}) => {
               <Row>
                 <Col className='text-muted' style={{fontSize:'12px'}} xs={9}>
                   <span className='me-2'>{reply.rid}{reply.uname}({reply.uid})</span>
-                  <Stars size={'15px'} number={reply.rating} disabled={true}/>
+                  <Stars 
+                    size={'15px'} number={reply.rating} disabled={(reply.uid!==uid || !reply.isEdit) && true}/>
                   <br/>
                   <span>{reply.fmtdate}</span>
                   {reply.fmtupdate && <span style={{color:'blue'}}>({reply.fmtupdate})</span>}
