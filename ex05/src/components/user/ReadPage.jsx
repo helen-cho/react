@@ -1,17 +1,39 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {Col, Row, Card, InputGroup, Form, Button} from 'react-bootstrap'
 import AddressModal from '../common/AddressModal';
 
 const ReadPage = () => {
+  const refFile = useRef();
+  const photoStyle={
+    borderRadius:'10px',
+    cursor:'pointer',
+    border:'3px solid gray'
+  }
+
+  const [old, setOld] = useState('');
   const [user, setUser] = useState('');
   const uid=sessionStorage.getItem('uid');
   const {uname, address1, address2, phone, photo}= user;
+
+  const [image, setImage] = useState({
+    fileName: photo,
+    file:null
+  });
+
+  const onChangeFile = (e) => {
+    setImage({
+      fileName:URL.createObjectURL(e.target.files[0]),
+      file:e.target.files[0]
+    });
+  }
+  const {file, fileName} = image;
 
   const callAPI = async() => {
     const res=await axios.get(`/users/${uid}`);
     console.log(res.data);
     setUser(res.data);
+    setOld(res.data);
   }
 
   useEffect(()=>{
@@ -23,9 +45,11 @@ const ReadPage = () => {
   }
 
   const onInsert = async() => {
+    if(JSON.stringify(old)===JSON.stringify(user)) return;
     if(!window.confirm('변경된 정보를 수정하실래요?')) return;
     await axios.post('/users/update', user);
     alert("정보수정완료!");
+    callAPI();
   }
 
   return (
@@ -37,11 +61,15 @@ const ReadPage = () => {
           </Card.Header>
           <Card.Body>
               <Row className='mb-3'>
-                <Col md={3} className='align-items-center mb-3'>
-                    <div style={{fontSize:'13px'}}>{user.regDate}</div>
-                    <img src={photo || 'http://via.placeholder.com/50x50'} width='100%'/>
-                </Col>
+                <Col md={3} className='align-items-center my-3 text-center'>
+                    <img style={photoStyle} onClick={()=>refFile.current.click()} 
+                      src={fileName || 'http://via.placeholder.com/50x50'} width='100%'/>
+                    <input ref={refFile}
+                      type="file" onChange={onChangeFile} style={{display:'none'}}/>
+                    <Button className='w-100 mt-1' size='sm'>이미지저장</Button>    
+                </Col> 
                 <Col>
+                  <div className="text-end mb-2" style={{fontSize:'12px'}}>가입일: {user.regDate}</div>
                   <InputGroup className='mb-2'>
                     <InputGroup.Text>이름</InputGroup.Text>
                     <Form.Control name="uname" onChange={onChangeForm} value={uname}/>
