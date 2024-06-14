@@ -90,7 +90,7 @@ const ReplyPage = ({bid}) => {
           {sessionStorage.getItem('uid') ?
             <div className='mb-5'>
               <div>
-                <Stars/>
+                <Stars size={'30px'} number={0}/>
               </div>
               <Form.Control value={contents} 
                 onChange={(e)=>setContents(e.target.value)}
@@ -113,6 +113,7 @@ const ReplyPage = ({bid}) => {
               <Row>
                 <Col className='text-muted' style={{fontSize:'12px'}} xs={9}>
                   <span className='me-2'>{reply.uname}({reply.uid})</span>
+                  <Stars size={'15px'} number={reply.rating} disabled={true}/>
                   <br/>
                   <span>{reply.fmtdate}</span>
                   {reply.fmtupdate && <span style={{color:'blue'}}>({reply.fmtupdate})</span>}
