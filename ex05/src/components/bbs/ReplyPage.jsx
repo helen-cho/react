@@ -14,12 +14,13 @@ const ReplyPage = ({bid}) => {
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(3);
+  const [rating, setRating] = useState(0);
 
   const callAPI = async()=>{
     const url=`/reply/list.json/${bid}?page=${page}&size=${size}`;
     const res=await axios.get(url);
     const data=res.data.documents.map(doc=>doc && 
-      {...doc, isEllip:true, isEdit:false, text:doc.contents, rating:3});
+      {...doc, isEllip:true, isEdit:false, text:doc.contents});
     setList(data);
     setCount(res.data.total);
   }
@@ -40,8 +41,9 @@ const ReplyPage = ({bid}) => {
     }
 
     await axios.post('/reply/insert', 
-      {bid, contents, uid:sessionStorage.getItem('uid')});
+      {bid, contents, uid:sessionStorage.getItem('uid'), rating});
     setContents('');
+    setRating(0);
     callAPI();
   }
 
@@ -68,7 +70,7 @@ const ReplyPage = ({bid}) => {
   }
 
   const onClickSave = async(reply) => {
-    alert(reply.rating);
+
     if(reply.contents !== reply.text){
       if(!window.confirm(`${reply.rid}번 댓글을 수정하실래요?`)) return;
       await axios.post('/reply/update', {rid:reply.rid, contents:reply.contents});
@@ -83,6 +85,10 @@ const ReplyPage = ({bid}) => {
     callAPI();
   }
 
+  const getRating = (rating) => {
+    setRating(rating);
+  }
+
   return (
     <div className='my-5'>
       <Row className='justify-content-center'>
@@ -90,7 +96,7 @@ const ReplyPage = ({bid}) => {
           {sessionStorage.getItem('uid') ?
             <div className='mb-5'>
               <div>
-                <Stars size={'30px'} number={0}/>
+                <Stars size={'30px'} number={rating} getRating={getRating}/>
               </div>
               <Form.Control value={contents} 
                 onChange={(e)=>setContents(e.target.value)}
@@ -112,7 +118,7 @@ const ReplyPage = ({bid}) => {
             <div key={reply.rid}>
               <Row>
                 <Col className='text-muted' style={{fontSize:'12px'}} xs={9}>
-                  <span className='me-2'>{reply.uname}({reply.uid})</span>
+                  <span className='me-2'>{reply.rid}{reply.uname}({reply.uid})</span>
                   <Stars size={'15px'} number={reply.rating} disabled={true}/>
                   <br/>
                   <span>{reply.fmtdate}</span>
