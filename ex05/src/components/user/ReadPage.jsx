@@ -53,6 +53,21 @@ const ReadPage = () => {
     callAPI();
   }
 
+  const onUploadImage = async() => {
+    if(file) {
+      if(!window.confirm("변경된 이미지를 저장하실래요?")) return;
+      //이미지업로드
+      const formData = new FormData();
+      formData.append("file", file);
+      const config = {
+        Headers:{'content-type':'multipart/form-data'}
+      };
+      await axios.post(`/users/photo/${uid}`, formData, config);
+      setImage({file:null, fileName:''});
+      callAPI();
+    }
+  }
+
   return (
     <Row className='my-5 justify-content-center'>
       <Col xs={12} md={10} lg={8}>
@@ -67,7 +82,8 @@ const ReadPage = () => {
                       src={fileName || 'http://via.placeholder.com/50x50'} width='100%'/>
                     <input ref={refFile}
                       type="file" onChange={onChangeFile} style={{display:'none'}}/>
-                    <Button className='w-100 mt-1' size='sm'>이미지저장</Button>    
+                    <Button onClick={onUploadImage}
+                      className='w-100 mt-1' size='sm'>이미지저장</Button>    
                 </Col> 
                 <Col>
                   <div className="text-end mb-2" style={{fontSize:'12px'}}>가입일: {user.regDate}</div>
