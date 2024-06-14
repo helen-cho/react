@@ -5,6 +5,8 @@ import BBSRouter from './router/BBSRouter'
 import UserRouter from './router/UserRouter'
 
 const MenuPage = () => {
+  const photo=sessionStorage.getItem('photo') &&
+     `/display?file=${sessionStorage.getItem('photo')}`;
   const uid=sessionStorage.getItem('uid');
   const uname=sessionStorage.getItem('uname');
   const onLogout = (e) => {
@@ -20,7 +22,10 @@ const MenuPage = () => {
       <Link to="/bbs/list" className='me-3'>게시판</Link>
       {uid ?
         <>
-          <Link to="/users/read" className='me-3'>{uname}({uid})님</Link>
+          <Link to="/users/read" className='me-3'>
+            <img src={photo || 'http://via.placeholder.com'} width="30px" style={{border:'1px solid gray', borderRadius:'50%'}}/>
+            {uname}({uid})님
+          </Link>
           <Link to="#" onClick={onLogout}>로그아웃</Link>
         </>
         :
