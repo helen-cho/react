@@ -12,7 +12,6 @@ const ReadPage = () => {
 
   const callAPI = async() => {
     const res=await axios.get(`/bbs/${bid}?isCnt=${isCnt}`);
-    //console.log(res.data);
     setForm(res.data);
   }
 

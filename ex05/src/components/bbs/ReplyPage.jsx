@@ -4,11 +4,10 @@ import {Row, Col, Form, Button} from 'react-bootstrap'
 import Pagination from 'react-js-pagination';
 import '../Paging.css'
 import { useLocation } from 'react-router-dom';
-import StarRating from '../common/StarRating';
+import Stars from '../common/Stars';
 
 const ReplyPage = ({bid}) => {
   const uid=sessionStorage.getItem('uid');
-  const [rating, setRating] = useState(0);
   const {pathname}=useLocation();
   const [contents, setContents] = useState('');
   const [list, setList] = useState([]);
@@ -19,9 +18,8 @@ const ReplyPage = ({bid}) => {
   const callAPI = async()=>{
     const url=`/reply/list.json/${bid}?page=${page}&size=${size}`;
     const res=await axios.get(url);
-    //console.log(res.data);
     const data=res.data.documents.map(doc=>doc && 
-      {...doc, isEllip:true, isEdit:false, text:doc.contents});
+      {...doc, isEllip:true, isEdit:false, text:doc.contents, rating:3});
     setList(data);
     setCount(res.data.total);
   }
@@ -40,7 +38,7 @@ const ReplyPage = ({bid}) => {
       alert('댓글 내용을 입력하세요!');
       return;
     }
-    alert(rating);
+
     await axios.post('/reply/insert', 
       {bid, contents, uid:sessionStorage.getItem('uid')});
     setContents('');
@@ -70,6 +68,7 @@ const ReplyPage = ({bid}) => {
   }
 
   const onClickSave = async(reply) => {
+    alert(reply.rating);
     if(reply.contents !== reply.text){
       if(!window.confirm(`${reply.rid}번 댓글을 수정하실래요?`)) return;
       await axios.post('/reply/update', {rid:reply.rid, contents:reply.contents});
@@ -90,9 +89,9 @@ const ReplyPage = ({bid}) => {
         <Col xs={12} md={10} lg={8}>
           {sessionStorage.getItem('uid') ?
             <div className='mb-5'>
-              <div className='mb-2'>
-                <StarRating rating={rating} setRating={setRating}/>
-              </div>  
+              <div>
+                <Stars/>
+              </div>
               <Form.Control value={contents} 
                 onChange={(e)=>setContents(e.target.value)}
                 as="textarea" rows={5}/>
@@ -112,8 +111,9 @@ const ReplyPage = ({bid}) => {
           {list.map(reply=>
             <div key={reply.rid}>
               <Row>
-                <Col className='text-muted' style={{fontSize:'14px'}} xs={8}>
-                  <span className='me-3'>{reply.uname}({reply.uid})</span>
+                <Col className='text-muted' style={{fontSize:'12px'}} xs={9}>
+                  <span className='me-2'>{reply.uname}({reply.uid})</span>
+                  <br/>
                   <span>{reply.fmtdate}</span>
                   {reply.fmtupdate && <span style={{color:'blue'}}>({reply.fmtupdate})</span>}
                 </Col>
