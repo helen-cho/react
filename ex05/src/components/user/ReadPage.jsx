@@ -8,7 +8,7 @@ const ReadPage = () => {
   const photoStyle={
     borderRadius:'10px',
     cursor:'pointer',
-    border:'3px solid gray'
+    border:'1px solid gray'
   }
 
   const [old, setOld] = useState('');
@@ -17,7 +17,7 @@ const ReadPage = () => {
   const {uname, address1, address2, phone, photo}= user;
 
   const [image, setImage] = useState({
-    fileName: photo,
+    fileName: '',
     file:null
   });
 
@@ -34,6 +34,7 @@ const ReadPage = () => {
     console.log(res.data);
     setUser(res.data);
     setOld(res.data);
+    setImage({...image, fileName:res.data.photo && `/display?file=${res.data.photo}`});
   }
 
   useEffect(()=>{
