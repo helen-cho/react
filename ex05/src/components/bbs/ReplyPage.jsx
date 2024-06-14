@@ -20,7 +20,7 @@ const ReplyPage = ({bid}) => {
     const url=`/reply/list.json/${bid}?page=${page}&size=${size}`;
     const res=await axios.get(url);
     const data=res.data.documents.map(doc=>doc && 
-      {...doc, isEllip:true, isEdit:false, text:doc.contents});
+      {...doc, isEllip:true, isEdit:false, text:doc.contents, num:doc.rating});
     setList(data);
     setCount(res.data.total);
   }
@@ -71,9 +71,10 @@ const ReplyPage = ({bid}) => {
 
   const onClickSave = async(reply) => {
 
-    if(reply.contents !== reply.text){
+    if(reply.contents !== reply.text || reply.num !== reply.rating){
       if(!window.confirm(`${reply.rid}번 댓글을 수정하실래요?`)) return;
-      await axios.post('/reply/update', {rid:reply.rid, contents:reply.contents});
+      await axios.post('/reply/update', 
+        {rid:reply.rid, contents:reply.contents, rating:reply.rating});
     }
     callAPI();
   }
@@ -87,6 +88,12 @@ const ReplyPage = ({bid}) => {
 
   const getRating = (rating) => {
     setRating(rating);
+  }
+
+  const getReplyRating = (rating, rid) => {
+    console.log(rating, '..............', rid);
+    const data=list.map(reply=>reply.rid===rid ? {...reply, rating:rating}:reply);
+    setList(data);
   }
 
   return (
@@ -119,7 +126,7 @@ const ReplyPage = ({bid}) => {
               <Row>
                 <Col className='text-muted' style={{fontSize:'12px'}} xs={9}>
                   <span className='me-2'>{reply.rid}{reply.uname}({reply.uid})</span>
-                  <Stars 
+                  <Stars getRating={(e)=>getReplyRating(e, reply.rid)}
                     size={'15px'} number={reply.rating} disabled={(reply.uid!==uid || !reply.isEdit) && true}/>
                   <br/>
                   <span>{reply.fmtdate}</span>
