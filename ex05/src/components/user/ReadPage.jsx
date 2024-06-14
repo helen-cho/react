@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react'
 import {Col, Row, Card, InputGroup, Form, Button} from 'react-bootstrap'
 import AddressModal from '../common/AddressModal';
+import PassModal from './PassModal';
 
 const ReadPage = () => {
   const refFile = useRef();
@@ -34,7 +35,7 @@ const ReadPage = () => {
     console.log(res.data);
     setUser(res.data);
     setOld(res.data);
-    setImage({...image, fileName:res.data.photo && `/display?file=${res.data.photo}`});
+    setImage({file:null, fileName:res.data.photo && `/display?file=${res.data.photo}`});
   }
 
   useEffect(()=>{
@@ -63,7 +64,7 @@ const ReadPage = () => {
         Headers:{'content-type':'multipart/form-data'}
       };
       await axios.post(`/users/photo/${uid}`, formData, config);
-      setImage({file:null, fileName:''});
+      alert("이미지가 변경되었습니다!");
       callAPI();
     }
   }
@@ -90,6 +91,7 @@ const ReadPage = () => {
                   <InputGroup className='mb-2'>
                     <InputGroup.Text>이름</InputGroup.Text>
                     <Form.Control name="uname" onChange={onChangeForm} value={uname}/>
+                    <PassModal/>
                   </InputGroup>
                   <InputGroup className='mb-2'>
                     <InputGroup.Text>전화</InputGroup.Text>
