@@ -25,7 +25,7 @@ const MenuPage = () => {
       
       {uid ?
         <>
-          <Link to="/message" className='me-3'>메시지</Link>
+          <Link to="/message" className='me-5'>메시지</Link>
           <Link to="/users/read" className='me-3'>
             <img src={photo || 'http://via.placeholder.com'} width="30px" style={{border:'1px solid gray', borderRadius:'50%'}}/>
             {uname}({uid})님

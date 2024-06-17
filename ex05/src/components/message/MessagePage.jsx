@@ -4,15 +4,15 @@ import MessageRouter from '../router/MessageRouter'
 
 const MessagePage = () => {
   return (
-    <Row>
-      <Col xs={2}>
-        <div>
+    <Row className='my-5'>
+      <Col xs={3}>
+        <div className='my-2'>
           <a href="/message/insert">메시지작성</a>
         </div>
-        <div>
+        <div className='my-2'>
           <a href="/message/receive">받은메시지</a>
         </div>
-        <div>
+        <div className='my-2'>
           <a href="/message/send">보낸메시지</a>
         </div>
       </Col>
