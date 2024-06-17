@@ -3,18 +3,37 @@ import React, { useEffect, useState } from 'react'
 import {Table} from 'react-bootstrap'
 
 const ReceivePage = () => {
+  const [checked, setChecked] = useState(0);
   const [list, setList] = useState([]);
   const uid=sessionStorage.getItem('uid');
   
   const callAPI = async() => {
     const res=await axios.get(`/message/receive.json/${uid}`);
     console.log(res.data);
-    setList(res.data);
+    const data=res.data.map(msg=>msg && {...msg, checked:false});
+    setList(data);
   }
+
+  const onChangeAll = (e) => {
+    const data=list.map(msg=>msg && {...msg, checked:e.target.checked});
+    setList(data);
+  }
+
+  const onChangeSingle = (e, mid) => {
+    const data=list.map(msg=>msg.mid===mid ? {...msg, checked:e.target.checked}:msg);
+    setList(data);
+  }
+
 
   useEffect(()=>{
     callAPI();
   }, []);
+
+  useEffect(()=> {
+    let cnt=0;
+    list.forEach(msg=>msg.checked && cnt++);
+    setChecked(cnt);
+  }, [list]);
 
   return (
     <div>
@@ -22,6 +41,8 @@ const ReceivePage = () => {
       <Table hover>
         <thead>
           <tr>
+            <td><input checked={checked===list.length}
+              type="checkbox" onChange={onChangeAll}/></td>
             <td>보낸이</td>
             <td>내용</td>
             <td>발신일</td>
@@ -31,6 +52,8 @@ const ReceivePage = () => {
         <tbody>
           {list.map(msg=>
             <tr key={msg.mid}>
+              <td><input onChange={(e)=>onChangeSingle(e, msg.mid)}
+                    type="checkbox" checked={msg.checked}/></td>
               <td>{msg.uname}({msg.sender})</td>
               <td>
                 <span className={msg.readDate || 'bold'}>

@@ -4,6 +4,9 @@ import {Table} from 'react-bootstrap'
 import { Link } from 'react-router-dom';
 
 const SendPage = () => {
+  const [checked, setChecked] = useState(0);
+
+
   const [list, setList] = useState([]);
   const callAPI = async() => {
     const url=`/message/send.json/${sessionStorage.getItem('uid')}`;
@@ -18,9 +21,20 @@ const SendPage = () => {
     setList(data);
   }
 
+  const onChangeSingle = (e, mid) => {
+    const data=list.map(msg=>msg.mid===mid ? {...msg, checked:e.target.checked} : msg);
+    setList(data);
+  }
+
   useEffect(()=>{
     callAPI();
   }, []);
+
+  useEffect(()=>{
+    let cnt=0;
+    list.forEach(msg=>msg.checked && cnt++);
+    setChecked(cnt);
+  }, [list]);
 
   return (
     <div>
@@ -28,7 +42,8 @@ const SendPage = () => {
       <Table>
         <thead>
           <tr>
-            <td><input type="checkbox" onChange={onChangeAll}/></td>
+            <td><input checked={checked===list.length}
+                type="checkbox" onChange={onChangeAll}/></td>
             <td>받은이</td>
             <td>내용</td>
             <td>발신일</td>
@@ -38,7 +53,8 @@ const SendPage = () => {
         <tbody>
           {list.map(msg=>
             <tr key={msg.mid}>
-              <td><input type="checkbox" checked={msg.checked}/></td>
+              <td><input onChange={(e)=>onChangeSingle(e, msg.mid)}
+                    type="checkbox" checked={msg.checked}/></td>
               <td>{msg.uname}({msg.receiver})</td>
               <td>
                 <div>
