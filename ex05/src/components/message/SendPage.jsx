@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import {Table} from 'react-bootstrap'
+import { Link } from 'react-router-dom';
 
 const SendPage = () => {
   const [list, setList] = useState([]);
@@ -31,7 +32,10 @@ const SendPage = () => {
           {list.map(msg=>
             <tr key={msg.mid}>
               <td>{msg.uname}({msg.receiver})</td>
-              <td><div className='ellipsis'>{msg.message}</div></td>
+              <td>
+                <div className='ellipsis'>
+                  <Link to={`/message/send/${msg.mid}`}>{msg.message}</Link></div>
+                </td>
               <td>{msg.sendDate}</td>
               <td>{msg.readDate || '안읽임'}</td>
             </tr>
