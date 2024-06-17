@@ -34,7 +34,7 @@ const ReceivePage = () => {
               <td>{msg.uname}({msg.sender})</td>
               <td>
                 <span className={msg.readDate || 'bold'}>
-                  {msg.message.substring(0,30)}
+                  <a href={`/message/receive/${msg.mid}`}>{msg.message.substring(0,30)}</a>
                 </span>
               </td>
               <td>{msg.sendDate}</td>

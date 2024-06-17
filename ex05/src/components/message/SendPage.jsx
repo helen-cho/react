@@ -8,8 +8,14 @@ const SendPage = () => {
   const callAPI = async() => {
     const url=`/message/send.json/${sessionStorage.getItem('uid')}`;
     const res=await axios.get(url);
-    console.log(res.data);
-    setList(res.data);
+    const data=res.data.map(msg=>msg && {...msg, checked:false});
+    console.log(data);
+    setList(data);
+  }
+
+  const onChangeAll = (e) => {
+    const data=list.map(msg=>msg && {...msg, checked:e.target.checked});
+    setList(data);
   }
 
   useEffect(()=>{
@@ -22,6 +28,7 @@ const SendPage = () => {
       <Table>
         <thead>
           <tr>
+            <td><input type="checkbox" onChange={onChangeAll}/></td>
             <td>받은이</td>
             <td>내용</td>
             <td>발신일</td>
@@ -31,10 +38,11 @@ const SendPage = () => {
         <tbody>
           {list.map(msg=>
             <tr key={msg.mid}>
+              <td><input type="checkbox" checked={msg.checked}/></td>
               <td>{msg.uname}({msg.receiver})</td>
               <td>
-                <div className='ellipsis'>
-                  <Link to={`/message/send/${msg.mid}`}>{msg.message}</Link></div>
+                <div>
+                  <Link to={`/message/send/${msg.mid}`}>{msg.message.substring(0,30)}</Link></div>
                 </td>
               <td>{msg.sendDate}</td>
               <td>{msg.readDate || '안읽임'}</td>
