@@ -23,7 +23,7 @@ const ReadSend = () => {
       <div>발신일: {msg.sendDate}</div>
       <div>수신일: {msg.readDate || '안읽음' }</div>
       <hr/>
-      <div>{msg.message}</div>
+      <div style={{whiteSpace:'pre-wrap'}}>{msg.message}</div>
     </div>
   )
 }
