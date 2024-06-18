@@ -1,11 +1,14 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link, Routes, Route } from 'react-router-dom'
 import HomePage from './HomePage'
 import BBSRouter from './router/BBSRouter'
 import UserRouter from './router/UserRouter'
 import MessagePage from './message/MessagePage'
+import { UserContext } from '../contexts/UserContext'
 
 const MenuPage = () => {
+  const {user, setUser} = useContext(UserContext);
+  console.log('.............', user);
   const photo=sessionStorage.getItem('photo') &&
      `/display?file=${sessionStorage.getItem('photo')}`;
      

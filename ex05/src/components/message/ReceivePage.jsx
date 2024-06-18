@@ -54,7 +54,7 @@ const ReceivePage = () => {
             <tr key={msg.mid}>
               <td><input onChange={(e)=>onChangeSingle(e, msg.mid)}
                     type="checkbox" checked={msg.checked}/></td>
-              <td>{msg.uname}({msg.sender})</td>
+              <td>{msg.mid} {msg.uname}({msg.sender})</td>
               <td>
                 <span className={msg.readDate || 'bold'}>
                   <a href={`/message/receive/${msg.mid}`}>{msg.message.substring(0,30)}</a>

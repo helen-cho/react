@@ -1,7 +1,11 @@
 import axios from 'axios';
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import {Row, Col, Card, InputGroup, Form, Button} from 'react-bootstrap'
+import { UserContext } from '../../contexts/UserContext';
+
 const LoginPage = () => {
+  const {user, setUser} = useContext(UserContext);
+
   const [form, setForm] = useState({
     uid:'red',
     upass:'pass'
@@ -14,8 +18,6 @@ const LoginPage = () => {
   const onSubmit = async(e) => {
     e.preventDefault();
     const res=await axios.get(`/users/${uid}`);
-    console.log(res.data);
-
     if(!res.data){
       alert("아이디가 존재하지 않습니다!");
     }else if(upass === res.data.upass){
@@ -23,6 +25,8 @@ const LoginPage = () => {
       sessionStorage.setItem('uid', res.data.uid);
       sessionStorage.setItem('uname', res.data.uname);
       sessionStorage.setItem('photo', res.data.photo);
+      setUser(res.data);
+      console.log('login', res.data);
       if(sessionStorage.getItem('target')){
         window.location.href=sessionStorage.getItem('target');
       }else{

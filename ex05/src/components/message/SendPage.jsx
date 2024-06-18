@@ -55,7 +55,7 @@ const SendPage = () => {
             <tr key={msg.mid}>
               <td><input onChange={(e)=>onChangeSingle(e, msg.mid)}
                     type="checkbox" checked={msg.checked}/></td>
-              <td>{msg.uname}({msg.receiver})</td>
+              <td>{msg.mid} {msg.uname}({msg.receiver})</td>
               <td>
                 <div>
                   <Link to={`/message/send/${msg.mid}`}>{msg.message.substring(0,30)}</Link></div>
