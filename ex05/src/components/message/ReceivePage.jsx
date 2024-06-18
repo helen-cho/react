@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import {Table} from 'react-bootstrap'
+import {Table, Button} from 'react-bootstrap'
 
 const ReceivePage = () => {
   const [checked, setChecked] = useState(0);
@@ -35,13 +35,32 @@ const ReceivePage = () => {
     setChecked(cnt);
   }, [list]);
 
+  const onDelete = () => {
+    if(checked===0) {
+      alert("삭제할 메시지를 선택하세요!");
+      return;
+    }
+
+    let cnt=0;
+    list.forEach(async(msg)=>{
+      if(msg.checked) {
+        await axios.post(`/message/receive/delete/${msg.mid}`);
+        cnt++;
+      }
+      if(cnt===checked) callAPI();
+    });
+  }
+
   return (
     <div>
       <h1 className='text-center'>받은메시지</h1>
+      <div>
+        <Button onClick={onDelete}>선택삭제</Button>
+      </div>
       <Table hover>
         <thead>
           <tr>
-            <td><input checked={checked===list.length}
+            <td><input checked={list.length> 0 && checked===list.length}
               type="checkbox" onChange={onChangeAll}/></td>
             <td>보낸이</td>
             <td>내용</td>
