@@ -8,7 +8,7 @@ import { UserContext } from '../contexts/UserContext'
 
 const MenuPage = () => {
   const {user, setUser} = useContext(UserContext);
-  console.log('.............', user);
+  console.log('.............', user.uname);
   const photo=sessionStorage.getItem('photo') &&
      `/display?file=${sessionStorage.getItem('photo')}`;
      

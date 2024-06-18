@@ -25,7 +25,7 @@ const LoginPage = () => {
       sessionStorage.setItem('uid', res.data.uid);
       sessionStorage.setItem('uname', res.data.uname);
       sessionStorage.setItem('photo', res.data.photo);
-      setUser(res.data);
+      setUser({...user, name:'강감찬'})
       console.log('login', res.data);
       if(sessionStorage.getItem('target')){
         window.location.href=sessionStorage.getItem('target');
