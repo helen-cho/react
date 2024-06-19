@@ -1,16 +1,13 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import { Table, Button } from 'react-bootstrap';
+import React, { useContext, useEffect, useState } from 'react'
+import { Table, Button, Row, Col } from 'react-bootstrap';
 import '../../common/Paging.css'
 import Pagination from 'react-js-pagination';
-import Box from '../../common/Box';
+import { BoxContext } from '../../contexts/BoxContext';
+import { Link } from 'react-router-dom';
 
 const ListPage = () => {
-  const [box, setBox] = useState({
-    show:false,
-    message:'',
-    action: null
-  });
+  const {setBox} = useContext(BoxContext);
 
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(3);
@@ -32,14 +29,33 @@ const ListPage = () => {
   const onClickDelete = (scode) => {
     setBox({
       show:true,
-      message:`${scode}번 학생을 삭제하실래요?`
+      message:`${scode}번 학생을 삭제하실래요?`,
+      action: ()=>onDelete(scode)
     });
+  }
+
+  const onDelete = async(scode) => {
+    await axios.post(`/stu/delete/${scode}`)
+          .then(()=>{
+            setPage(1);
+            callAPI();
+          })
+          .catch((err)=>{
+            console.log(err)
+          });
   }
 
   return (
     <div>
       <h1 className='text-center mb-5'>학생목록</h1>
-      검색수:{count}명
+      <Row>
+        <Col>
+          검색수:{count}명
+        </Col>
+        <Col className='text-end'>
+          <Link to='/stu/insert'>학생등록</Link>
+        </Col>
+      </Row>
       <hr/>
       <Table>
         <tbody>
@@ -68,7 +84,6 @@ const ListPage = () => {
             nextPageText={"›"}
             onChange={ (e)=>setPage(e) }/>
         }
-      { box.show && <Box box={box} setBox={setBox}/> }  
     </div>
   )
 }
