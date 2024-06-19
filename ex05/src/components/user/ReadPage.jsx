@@ -1,10 +1,12 @@
 import axios from 'axios';
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import {Col, Row, Card, InputGroup, Form, Button} from 'react-bootstrap'
 import AddressModal from '../common/AddressModal';
 import PassModal from './PassModal';
+import { UserContext } from '../../contexts/UserContext';
 
 const ReadPage = () => {
+  const {user, setUser} = useContext(UserContext);
   const refFile = useRef();
   const photoStyle={
     borderRadius:'10px',
@@ -13,7 +15,7 @@ const ReadPage = () => {
   }
 
   const [old, setOld] = useState('');
-  const [user, setUser] = useState('');
+  //const [user, setUser] = useState('');
   const uid=sessionStorage.getItem('uid');
   const {uname, address1, address2, phone, photo}= user;
 

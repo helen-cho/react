@@ -2,8 +2,10 @@ import axios from 'axios';
 import React, { useContext, useState } from 'react'
 import {Row, Col, Card, InputGroup, Form, Button} from 'react-bootstrap'
 import { UserContext } from '../../contexts/UserContext';
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
+  const navi = useNavigate();
   const {user, setUser} = useContext(UserContext);
 
   const [form, setForm] = useState({
@@ -25,12 +27,14 @@ const LoginPage = () => {
       sessionStorage.setItem('uid', res.data.uid);
       sessionStorage.setItem('uname', res.data.uname);
       sessionStorage.setItem('photo', res.data.photo);
-      setUser({...user, name:'강감찬'})
-      console.log('login', res.data);
+      
+      setUser(res.data);
       if(sessionStorage.getItem('target')){
-        window.location.href=sessionStorage.getItem('target');
+        //window.location.href=sessionStorage.getItem('target');
+        navi(sessionStorage.getItem('target'));
       }else{
-        window.location.href="/";
+        //window.location.href="/";
+        navi('/');
       }
     }else{
       alert("비밀번호가 일치하지 않습니다!");

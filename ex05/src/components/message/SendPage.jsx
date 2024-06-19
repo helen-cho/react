@@ -51,7 +51,8 @@ const SendPage = () => {
     <div>
       <h1 className='text-center'>보낸메시지</h1>
       <div>
-        <Button onClick={onDelete}>선택삭제</Button>
+        <Button onClick={onDelete} size='sm'>선택삭제</Button>
+        <hr/>
       </div>
       <Table>
         <thead>

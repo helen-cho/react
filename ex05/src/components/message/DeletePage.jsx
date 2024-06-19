@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import {Table, Button} from 'react-bootstrap'
 
 const DeletePage = () => {
+  const [loading, setLoading] = useState(false);
   const [checked, setChecked] = useState(0);
   const uid=sessionStorage.getItem('uid');
   const [list, setList] = useState([]);
@@ -42,15 +43,21 @@ const DeletePage = () => {
     }
 
     let cnt=0;
+    setLoading(true);
     list.forEach(async msg=>{
       if(msg.checked){
         await axios.post(`/message/reset/delete/${msg.mid}?type=${msg.type}`);
         cnt++;
       }
       if(cnt===checked) callAPI();
+
+      setTimeout(()=>{
+        setLoading(false);
+      }, 1000);
     });
   }
 
+  if(loading) return <h1 className='text-center my-5'>로딩중......</h1>
   return (
     <div>
       <h1 className='text-center'>휴지통</h1>

@@ -236,6 +236,7 @@ select title,uid from bbs;
 
 select count(*) from bbs;
 
+drop view view_bbs;
 create view view_bbs as
 select b.*, u.uname, u.photo
 from bbs b, users u
@@ -247,13 +248,182 @@ where uname like '%레드%'
 order by bid desc
 limit 0, 5;
 
+select * from users;
+update bbs
+set contents='내용입니다.'
+where bid>0;
+select * from view_bbs;
+
+alter table bbs
+add column viewcnt int default 0;
+
+desc bbs;
+
+
+select bid, viewcnt from bbs where bid=250;
+
+create table reply(
+	rid int auto_increment primary key,
+    bid int not null,
+    uid varchar(20) not null,
+    regDate datetime default now(),
+    contents text,
+    foreign key(bid) references bbs(bid),
+    foreign key(uid) references users(uid)
+);
+
+desc reply;
+
+select * from reply;
+
+insert into reply(bid, uid, contents)
+select bid, uid, contents from reply;
+
+select count(*) from reply;
+
+drop view view_reply;
+
+drop view view_reply;
+
+create view view_reply as
+select r.*,u.uname, u.photo, 
+date_format(r.regdate,'%Y년%m월%d일 %T') as fmtdate,
+date_format(r.updatedate,'%Y년%m월%d일 %T') as fmtupdate
+from reply r, users u
+where r.uid=u.uid;
+
+select * from view_reply
+where bid=252
+order by rid desc
+limit 0, 5;
+
+alter table reply
+add column updateDate datetime;
+
+desc reply;
+desc view_reply;
+
+desc bbs;
+
+alter table bbs
+add column replycnt int default 0;
+
+update bbs
+set replycnt=(select count(*) from reply where bbs.bid=reply.bid)
+where bid > 0;
+
+alter table reply
+add column rating int default 0;
+
+desc reply;
+desc view_reply;
+
+update reply
+set rating=3
+where bid>0;
+
+select rid, rating from reply order by rid desc;
 
 
 
 
+select * from users;
+update users
+set photo=null
+where uid > '';
+
+
+select * from users where uid='red';
+
+update users
+set photo='/upload/photo/a01.png'
+where uid='red';
+
+desc users;
+
+create table messages(
+	mid int auto_increment primary key,
+    sender varchar(20) not null,
+    receiver varchar(20) not null,
+    message text,
+    sendDate datetime default now(),
+    readDate datetime,
+    foreign key(sender) references users(uid),
+    foreign key(receiver) references users(uid)
+);
+
+desc messages;
+
+desc users;
+
+alter table users
+add column point int default 0;
+
+select * from messages;
+select uid, point from users
+where uid='red';
 
 
 
+/*보낸메시지*/
+select m.*, u.uname, u.photo
+from messages m, users u
+where m.receiver=u.uid and mid=1;
+
+/*받은메시지*/
+select m.*, u.uname, u.photo
+from messages m, users u
+where m.sender=u.uid and mid=1;
+
+select * from messages;
+
+
+
+/*보낸메시지목록*/
+select m.*, u.uname
+from messages m, users u
+where sender='blue' and u.uid=m.receiver
+order by mid desc; 
+
+/*받은메시지목록*/
+select m.*, u.uname
+from messages m, users u
+where receiver='red' and u.uid=m.sender
+order by mid desc; 
+
+select * from users;
+desc messages;
+
+alter table messages
+add column sendDelete int default 0;
+
+alter table messages
+add column receiveDelete int default 0;
+
+select * from messages
+where (sender='red' and sendDelete=1)
+or (receiver='red' and receiveDelete=1);
+
+
+create table account(
+	ano char(4) primary key not null,
+    uid varchar(20),
+    openDate datetime default now(),
+    balance double default 0,
+    foreign key(uid) references users(uid)
+);
+desc account;
+
+create table trade(
+	tid int auto_increment primary key,
+	ano char(4) not null,
+    tno char(4) not null,
+    amount double,
+    tradeDate datetime default now(),
+    type int default 1, /*1:입금 -1:출금 */
+    foreign key(ano) references account(ano),
+    foreign key(tno) references account(ano)
+);
 
 
 

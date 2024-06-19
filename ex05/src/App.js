@@ -6,7 +6,9 @@ import { UserContext } from './contexts/UserContext';
 
 function App() {
   const [user, setUser] = useState({
-    uname:'홍길동'
+    uname:'',
+    photo:'',
+    point:0
   });
 
   return (
