@@ -1,6 +1,6 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { GiConfirmed } from "react-icons/gi";
+import { FiHelpCircle } from "react-icons/fi";
 import { FiAlertCircle } from "react-icons/fi";
 
 const Box = ({box, setBox}) => {
@@ -38,7 +38,7 @@ const Box = ({box, setBox}) => {
         </Modal.Header>
         <Modal.Body>
           {box.action ? 
-            <GiConfirmed style={style} className='me-2'/> 
+            <FiHelpCircle style={style} className='me-2'/> 
               : 
             <FiAlertCircle style={style1} className='me-2'/>
           }
