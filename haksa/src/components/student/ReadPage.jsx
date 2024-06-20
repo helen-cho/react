@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { Table } from 'react-bootstrap';
 
 const ReadPage = () => {
@@ -20,6 +20,9 @@ const ReadPage = () => {
   return (
     <div>
       <h1 className='text-center mb-5'>학생정보</h1>
+      <div className='text-end mb-2'>
+        <Link to={`/stu/update/${scode}`}>정보수정</Link>
+      </div>
       <Table bordered>
         <tbody>
           <tr>
