@@ -8,7 +8,7 @@ const InsertPage = () => {
   const navi=useNavigate();
   const {setBox} = useContext(BoxContext);
   const [sname, setSname] = useState('');
-  const [dept, setDept] = useState('전기');
+  const [dept, setDept] = useState('전자');
 
   const onSubmit = async() => {
     if(sname=='') {
@@ -31,7 +31,7 @@ const InsertPage = () => {
           <InputGroup.Text>학생학과</InputGroup.Text>
           <Form.Select value={dept} onChange={(e)=>setDept(e.target.value)}>
             <option value='전산'>컴퓨터정보공학과</option>
-            <option value='전기'>전기공학과</option>
+            <option value='전자'>전자공학과</option>
             <option value='건축'>건축공학과</option>
           </Form.Select>
         </InputGroup>
