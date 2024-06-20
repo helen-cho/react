@@ -31,12 +31,12 @@ const ListPage = () => {
       <Table>
         <tbody>
         {list.map(cou=>
-          <tr key={cou.lcode}>
+          <tr key={cou.lcode} className='text-center'>
             <td>{cou.lcode}</td>
             <td>{cou.lname}</td>
-            <td>{cou.pname} {cou.instructor}</td>
+            <td>{cou.pname ? `${cou.pname}(${cou.instructor})` : '-'}</td>
             <td>{cou.hours}시간</td>    
-            <td>{cou.room}호</td>
+            <td>{cou.room ? `${cou.room}호`: '-'}</td>
             <td>{cou.persons}명/{cou.capacity}명</td>
             <td><Button variant='outline-danger' size='sm'>삭제</Button></td>
           </tr>
