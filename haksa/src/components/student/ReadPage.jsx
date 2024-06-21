@@ -2,15 +2,25 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Table } from 'react-bootstrap';
-
+import { IoPersonCircleOutline } from "react-icons/io5";
+import EnrollList from './EnrollList';
 const ReadPage = () => {
+  const [list, setList] = useState([]);
+  const style={
+    fontSize:'4rem',
+    color:'gray',
+    cursor:'pointer'
+  }
   const [student, setStudent] = useState('');
   const {scode} = useParams();
   const {sname, dept, birthday, advisor, pname, year} = student;
+
   const callAPI = async() => {
     const res=await axios.get(`/stu/${scode}`);
     console.log(res.data);
     setStudent(res.data);
+    const res1= await axios.get(`/enroll/scode/${scode}`);
+    setList(res1.data);
   }
 
   useEffect(()=>{
@@ -26,10 +36,16 @@ const ReadPage = () => {
       <Table bordered>
         <tbody>
           <tr>
+            <td rowSpan={2} className='text-center align-middle'>
+              <IoPersonCircleOutline style={style}/>
+            </td>
             <td className='text-center table-info'>학번</td>
             <td>{scode}</td>
             <td className='text-center table-info'>성명</td>
-            <td>{sname}</td>
+            <td>
+              
+              {sname}
+            </td>
             <td className='text-center table-info'>학과</td>
             <td>{dept}</td>
           </tr>
@@ -43,6 +59,7 @@ const ReadPage = () => {
           </tr>
         </tbody>
       </Table>
+      <EnrollList list={list}/>
     </div>
   )
 }
