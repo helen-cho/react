@@ -6,7 +6,6 @@ import {BoxContext} from '../../contexts/BoxContext'
 const EnrollList = ({lcode}) => {
   const [checked, setChecked] = useState(0);
   const {setBox} = useContext(BoxContext);
-  const [enroll, setEnroll] = useState([]);
   const [list, setList] = useState([]);
   
   useEffect(()=>{
@@ -19,7 +18,6 @@ const EnrollList = ({lcode}) => {
     const res=await axios.get(`/enroll/lcode/${lcode}`);
     const data=res.data.map(stu=>stu && {...stu, num:stu.grade, checked:false});
     setList(data);
-    setEnroll(data);
   }
 
   useEffect(()=>{
@@ -48,14 +46,21 @@ const EnrollList = ({lcode}) => {
   }
 
   const onCheckedUpdate = () => {
+    const updated = 
+      list.filter(stu => stu.checked && stu.grade !== stu.num);
+
+    if(updated.length===0){
+      setBox({show:true, message:'변경된 성적이 없습니다.'});
+      const data=list.map(stu=>stu && {...stu, checked:false});
+      setList(data);
+      return;
+    }
+
     if(checked === 0) {
       setBox({show:true, message:'수정할 학생을 선택하세요.'});
       return;
     }
 
-    let isChange=false;
-    
-    
     setBox({
       show:true,
       message:'변경된 성적을 저장하실래요?',

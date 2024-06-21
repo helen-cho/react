@@ -14,13 +14,21 @@ const Box = ({box, setBox}) => {
     fontSize:'3rem'
   }
 
+  //확인버튼
   const onClose = () => {
+    if(box.action2()) box.action2();
     setBox({...box, show:false});
   }
 
+  //예버튼
   const onAction = () => {
     box.action();
     onClose();
+  }
+
+  //아니오버튼
+  const onCancel = () => {
+    setBox({...box, show:false});
   }
 
   return (
@@ -33,7 +41,7 @@ const Box = ({box, setBox}) => {
         keyboard={false}>
         <Modal.Header closeButton>
           <Modal.Title>
-            {box.action ? '질의' : '경고'}
+            {box.action ? '질의' : '알림'}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -47,10 +55,12 @@ const Box = ({box, setBox}) => {
         <Modal.Footer>
           {box.action ?
             <>
-              <Button variant="outline-secondary" onClick={onClose}>
+              <Button variant="outline-secondary" onClick={onCancel}>
                 아니오
               </Button>
-              <Button variant="outline-primary" onClick={onAction} className='px-4'>예</Button>
+              <Button variant="outline-primary" onClick={onAction} className='px-4'>
+                예
+              </Button>
             </>
             :
             <Button variant='outline-primary' onClick={onClose}>확인</Button>
