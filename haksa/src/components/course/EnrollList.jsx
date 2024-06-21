@@ -4,13 +4,22 @@ import { Button, Table } from 'react-bootstrap'
 import {BoxContext} from '../../contexts/BoxContext'
 
 const EnrollList = ({lcode}) => {
+  const [checked, setChecked] = useState(0);
   const {setBox} = useContext(BoxContext);
+  const [enroll, setEnroll] = useState([]);
   const [list, setList] = useState([]);
   
+  useEffect(()=>{
+    let cnt=0;
+    list.forEach(stu=>stu.checked && cnt++);
+    setChecked(cnt);
+  }, [list]);
+
   const callAPI = async() => {
     const res=await axios.get(`/enroll/lcode/${lcode}`);
     const data=res.data.map(stu=>stu && {...stu, num:stu.grade, checked:false});
     setList(data);
+    setEnroll(data);
   }
 
   useEffect(()=>{
@@ -38,8 +47,39 @@ const EnrollList = ({lcode}) => {
     });
   }
 
+  const onCheckedUpdate = () => {
+    if(checked === 0) {
+      setBox({show:true, message:'수정할 학생을 선택하세요.'});
+      return;
+    }
+
+    let isChange=false;
+    
+    
+    setBox({
+      show:true,
+      message:'변경된 성적을 저장하실래요?',
+      action:()=>{
+        let cnt=0;
+        list.forEach(async stu=>{
+          if(stu.checked && stu.grade !== stu.num){
+            await axios.post('/enroll/update', {lcode, scode:stu.scode,grade:stu.grade});
+          }
+          cnt++;
+          if(cnt===checked) callAPI();
+        });
+      }
+    });
+  }
+
   const onChangeAll = (e) => {
     const data=list.map(stu=>stu && {...stu, checked:e.target.checked});
+    setList(data);
+  }
+
+  const onChangeSingle = (e, scode) => {
+    const data=list.map(stu=>stu.scode===scode ? 
+                {...stu, checked:e.target.checked}: stu);
     setList(data);
   }
 
@@ -47,15 +87,17 @@ const EnrollList = ({lcode}) => {
     <div>
       <h1 className='text-center my-5'>학생목록</h1>
       <div className='ms-2'>
-        <input type="checkbox" onChange={onChangeAll}/>
-        <Button className='ms-3' variant='outline-primary'>선택항목저장</Button>
+        <input type="checkbox" checked={list.length===checked} onChange={onChangeAll}/>
+        <Button onClick={onCheckedUpdate}
+          className='ms-3' variant='outline-primary'>선택항목저장</Button>
       </div>
       <hr/>
       <Table>
         <tbody>
           {list.map(stu=>
             <tr key={stu.scode}>
-              <td><input type="checkbox" checked={stu.checked}/></td>
+              <td><input onChange={(e)=>onChangeSingle(e, stu.scode)}
+                    type="checkbox" checked={stu.checked}/></td>
               <td>{stu.scode}</td>
               <td>{stu.sname}</td>
               <td>{stu.dept} (지도교수:{stu.pname})</td>
