@@ -19,7 +19,7 @@ const EnrollList = ({list, scode, callCourses}) => {
   }, []);
 
   const onInsert = () => {
-    if(course.lcode===''){
+    if(!course){
       setBox({show:true, message:'신청할 강좌를 선택하세요.'});
       return;
     }
@@ -64,6 +64,7 @@ const EnrollList = ({list, scode, callCourses}) => {
           <Row>
             <Col>
               <Form.Select onChange={(e)=>setCourse(JSON.parse(e.target.value))}>
+                <option value='null'>강좌를 선택하세요.</option>
                 {cous.map(cou=>
                   <option key={cou.lcode} value={JSON.stringify(cou)}>
                     {cou.lname} ({cou.lcode} {cou.pname} {cou.dept} {cou.persons}명/{cou.capacity}명)
