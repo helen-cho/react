@@ -17,8 +17,12 @@ const ReadPage = () => {
 
   const callAPI = async() => {
     const res=await axios.get(`/stu/${scode}`);
-    console.log(res.data);
+    //console.log(res.data);
     setStudent(res.data);
+    callCourses();
+  }
+
+  const callCourses = async()=>{
     const res1= await axios.get(`/enroll/scode/${scode}`);
     setList(res1.data);
   }
@@ -59,7 +63,7 @@ const ReadPage = () => {
           </tr>
         </tbody>
       </Table>
-      <EnrollList list={list}/>
+      <EnrollList list={list} scode={scode} callCourses={callCourses}/>
     </div>
   )
 }

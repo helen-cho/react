@@ -1,10 +1,65 @@
-import React from 'react'
-import { Table } from 'react-bootstrap'
+import axios from 'axios'
+import React, { useContext, useEffect, useState } from 'react'
+import { Table, Card, Form, Button, Row, Col } from 'react-bootstrap'
+import { BoxContext} from '../../contexts/BoxContext'
 
-const EnrollList = ({list}) => {
+const EnrollList = ({list, scode, callCourses}) => {
+  const {setBox} = useContext(BoxContext);
+  const [cous, setCous] = useState([]);
+  const [lcode, setLcode] = useState('');
+
+  const callAPI = async() => {
+    const res=await axios.get('/cou?page=1&size=100')
+    //console.log('강좌목록',res.data.list);
+    setCous(res.data.list);
+  }
+
+  useEffect(()=>{
+    callAPI();
+  }, []);
+
+  const onInsert = () => {
+    if(lcode===''){
+      setBox({show:true, message:'신청할 강좌를 선택하세요.'});
+      return;
+    }
+
+    setBox({
+      show:true,
+      message:`'${lcode}' 강좌를 수강신청하실래요?`,
+      action:async()=> {
+        const res=await axios.post('/enroll/insert', {lcode, scode});
+        if(res.data===0){
+          callCourses();
+        }else{
+          setBox({show:true, message:'이미 수강신청된 강좌입니다.'})
+        }
+      }
+    });
+  }
+
   return (
     <div>
       <h1 className='text-center my-5'>수강신청목록</h1>
+      <Card>
+        <Card.Body>
+          <Row>
+            <Col>
+              <Form.Select onChange={(e)=>setLcode(e.target.value)}>
+                {cous.map(cou=>
+                  <option key={cou.lcode} value={cou.lcode}>
+                    {cou.lname} ({cou.lcode} {cou.pname} {cou.dept})
+                  </option>
+                )}
+              </Form.Select>
+            </Col>
+            <Col>
+                <Button onClick={onInsert}
+                  variant='outline-primary' className='px-5'>수강신청</Button>
+            </Col>
+          </Row>
+        </Card.Body>
+      </Card>
       <hr/>
       <Table>
         <tbody>
@@ -17,6 +72,7 @@ const EnrollList = ({list}) => {
               <td>{cou.persons}명/{cou.capacity}명</td>
               <td>{cou.hours}시간</td>
               <td>{cou.grade}점</td>
+              <td>{cou.edate}</td>
             </tr>
           )}
         </tbody>
