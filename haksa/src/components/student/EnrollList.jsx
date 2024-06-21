@@ -44,6 +44,18 @@ const EnrollList = ({list, scode, callCourses}) => {
     });
   }
 
+  const onDelete = (lcode, lname) => {
+    setBox({
+      show:true,
+      message:`${lname} 강좌를 수강취소하실래요?`,
+      action:async()=>{
+        await axios.post('/enroll/delete', {lcode, scode});
+        callAPI();
+        callCourses();
+      }
+    });
+  }
+
   return (
     <div>
       <h1 className='text-center my-5'>수강신청목록</h1>
@@ -79,6 +91,8 @@ const EnrollList = ({list, scode, callCourses}) => {
               <td>{cou.hours}시간</td>
               <td>{cou.grade}점</td>
               <td>{cou.edate}</td>
+              <td><Button onClick={()=>onDelete(cou.lcode, cou.lname)}
+                size='sm' variant='outline-danger'>수강취소</Button></td>
             </tr>
           )}
         </tbody>
