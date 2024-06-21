@@ -5,8 +5,8 @@ import { BoxContext} from '../../contexts/BoxContext'
 
 const EnrollList = ({list, scode, callCourses}) => {
   const {setBox} = useContext(BoxContext);
+  const [course, setCourse] = useState('');
   const [cous, setCous] = useState([]);
-  const [lcode, setLcode] = useState('');
 
   const callAPI = async() => {
     const res=await axios.get('/cou?page=1&size=100')
@@ -19,18 +19,24 @@ const EnrollList = ({list, scode, callCourses}) => {
   }, []);
 
   const onInsert = () => {
-    if(lcode===''){
+    if(course.lcode===''){
       setBox({show:true, message:'신청할 강좌를 선택하세요.'});
+      return;
+    }
+
+    if(course.persons===course.capacity){
+      setBox({show:true, message:'이미 마감된 강좌입니다.'});
       return;
     }
 
     setBox({
       show:true,
-      message:`'${lcode}' 강좌를 수강신청하실래요?`,
+      message:`'${course.lname}' 강좌를 수강신청하실래요?`,
       action:async()=> {
-        const res=await axios.post('/enroll/insert', {lcode, scode});
+        const res=await axios.post('/enroll/insert', {lcode:course.lcode, scode});
         if(res.data===0){
           callCourses();
+          callAPI();
         }else{
           setBox({show:true, message:'이미 수강신청된 강좌입니다.'})
         }
@@ -45,10 +51,10 @@ const EnrollList = ({list, scode, callCourses}) => {
         <Card.Body>
           <Row>
             <Col>
-              <Form.Select onChange={(e)=>setLcode(e.target.value)}>
+              <Form.Select onChange={(e)=>setCourse(JSON.parse(e.target.value))}>
                 {cous.map(cou=>
-                  <option key={cou.lcode} value={cou.lcode}>
-                    {cou.lname} ({cou.lcode} {cou.pname} {cou.dept})
+                  <option key={cou.lcode} value={JSON.stringify(cou)}>
+                    {cou.lname} ({cou.lcode} {cou.pname} {cou.dept} {cou.persons}명/{cou.capacity}명)
                   </option>
                 )}
               </Form.Select>
