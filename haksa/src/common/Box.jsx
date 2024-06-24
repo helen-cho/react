@@ -16,7 +16,9 @@ const Box = ({box, setBox}) => {
 
   //확인버튼
   const onClose = () => {
-    if(box.action2()) box.action2();
+    if(box.action2) {
+      box.action2();
+    }
     setBox({...box, show:false});
   }
 

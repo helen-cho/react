@@ -9,7 +9,8 @@ function App() {
   const [box, setBox] = useState({
     show:false,
     message:'',
-    action:null
+    action:null,
+    action2:''
   });
 
   return (
