@@ -28,11 +28,13 @@ const FinancePage = () => {
       <Table>
         <tbody>
           {list.map((fi, index)=>
-            <tr key={index} style={fi.range.substr(0,2)==='상승' ? up:down}>
+            <tr key={index} >
               <td>{index+1} {fi.title}</td>
-              <td>{fi.price}</td>
-              <td>{fi.range.substr(0,2)}</td>
-              <td>{fi.range.substring(3)}</td>
+              <td style={fi.range.substr(0,2)==='상승' ? up:down}>{fi.price}</td>
+              <td style={fi.range.substr(0,2)==='상승' ? up:down}>
+                {fi.range.substr(0,2)}
+              </td>
+              <td style={fi.range.substr(0,2)==='상승' ? up:down}>{fi.range.substring(3)}</td>
             </tr>
           )}
         </tbody>
