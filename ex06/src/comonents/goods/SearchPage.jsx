@@ -7,6 +7,7 @@ import { BoxContext } from '../../common/BoxContext';
 import { Rating } from '@mui/material';
 
 const SearchPage = () => {
+  const [checked, setChecked] = useState(0);
   const {setBox} = useContext(BoxContext);
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState('노트북');
@@ -18,10 +19,16 @@ const SearchPage = () => {
     const res=await axios.get(`/goods/search?query=${query}&page=${page}&size=${size}`);
     console.log(res.data);
     setGoods(res.data.items);
-    const data=res.data.items.map(good=>good && {...good, value:3});
+    const data=res.data.items.map(good=>good && {...good, checked:false});
     setGoods(data);
     setCount(res.data.total > 100 && 100);
   }
+
+  useEffect(()=>{
+    let cnt=0;
+    goods.map(good=>good.checked && cnt++);
+    setChecked(cnt);
+  }, [goods]);
 
   useEffect(()=>{
     callAPI();
@@ -66,11 +73,26 @@ const SearchPage = () => {
     });
   }
 
+  const onChangeAll = (e) => {
+    console.log(e);
+    const data=goods.map(good=>good && {...good, checked:e.target.checked});
+    setGoods(data);
+  }
+
+  const onChangeSingle = (e, id)=> {
+    const data=goods.map(good=>good.productId===id ? {...good, checked:e.target.checked}: good);
+    setGoods(data);
+  }
+
   return (
     <div>
       <h1 className='text-center my-5'>상품검색</h1>
       <Row>
-        <Col></Col>
+        <Col>
+          <input checked={goods.length===checked}
+            type="checkbox" className='mx-2' onChange={onChangeAll}/>
+          <Button>선택상품등록</Button>
+        </Col>
         <Col xs={6} md={5} lg={4} className='text-end'>
           <form onSubmit={onSubmit}>
             <InputGroup>
@@ -85,7 +107,9 @@ const SearchPage = () => {
         <tbody>
           {goods.map(good=>
             <tr key={good.productId}>
-                <td><img src={good.image} width="30px"/></td>
+                <td><input onChange={(e)=>onChangeSingle(e, good.productId)}
+                  type='checkbox' checked={good.checked}/></td>
+                <td><img src={good.image} width="50px"/></td>
                 <td>{good.productId}</td>
                 <td><div dangerouslySetInnerHTML={{__html:good.title}}/></td>
                 <td>{good.lprice}</td>
