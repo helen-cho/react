@@ -9,7 +9,7 @@ const ListPage = () => {
   const [checked, setChecked] = useState(0);
   const { setBox } = useContext(BoxContext);
   const [page, setPage] = useState(1);
-  const [size, setSize] = useState(5);
+  const [size, setSize] = useState(3);
   const [goods, setGoods] = useState([]);
   const [count, setCount] = useState(0);
 
