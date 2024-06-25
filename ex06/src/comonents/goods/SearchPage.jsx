@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import axios from 'axios';
-import {Table} from 'react-bootstrap'
+import {Table, Row, Col, InputGroup, Button, Form} from 'react-bootstrap'
 import Pagination from 'react-js-pagination';
 import '../../common/Paging.css'
 
@@ -22,9 +22,30 @@ const SearchPage = () => {
     callAPI();
   }, [page]);
 
+  const onSubmit = (e) => {
+    e.preventDefault();
+    if(query==='') {
+      alert('검색어를 입력하세요!');
+      return;
+    }
+    setPage(1);
+    callAPI();
+  }
+
   return (
     <div>
       <h1 className='text-center my-5'>상품검색</h1>
+      <Row>
+        <Col xs={6} md={5} lg={4}>
+          <form onSubmit={onSubmit}>
+            <InputGroup>
+              <Form.Control value={query} onChange={(e)=>setQuery(e.target.value)}/>
+              <Button type="submit">검색</Button>
+            </InputGroup>
+          </form>
+        </Col>
+      </Row>
+      <hr/>
       <Table>
         <tbody>
           {goods.map(good=>
