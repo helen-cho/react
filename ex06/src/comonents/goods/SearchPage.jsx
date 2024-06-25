@@ -1,10 +1,13 @@
-import React, {useEffect, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import axios from 'axios';
 import {Table, Row, Col, InputGroup, Button, Form} from 'react-bootstrap'
 import Pagination from 'react-js-pagination';
 import '../../common/Paging.css'
+import { BoxContext } from '../../common/BoxContext';
 
 const SearchPage = () => {
+  const {setBox} = useContext(BoxContext);
+
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState('노트북');
   const [size, setSize] = useState(5);
@@ -25,7 +28,11 @@ const SearchPage = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     if(query==='') {
-      alert('검색어를 입력하세요!');
+      setBox({
+        show:true, 
+        message:'검색어를 입력하세요.',
+        action2: ()=>setQuery('노트북')
+      });
       return;
     }
     setPage(1);
