@@ -43,7 +43,7 @@ const GmarketPage = () => {
               <td><img src={pro.image} width="50px"/></td>
               <td>{pro.code}</td>
               <td>{index +1}. {pro.title}</td>
-              <td>{pro.price}</td>
+              <td>{pro.price.replace(',','')}</td>
              </tr>
             )}
           </tbody>
