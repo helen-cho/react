@@ -4,7 +4,6 @@ import {Table, Row, Col, InputGroup, Button, Form} from 'react-bootstrap'
 import Pagination from 'react-js-pagination';
 import '../../common/Paging.css'
 import { BoxContext } from '../../common/BoxContext';
-import { Rating } from '@mui/material';
 
 const SearchPage = () => {
   const [checked, setChecked] = useState(0);
@@ -17,7 +16,7 @@ const SearchPage = () => {
 
   const callAPI = async()=> {
     const res=await axios.get(`/goods/search?query=${query}&page=${page}&size=${size}`);
-    console.log(res.data);
+    //console.log(res.data);
     setGoods(res.data.items);
     const data=res.data.items.map(good=>good && {...good, checked:false});
     setGoods(data);
@@ -74,7 +73,6 @@ const SearchPage = () => {
   }
 
   const onChangeAll = (e) => {
-    console.log(e);
     const data=goods.map(good=>good && {...good, checked:e.target.checked});
     setGoods(data);
   }
@@ -84,6 +82,43 @@ const SearchPage = () => {
     setGoods(data);
   }
 
+  const onCheckedInsert = () => {
+    if(checked===0) {
+      setBox({show:true, message:'등록할 상품을 선택하세요!'});
+      return;
+    }
+
+    setBox({
+      show:true,
+      message:`${checked}개 상품을 등록하실래요?`,
+      action:()=>{
+        let cnt=0;
+        let inserted=0;
+        goods.forEach(async good=>{
+          if(good.checked){
+            const res=await axios.post('/goods/insert',{
+              gid:good.productId,title:good.title,
+              image:good.image,maker:good.maker,
+              brand:good.brand,price:good.lprice
+            });
+            if(res.data===1) inserted++;
+            cnt++;
+            if(checked==cnt){
+              setBox({
+                show:true, 
+                message:`${inserted}개 상품등록완료!`,
+                action2:()=>{
+                  const data=goods.map(good=>good && {...good, checked:false});
+                  setGoods(data);
+                }
+              });
+            }
+          }
+        });
+      }
+    });
+  }
+
   return (
     <div>
       <h1 className='text-center my-5'>상품검색</h1>
@@ -91,7 +126,7 @@ const SearchPage = () => {
         <Col>
           <input checked={goods.length===checked}
             type="checkbox" className='mx-2' onChange={onChangeAll}/>
-          <Button>선택상품등록</Button>
+          <Button onClick={onCheckedInsert}>선택상품등록</Button>
         </Col>
         <Col xs={6} md={5} lg={4} className='text-end'>
           <form onSubmit={onSubmit}>
