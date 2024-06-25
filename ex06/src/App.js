@@ -11,7 +11,7 @@ function App() {
   return (
     <BoxContext.Provider value={{box, setBox}}>
       <Container>
-        <MenuPage/>
+          <MenuPage/>
       </Container>
       {box.show && <Box box={box} setBox={setBox}/>}
     </BoxContext.Provider>
