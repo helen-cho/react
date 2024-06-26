@@ -1,9 +1,15 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Row, Col, InputGroup, Form, Button, Card} from 'react-bootstrap'
 
 const UpdatePage = () => {
+  const refFile=useRef(null);
+  const [file, setFile] = useState({
+    name:'',
+    byte:null
+  });
+
   const {gid} = useParams();
   const [good, setGood] = useState('');
   const [form, setForm] = useState({
@@ -23,6 +29,7 @@ const UpdatePage = () => {
         fmtprice:res.data.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
     setForm(data);
     setGood(data);
+    setFile({name:res.data.image, byte:null});
   }
 
   useEffect(()=>{
@@ -52,6 +59,20 @@ const UpdatePage = () => {
     alert('저장완료');
   }
 
+  const onChangeFile = (e) => {
+    setFile({
+      name:URL.createObjectURL(e.target.files[0]),
+      byte:e.target.files[0]
+    });
+  }
+
+  const onClickImageSave = () => {
+    if(file.byte==null) return;
+    if(!window.confirm('변경된 이미지를 저장하실래요?')) return;
+    //이미지업로드
+  }
+
+
   return (
     <div>
       <h1 className='text-center my-5'>상품정보수정</h1>
@@ -59,9 +80,13 @@ const UpdatePage = () => {
           <Card.Body>
             <Row className='justify-content-center'>
               <Col md={4} lg={3} className='mb-3'>
-                <img src={image || 'http://via.placeholder.com/150x170'} width='100%'/>
+                <img onClick={()=>refFile.current.click()}
+                  src={file.name || 'http://via.placeholder.com/150x170'} width='100%' style={{cursor:'pointer'}}/>
+                <input ref={refFile}
+                  type="file" onChange={onChangeFile} style={{display:'none'}}/>
                 <div>
-                  <Button className='w-100'>이지지저장</Button>
+                  <Button onClick={onClickImageSave}
+                    className='w-100'>이지지저장</Button>
                 </div>
               </Col>
               <Col className='mt-3'>
