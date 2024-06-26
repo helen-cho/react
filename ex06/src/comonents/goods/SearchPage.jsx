@@ -6,21 +6,24 @@ import '../../common/Paging.css'
 import { BoxContext } from '../../common/BoxContext';
 
 const SearchPage = () => {
+  const [loading, setLoading] = useState(false);
   const [checked, setChecked] = useState(0);
   const {setBox} = useContext(BoxContext);
   const [page, setPage] = useState(1);
-  const [query, setQuery] = useState('노트북');
+  const [query, setQuery] = useState('조말론 향수');
   const [size, setSize] = useState(5);
   const [goods, setGoods]= useState([]);
   const [count, setCount] = useState(0);
 
   const callAPI = async()=> {
+    setLoading(true);
     const res=await axios.get(`/goods/search?query=${query}&page=${page}&size=${size}`);
     //console.log(res.data);
     setGoods(res.data.items);
     const data=res.data.items.map(good=>good && {...good, checked:false});
     setGoods(data);
     setCount(res.data.total > 100 && 100);
+    setLoading(false);
   }
 
   useEffect(()=>{
@@ -53,11 +56,11 @@ const SearchPage = () => {
   const onInsert = (good) => {
     setBox({
       show:true,
-      message:`${good.title}를 등록하실래요?`,
+      message:`${removeTags(good.title)}를 등록하실래요?`,
       action:async()=>{
         const res=await axios.post('/goods/insert', {
           gid:good.productId,
-          title:good.title,
+          title:removeTags(good.title),
           image:good.image,
           maker:good.maker,
           brand:good.brand,
@@ -97,7 +100,8 @@ const SearchPage = () => {
         goods.forEach(async good=>{
           if(good.checked){
             const res=await axios.post('/goods/insert',{
-              gid:good.productId,title:good.title,
+              gid:good.productId,
+              title:removeTags(good.title),
               image:good.image,maker:good.maker,
               brand:good.brand,price:good.lprice
             });
@@ -125,6 +129,12 @@ const SearchPage = () => {
     alert("다운로드완료!");
   }
 
+  const removeTags = (html) => {
+    const doc=new DOMParser().parseFromString(html, 'text/html');
+    return doc.body.textContent || '';
+  }
+
+  if (loading) return <h1>로딩중......</h1>
   return (
     <div>
       <h1 className='text-center my-5'>상품검색</h1>

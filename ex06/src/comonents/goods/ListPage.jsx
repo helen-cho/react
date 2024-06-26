@@ -114,7 +114,7 @@ const ListPage = () => {
                 </Link>
               </td>
               <td>
-                <div dangerouslySetInnerHTML={{__html:good.title}}/>
+                <div>{good.title}</div>
                 <div>{good.fmtprice}원</div>
                 <div>{good.fmtdate}</div>
                 <div>{good.maker}</div>
