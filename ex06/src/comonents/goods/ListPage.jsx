@@ -110,7 +110,7 @@ const ListPage = () => {
               <td>
                 <div>{good.gid}</div>
                 <Link to={`/goods/update/${good.gid}`}>
-                  <img src={good.image} width={80} style={{border:'1px solid gray'}}/>
+                  <img src={good.image || 'http://via.placeholder.com/120x170'} width={80} style={{border:'1px solid gray'}}/>
                 </Link>
               </td>
               <td>

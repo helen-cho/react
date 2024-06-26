@@ -66,10 +66,15 @@ const UpdatePage = () => {
     });
   }
 
-  const onClickImageSave = () => {
+  const onClickImageSave = async() => {
     if(file.byte==null) return;
     if(!window.confirm('변경된 이미지를 저장하실래요?')) return;
     //이미지업로드
+    const formData=new FormData();
+    formData.append("byte", file.byte);
+    await axios.post(`/goods/update/image/${gid}`, formData);
+    alert("이미지변경완료!");
+    callAPI();
   }
 
 
