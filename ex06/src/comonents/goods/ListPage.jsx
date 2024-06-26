@@ -1,9 +1,10 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react'
-import { Button, Table } from 'react-bootstrap';
+import { Button, Table, Row, Col } from 'react-bootstrap';
 import '../../common/Paging.css';
 import Pagination from 'react-js-pagination';
 import { BoxContext } from '../../common/BoxContext';
+import { Link } from 'react-router-dom';
 
 const ListPage = () => {
   const [checked, setChecked] = useState(0);
@@ -60,21 +61,30 @@ const ListPage = () => {
 
   const onCheckedDelete = () => {
     if(checked===0) {
-      alert("삭제할 상품을 선택하세요!");
+      setBox({show:true, message:'삭제할 상품을 선택하세요!'});
       return;
     }
 
-    if(!window.confirm('선택한 상품을 삭제하실래요?')) return;
-
-    let cnt=0;
-    goods.forEach(async good=>{
-      if(good.checked){
-        await axios.post(`/goods/delete/${good.gid}`);
-        cnt++;
-        if(cnt===checked){
-          alert(`${cnt}개 상품이 삭제되었습니다.`);
-          callAPI();
-        }
+    setBox({
+      show:true,
+      message:'선택한 상품을 삭제하실래요?',
+      action:()=>{
+        let cnt=0;
+        goods.forEach(async good=>{
+          if(good.checked){
+            await axios.post(`/goods/delete/${good.gid}`);
+            cnt++;
+            if(cnt===checked){
+              setBox({
+                show:true,
+                message:`${cnt}개 상품이 삭제되었습니다.`,
+                action2:()=>{
+                  callAPI();
+                }
+              });
+            }
+          }
+        });
       }
     });
   }
@@ -85,7 +95,7 @@ const ListPage = () => {
       <div>
         <input checked={goods.length===checked}
           onChange={onChangeAll} type="checkbox" className='ms-2 me-3'/>
-        <Button onClick={onCheckedDelete} variant='danger' className='me-3'>선택삭제</Button>
+        <Button onClick={onCheckedDelete} variant='outline-danger' className='me-3'>선택삭제</Button>
         상품수: {count}개
       </div>
       <hr/>
@@ -99,11 +109,15 @@ const ListPage = () => {
               </td>
               <td>
                 <div>{good.gid}</div>
-                <img src={good.image} width={80} style={{border:'1px solid gray'}}/></td>
+                <Link to={`/goods/update/${good.gid}`}>
+                  <img src={good.image} width={80} style={{border:'1px solid gray'}}/>
+                </Link>
+              </td>
               <td>
                 <div dangerouslySetInnerHTML={{__html:good.title}}/>
                 <div>{good.fmtprice}원</div>
                 <div>{good.fmtdate}</div>
+                <div>{good.maker}</div>
               </td>
               <td className='align-middle'>
                 <Button onClick={()=>onDelete(good.gid)}

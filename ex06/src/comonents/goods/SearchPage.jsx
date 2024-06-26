@@ -119,6 +119,12 @@ const SearchPage = () => {
     });
   }
 
+  const onClickImage = async(image) => {
+    if(!window.confirm(`${image} 다운로드하실래요?`)) return;
+    await axios.post(`/download?file=${image}`);
+    alert("다운로드완료!");
+  }
+
   return (
     <div>
       <h1 className='text-center my-5'>상품검색</h1>
@@ -126,7 +132,7 @@ const SearchPage = () => {
         <Col>
           <input checked={goods.length===checked}
             type="checkbox" className='mx-2' onChange={onChangeAll}/>
-          <Button onClick={onCheckedInsert}>선택상품등록</Button>
+          <Button onClick={onCheckedInsert} variant='outline-primary'>선택상품등록</Button>
         </Col>
         <Col xs={6} md={5} lg={4} className='text-end'>
           <form onSubmit={onSubmit}>
@@ -144,13 +150,14 @@ const SearchPage = () => {
             <tr key={good.productId}>
                 <td><input onChange={(e)=>onChangeSingle(e, good.productId)}
                   type='checkbox' checked={good.checked}/></td>
-                <td><img src={good.image} width="50px"/></td>
+                <td><img onClick={()=>onClickImage(good.image)}
+                      src={good.image} width="50px"/></td>
                 <td>{good.productId}</td>
                 <td><div dangerouslySetInnerHTML={{__html:good.title}}/></td>
                 <td>{good.lprice}</td>
                 <td>{good.maker}</td>
                 <td>{good.brand}</td>
-                <td><Button onClick={()=>onInsert(good)}
+                <td><Button onClick={()=>onInsert(good)} variant='outline-primary'
                     size='sm'>상품등록</Button></td>
             </tr>
           )}
