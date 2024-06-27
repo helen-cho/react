@@ -9,12 +9,13 @@ function App() {
   const [box, setBox] = useState('');
 
   return (
-    <BoxContext.Provider value={{box, setBox}}>
-      <Container>
-          <MenuPage/>
-      </Container>
-      {box.show && <Box box={box} setBox={setBox}/>}
-    </BoxContext.Provider>
+      <BoxContext.Provider value={{box, setBox}}>
+        <Container>
+            <MenuPage/>
+        </Container>
+        {box.show && <Box box={box} setBox={setBox}/>}
+      </BoxContext.Provider>
+
   );
 }
 

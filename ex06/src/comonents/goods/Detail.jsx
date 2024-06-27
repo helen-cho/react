@@ -30,6 +30,20 @@ const Detail = ({form, setForm, callAPI, good}) => {
     setFiles(selFiles);
   }
 
+  const onClickAttach = async() => {
+    if(files.length === 0) return;
+    if(!window.confirm(`${files.length}개 파일을 업로드하실래요?`)) return;
+    
+    //첨부파일업로드
+    const formData = new FormData();
+    for(let i=0; i<files.length; i++){
+      formData.append('bytes', files[i].byte);
+    }
+    await axios.post(`/goods/attach/${form.gid}`, formData);
+    alert("첨부파일업로드!");
+    setFiles([]);
+  }
+
   return (
     <Tabs
       defaultActiveKey="home"
@@ -48,12 +62,12 @@ const Detail = ({form, setForm, callAPI, good}) => {
       <InputGroup>
         <Form.Control onChange={onChangeFiles}
             type='file' multiple={true}/>
-        <Button>첨부파일저장</Button>
+        <Button onClick={onClickAttach}>첨부파일저장</Button>
       </InputGroup>
       <Row className='my-5'>
         {files.map(file=>
-          <Col key={file.name} md={3}>
-            <img src={file.name} width='100%'/>
+          <Col key={file.name} xs={3}>
+            <img src={file.name} width='100px'/>
           </Col>
         )}
       </Row>  
