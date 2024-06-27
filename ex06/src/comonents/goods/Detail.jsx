@@ -83,26 +83,26 @@ const Detail = ({form, setForm, callAPI, good}) => {
         onChange={(e, editor)=>setForm({...form, contents:editor.getData()})}/>
     </Tab>
     <Tab eventKey="profile" title="파일첨부하기">
-      <InputGroup className='p-5'>
+      <InputGroup className='pt-5'>
         <Form.Control onChange={onChangeFiles}
             type='file' multiple={true}/>
         <Button onClick={onClickAttach}>첨부파일저장</Button>
       </InputGroup>
       <Row className='my-5'>
         {files.map(file=>
-          <Col key={file.name} xs={2}>
+          <Col key={file.name} xs={4} md={3} lg={2} className='mb-3'>
             <img src={file.name} style={style}/>
           </Col>
         )}
       </Row>  
     </Tab>
     <Tab eventKey="attach" title="첨부한파일">
-        <Row>
+        <Row className='my-5'>
           {attaches.map(att=>
-            <Col key={att.aid} xs={2} className='mb-3'>
+            <Col key={att.aid} xs={4} md={3} lg={2} className='mb-3'>
                 <div style={{position:'relative'}}>
                   <Badge onClick={()=>onClickDelete(att)}
-                    bg='danger' style={{position:'absolute', top:'10px', right:'10px', cursor:'pointer'}}>X</Badge>
+                    bg='danger' style={{position:'absolute', top:'5px', right:'5px', cursor:'pointer'}}>X</Badge>
                   <img src={att.filename} style={style}/>
                 </div>
             </Col>

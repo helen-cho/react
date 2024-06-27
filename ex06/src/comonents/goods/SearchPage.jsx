@@ -134,7 +134,7 @@ const SearchPage = () => {
     return doc.body.textContent || '';
   }
 
-  if (loading) return <h1>로딩중......</h1>
+  if (loading) return <h1 className='my-5 text-center'>로딩중......</h1>
   return (
     <div>
       <h1 className='text-center my-5'>상품검색</h1>
