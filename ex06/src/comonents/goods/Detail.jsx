@@ -2,12 +2,27 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { Button, Row, Col, Form, InputGroup } from 'react-bootstrap';
+import { Button, Row, Col, Form, InputGroup, Badge } from 'react-bootstrap';
 import axios from 'axios';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const Detail = ({form, setForm, callAPI, good}) => {
+  const style ={
+    border: '1px solid gray',
+    width: '100%',
+  }
   const [files, setFiles]= useState([]);
+  const [attaches, setAttaches] = useState([]);
+
+  const callAttach = async() => {
+    const res= await axios.get(`/goods/attach/${form.gid}`);
+    //console.log(res.data);
+    setAttaches(res.data);
+  }
+
+  useEffect(()=>{
+    callAttach();
+  }, []);
 
   const onClickSave = async() => {
     if(good.contents===form.contents) return;
@@ -41,7 +56,16 @@ const Detail = ({form, setForm, callAPI, good}) => {
     }
     await axios.post(`/goods/attach/${form.gid}`, formData);
     alert("첨부파일업로드!");
+    callAttach();
     setFiles([]);
+  }
+
+  const onClickDelete = async(att) => {
+    if(!window.confirm(`${att.aid}번 이미지를 삭제하실래요?`)) return;
+    //첨부파일삭제
+    await axios.post('/goods/attach/delete', att);
+    alert('첨부파일삭제!');
+    callAttach();
   }
 
   return (
@@ -59,21 +83,31 @@ const Detail = ({form, setForm, callAPI, good}) => {
         onChange={(e, editor)=>setForm({...form, contents:editor.getData()})}/>
     </Tab>
     <Tab eventKey="profile" title="파일첨부하기">
-      <InputGroup>
+      <InputGroup className='p-5'>
         <Form.Control onChange={onChangeFiles}
             type='file' multiple={true}/>
         <Button onClick={onClickAttach}>첨부파일저장</Button>
       </InputGroup>
       <Row className='my-5'>
         {files.map(file=>
-          <Col key={file.name} xs={3}>
-            <img src={file.name} width='100px'/>
+          <Col key={file.name} xs={2}>
+            <img src={file.name} style={style}/>
           </Col>
         )}
       </Row>  
     </Tab>
     <Tab eventKey="attach" title="첨부한파일">
-
+        <Row>
+          {attaches.map(att=>
+            <Col key={att.aid} xs={2} className='mb-3'>
+                <div style={{position:'relative'}}>
+                  <Badge onClick={()=>onClickDelete(att)}
+                    bg='danger' style={{position:'absolute', top:'10px', right:'10px', cursor:'pointer'}}>X</Badge>
+                  <img src={att.filename} style={style}/>
+                </div>
+            </Col>
+          )}
+        </Row>
     </Tab>
   </Tabs>
   )
