@@ -4,7 +4,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { Button, Row, Col, Form, InputGroup } from 'react-bootstrap';
 import axios from 'axios';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 const Detail = ({form, setForm, callAPI, good}) => {
   const [files, setFiles]= useState([]);
@@ -58,7 +58,7 @@ const Detail = ({form, setForm, callAPI, good}) => {
         data={form.contents}
         onChange={(e, editor)=>setForm({...form, contents:editor.getData()})}/>
     </Tab>
-    <Tab eventKey="profile" title="첨부파일">
+    <Tab eventKey="profile" title="파일첨부하기">
       <InputGroup>
         <Form.Control onChange={onChangeFiles}
             type='file' multiple={true}/>
@@ -71,6 +71,9 @@ const Detail = ({form, setForm, callAPI, good}) => {
           </Col>
         )}
       </Row>  
+    </Tab>
+    <Tab eventKey="attach" title="첨부한파일">
+
     </Tab>
   </Tabs>
   )
