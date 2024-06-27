@@ -1,8 +1,12 @@
 import axios from 'axios';
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import {Row, Col, Card, Form, Button} from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { BoxContext } from '../../common/BoxContext';
+
 const LoginPage = () => {
+  const navi = useNavigate();
+  const {user, setUser} = useContext(BoxContext);
   const [form, setForm] = useState({
     uid:'red',
     upass:'pass'
@@ -17,6 +21,9 @@ const LoginPage = () => {
     const res=await axios.post('/users/login', form);
     if(res.data===1){
       alert('로그인성공!');
+      setUser({uid, uname:'무기명'});
+      sessionStorage.setItem('uid', uid);
+      navi('/');
     }else if(res.data===2){
       alert('비밀번호 불일치!');
     }else if(res.data===0) {

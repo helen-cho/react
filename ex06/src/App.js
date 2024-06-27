@@ -7,9 +7,13 @@ import Box from './common/Box';
 
 function App() {
   const [box, setBox] = useState('');
+  const [user, setUser] = useState({
+    uid:'',
+    uname:''
+  });
 
   return (
-      <BoxContext.Provider value={{box, setBox}}>
+      <BoxContext.Provider value={{box, setBox, user, setUser}}>
         <Container>
             <MenuPage/>
         </Container>
