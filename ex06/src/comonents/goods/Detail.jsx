@@ -6,6 +6,7 @@ import { Button, Row, Col, Form, InputGroup, Badge } from 'react-bootstrap';
 import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import ModalRelated from './ModalRelated';
+import { Table } from 'react-bootstrap'
 
 const Detail = ({form, setForm, callAPI, good}) => {
   const style ={
@@ -14,6 +15,7 @@ const Detail = ({form, setForm, callAPI, good}) => {
   }
   const [files, setFiles]= useState([]);
   const [attaches, setAttaches] = useState([]);
+  const [related, setRelated] = useState([]);
 
   const callAttach = async() => {
     const res= await axios.get(`/goods/attach/${form.gid}`);
@@ -21,8 +23,15 @@ const Detail = ({form, setForm, callAPI, good}) => {
     setAttaches(res.data);
   }
 
+  const callRelated = async() => {
+    const res1=await axios.get(`/goods/related/list/${form.gid}`);
+    //console.log(res1.data);
+    setRelated(res1.data);
+  }
+
   useEffect(()=>{
     callAttach();
+    callRelated();
   }, []);
 
   const onClickSave = async() => {
@@ -112,7 +121,18 @@ const Detail = ({form, setForm, callAPI, good}) => {
         </Row>
     </Tab>
     <Tab eventKey="related" title="관련상품">
-        <ModalRelated gid={form.gid}/>
+        <ModalRelated gid={form.gid} callRelated={callRelated}/>
+        <Table className='mt-5'>
+          <tbody>
+            {related.map(goods=>
+              <tr key={goods.rid}>
+                <td>{goods.rid}</td>
+                <td>{goods.title}</td>
+                <td>{goods.price}</td>
+              </tr>
+            )}
+          </tbody>
+        </Table>
     </Tab>
   </Tabs>
   )

@@ -85,7 +85,7 @@ const UpdatePage = () => {
 
   if(loading) return <h1 className='text-center'>로딩중...</h1>
   return (
-    <div>
+    <div style={{marginBottom:'500px'}}>
       <h1 className='text-center my-5'>상품정보수정</h1>
         <Card className='my-5'>
           <Card.Body>
