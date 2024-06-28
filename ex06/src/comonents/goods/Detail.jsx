@@ -25,8 +25,9 @@ const Detail = ({form, setForm, callAPI, good}) => {
 
   const callRelated = async() => {
     const res1=await axios.get(`/goods/related/list/${form.gid}`);
-    //console.log(res1.data);
-    setRelated(res1.data);
+    const data=res1.data.map(goods=>goods && {...goods, gid:goods.rid});
+    console.log(data);
+    setRelated(data);
   }
 
   useEffect(()=>{

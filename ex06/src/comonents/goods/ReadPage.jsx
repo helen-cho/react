@@ -37,7 +37,7 @@ const ReadPage = () => {
 
   if(loading) return <h1 className='text-center my-5'>로딩중......</h1>
   return (
-    <div className='my-5'>
+    <div className='my-5' style={{height:'1500px'}}>
       <Card>
         <Card.Body>
           <Row>

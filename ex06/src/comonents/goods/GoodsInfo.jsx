@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import {Row, Col, Card} from 'react-bootstrap';
+import Review from './Review';
 
 const GoodsInfo = ({goods}) => {
   const {contents, gid} = goods;
@@ -29,7 +30,7 @@ const GoodsInfo = ({goods}) => {
           <div dangerouslySetInnerHTML={{__html:contents}} className='my-5'/>
         </Tab>
         <Tab eventKey="profile" title="리뷰작성">
-          Tab content for Profile
+          <Review gid={gid}/>
         </Tab>
         <Tab eventKey="contact" title="첨부이미지">
           <Row>
