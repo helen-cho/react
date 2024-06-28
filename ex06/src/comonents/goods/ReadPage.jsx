@@ -3,8 +3,10 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {Row, Col, Card} from 'react-bootstrap'
 import GoodsInfo from './GoodsInfo';
+import Recently from '../../common/Recently';
 
 const ReadPage = () => {
+  const [related, setRelated] = useState([]);
   const [loading, setLoading] = useState(false);
   const [goods, setGoods] = useState('');
   const param=useParams();
@@ -22,8 +24,15 @@ const ReadPage = () => {
     setLoading(false);
   }
 
+  const callRelated = async() => {
+    const res1=await axios.get(`/goods/related/list/${gid}`);
+    //console.log(res1.data);
+    setRelated(res1.data);
+  }
+
   useEffect(()=>{
     callAPI();
+    callRelated();
   }, []);
 
   if(loading) return <h1 className='text-center my-5'>로딩중......</h1>
@@ -46,6 +55,12 @@ const ReadPage = () => {
           </Row>
         </Card.Body>
       </Card>
+      {related.length >=5 && 
+        <div className='mt-5'>
+          <h3>관련상품</h3>
+          <Recently goods={related}/>
+        </div>
+      }
       <GoodsInfo goods={goods}/>
     </div>
   )

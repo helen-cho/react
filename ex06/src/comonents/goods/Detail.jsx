@@ -78,6 +78,13 @@ const Detail = ({form, setForm, callAPI, good}) => {
     callAttach();
   }
 
+  const onClickRelatedDelete = async(rid) => {
+    if(!window.confirm(`${form.gid}-${rid} 삭제하실래요?`)) return;
+    //관련상품삭제
+    await axios.post('/goods/related/delete', {gid:form.gid, rid});
+    alert("삭제완료!");
+    callRelated();
+  }
 
   return (
     <Tabs
@@ -128,7 +135,9 @@ const Detail = ({form, setForm, callAPI, good}) => {
               <tr key={goods.rid}>
                 <td>{goods.rid}</td>
                 <td>{goods.title}</td>
-                <td>{goods.price}</td>
+                <td>{goods.fmtprice}원</td>
+                <td><Button onClick={()=>onClickRelatedDelete(goods.rid)}
+                  size='sm' variant='outline-danger'>삭제</Button></td>
               </tr>
             )}
           </tbody>

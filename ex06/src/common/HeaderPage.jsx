@@ -48,7 +48,7 @@ const HeaderPage = () => {
 
   return (
     <Slider {...settings}>
-      {images.map(img=>
+      {images.map((img, index)=>
         <img src={img} key={img} width='100%'/>
       )}
     </Slider>
