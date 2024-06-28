@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import Slider from "react-slick";
 import { BiChevronLeft, BiChevronRight } from 'react-icons/bi'
 import { Card, Row, Col } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 function SampleNextArrow(props) {
   const { className, style, onClick } = props;
@@ -31,7 +32,7 @@ function SamplePrevArrow(props) {
 const Recently = () => {
   const [goods, setGoods] = useState([]);
   var settings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 500,
     slidesToShow: 5,
@@ -59,12 +60,14 @@ const Recently = () => {
 
   return (
     <Row>
-      <Slider {...settings} className='pb-5'>
+      <Slider {...settings}>
         {goods.map(good=>
           <Col key={good.gid}>
             <Card className='me-2'>
               <Card.Body>
-                <img src={good.image} width='90%'/>
+                <Link to={`/goods/read/${good.gid}`}>
+                  <img src={good.image} width='90%'/>
+                </Link>
                 <div className='ellipsis'>{good.title}</div>
                 <div>{good.fmtprice}원</div>
               </Card.Body>
