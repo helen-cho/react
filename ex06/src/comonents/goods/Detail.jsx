@@ -5,6 +5,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { Button, Row, Col, Form, InputGroup, Badge } from 'react-bootstrap';
 import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
+import ModalRelated from './ModalRelated';
 
 const Detail = ({form, setForm, callAPI, good}) => {
   const style ={
@@ -68,6 +69,7 @@ const Detail = ({form, setForm, callAPI, good}) => {
     callAttach();
   }
 
+
   return (
     <Tabs
       defaultActiveKey="home"
@@ -108,6 +110,9 @@ const Detail = ({form, setForm, callAPI, good}) => {
             </Col>
           )}
         </Row>
+    </Tab>
+    <Tab eventKey="related" title="관련상품">
+        <ModalRelated gid={form.gid}/>
     </Tab>
   </Tabs>
   )
