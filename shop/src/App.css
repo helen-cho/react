@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Sunflower:wght@300&display=swap');
+
+* {
+    font-family: "Sunflower", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+
+.loginPage .title, .orderPage .title {
+    width: 100px;
+}
+
+.readPage .title {
+    width: 100px;
+}
+
+.readPage img {
+    border-radius: 50%;
+    cursor: pointer;
+    margin-bottom: 10px;
+    border: 1px solid gray;
+}
+
+.heart {
+    color:pink;
+    cursor: pointer;
+    font-size: 19px;
+}
+
+.ellipsis2 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
