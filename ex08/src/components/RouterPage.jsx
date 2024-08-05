@@ -4,6 +4,8 @@ import HomePage from './HomePage'
 import ListPage from './bbs/ListPage'
 import LoginPage from './users/LoginPage'
 import InsertPage from './bbs/InsertPage'
+import ReadPage from './bbs/ReadPage'
+import UpdatePage from './bbs/UpdatePage'
 
 const RouterPage = () => {
   return (
@@ -12,6 +14,8 @@ const RouterPage = () => {
       <Route path="/bbs" element={<ListPage/>}/>
       <Route path="/login" element={<LoginPage/>}/>
       <Route path='/bbs/insert' element={<InsertPage/>}/>
+      <Route path='/bbs/:bid' element={<ReadPage/>}/>
+      <Route path='/bbs/update/:bid' element={<UpdatePage/>}/>
     </Routes>
   )
 }

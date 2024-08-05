@@ -3,10 +3,10 @@ import '../Paging.css'
 import axios from 'axios'
 import { Table, Row, Col } from 'react-bootstrap'
 import Pagination from 'react-js-pagination'
-import { Link } from 'react-router-dom'
+import { Link} from 'react-router-dom'
 
 const ListPage = () => {
-  const [total, setTotal] = useState(0)
+  const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(5);
   const [list, setList] = useState([]);
@@ -38,7 +38,7 @@ const ListPage = () => {
           {list.map(bbs=>
             <tr key={bbs.bid}>
               <td>{bbs.bid}</td>
-              <td>{bbs.title}</td>
+              <td><Link to={`/bbs/${bbs.bid}`}>{bbs.title}</Link></td>
               <td>{bbs.writer}</td>
               <td>{bbs.fmtDate}</td>
             </tr>
