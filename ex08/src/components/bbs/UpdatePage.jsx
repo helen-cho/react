@@ -29,7 +29,7 @@ const UpdatePage = () => {
     console.log(form);
     if(res.data === 'success'){
       alert('수정완료!');
-      navi('/bbs')
+      navi(`/bbs/${bid}`)
     }else{
       alert('수정실패!');
     }
