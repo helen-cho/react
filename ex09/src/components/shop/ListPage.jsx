@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import {app} from '../../firebaseInit'
-import { getFirestore, onSnapshot, collection, query, orderBy } 
+import { deleteDoc, doc, getFirestore, onSnapshot, collection, query, orderBy } 
     from 'firebase/firestore'
 import { Button, Table } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 
 const ListPage = () => {
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(false);
   const db = getFirestore(app);
+
+  const onDelete = async(id) => {
+    if(!window.confirm(`${id}번 상품을 삭제하실래요?`)) return;
+    await deleteDoc(doc(db, 'shop', id));
+    alert("상품삭제완료!");
+  }
 
   const callAPI = () => {
     setLoading(true);
@@ -35,11 +42,11 @@ const ListPage = () => {
           {list.map(shop=>
             <tr key={shop.id}>
                <td><img src={shop.image} width={50}/></td>
-               <td>{shop.title}</td> 
+               <td><Link to={`/shop/${shop.id}`}>{shop.title}</Link></td> 
                <td>{shop.address}</td>
                <td className='text-end'>{shop.price}</td>
                <td width={80}>
-                <Button>삭제</Button>
+                <Button onClick={()=>onDelete(shop.id)}>삭제</Button>
                </td>
             </tr>
           )}
