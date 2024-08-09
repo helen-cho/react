@@ -42,11 +42,17 @@ const ListPage = () => {
           {list.map(shop=>
             <tr key={shop.id}>
                <td><img src={shop.image} width={50}/></td>
-               <td><Link to={`/shop/${shop.id}`}>{shop.title}</Link></td> 
+               <td>
+                  <Link to={`/shop/${shop.id}`}>{shop.title}</Link>
+                  <br/>
+                  {shop.writer}
+                </td> 
                <td>{shop.address}</td>
                <td className='text-end'>{shop.price}</td>
                <td width={80}>
-                <Button onClick={()=>onDelete(shop.id)}>삭제</Button>
+                {sessionStorage.getItem('email') === shop.writer &&
+                  <Button onClick={()=>onDelete(shop.id)}>삭제</Button>
+                }
                </td>
             </tr>
           )}

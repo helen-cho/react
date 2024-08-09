@@ -14,7 +14,8 @@ const SearchPage = () => {
   const onInsert = async(shop) => {
     if(!window.confirm(`"${shop.title}" 저장?`)) return;
     const date = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
-    await addDoc(collection(db, 'shop'), {date, ...shop});
+    await addDoc(collection(db, 'shop'), 
+      {date, ...shop, writer:sessionStorage.getItem('email')});
     alert('상품등록완료!');
   }
 
@@ -65,7 +66,9 @@ const SearchPage = () => {
                <td>{shop.address}</td>
                <td className='text-end'>{shop.price}</td>
                <td width={80}>
-                <Button onClick={()=>onInsert(shop)}>등록</Button>
+                {sessionStorage.getItem('email') &&
+                  <Button onClick={()=>onInsert(shop)}>등록</Button>
+                }
                </td>
             </tr>
           )}

@@ -3,10 +3,19 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import RouterPage from './RouterPage';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const MenuPage = () => {
-  const {pathname}= useLocation()
+  const {pathname}= useLocation();
+  const navi = useNavigate();
+
+  const onLogout = (e) => {
+    e.preventDefault();
+    if(!window.confirm('로그아웃하실래요?')) return;
+    sessionStorage.clear();
+    navi('/');
+  }
+
   return (
     <>
       <Navbar bg="primary" data-bs-theme="dark">
@@ -21,9 +30,20 @@ const MenuPage = () => {
               </Nav.Link>
             </Nav>
             <Nav>
-              <Nav.Link href="/login" className={pathname==='/login' && 'active'}>
-                로그인
-              </Nav.Link>
+              {!sessionStorage.getItem('email') ? 
+                <Nav.Link href="/login" className={pathname==='/login' && 'active'}>
+                  로그인
+                </Nav.Link>
+              :
+              <>
+                <Nav.Link href="/mypage" className='active'>
+                  {sessionStorage.getItem('email')}님
+                </Nav.Link>
+                <Nav.Link href="#" className='active' onClick={onLogout}>
+                  로그아웃
+                </Nav.Link>
+              </>
+              }
             </Nav>
         </Container>
       </Navbar>
